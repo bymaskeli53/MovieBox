@@ -9,7 +9,9 @@
     <color name="grey">#A7A7A9</color>
     <color name="placeholder">#293E58</color>
     <color name="ratingBackground">#293E58</color>
-    <color name="nice_blue">#07415E</color>
+    <color name="spring_blue">#07415E</color>
+
+    <color name="blue_winter">#BBDAEA</color>
 
 
 </resources>
