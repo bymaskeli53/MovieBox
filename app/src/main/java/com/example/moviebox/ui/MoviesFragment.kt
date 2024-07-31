@@ -13,6 +13,9 @@ import com.example.moviebox.R
 import com.example.moviebox.Resource
 import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.util.autoCleared
+import com.example.moviebox.util.hide
+import com.example.moviebox.util.show
+
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,11 +44,14 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
                                 val adapter = MovieAdapter()
                                 adapter.submitList(data.results)
                                 binding.rvMovies.adapter = adapter
+                                binding.shimmerView.stopShimmer()
+                                binding.shimmerView.hide()
                             }
                         }
 
                         is Resource.Loading -> {
-                            println("Loading")
+                            binding.shimmerView.startShimmer()
+                            binding.shimmerView.show()
                         }
 
                         is Resource.Error -> {

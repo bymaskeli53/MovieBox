@@ -108,6 +108,9 @@ dependencies {
 
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // Shimmer
+    implementation ("com.facebook.shimmer:shimmer:0.5.0@aar")
 }
 kapt {
     correctErrorTypes = true

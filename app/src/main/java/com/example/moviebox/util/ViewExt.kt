@@ -22,6 +22,25 @@ fun View.onClick(
     )
 }
 
+// Extension function to set the visibility to VISIBLE
+fun View.show() {
+    visibility = View.VISIBLE
+}
+
+// Extension function to set the visibility to INVISIBLE
+fun View.hide() {
+    visibility = View.INVISIBLE
+}
+
+// Extension function to set the visibility to GONE
+fun View.gone() {
+    visibility = View.GONE
+}
+
+fun View.toggleVisibility() {
+    visibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
+}
+
 private class DebouncedOnClickListener(
     private val debounceDuration: Long,
     private val clickAction: (View) -> Unit,
