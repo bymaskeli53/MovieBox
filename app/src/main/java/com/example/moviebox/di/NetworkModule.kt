@@ -1,9 +1,12 @@
 package com.example.moviebox.di
 
 import com.example.moviebox.BuildConfig
+import com.example.moviebox.GetPopularMoviesUseCase
+import com.example.moviebox.MovieRepository
+import com.example.moviebox.MovieRepositoryImpl
 import com.example.moviebox.remote.MovieApi
+import com.example.moviebox.util.DurationConstants.TIMEOUT_DURATION
 import com.example.moviebox.util.NetworkConstants.BASE_URL
-import com.example.moviebox.util.NetworkConstants.TIMEOUT_DURATION
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,4 +66,12 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideMovieApi(retrofit: Retrofit): MovieApi = retrofit.create(MovieApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMovieRepository(movieApi: MovieApi): MovieRepository = MovieRepositoryImpl(movieApi)
+
+    @Provides
+    @Singleton
+    fun provideGetPopularMoviesUseCase(movieRepository: MovieRepository): GetPopularMoviesUseCase = GetPopularMoviesUseCase(movieRepository)
 }
