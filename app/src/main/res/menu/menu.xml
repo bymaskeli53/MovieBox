@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/grid_recycler_view" android:title="Grid" />
+
+    <item android:id="@+id/linear_recycler_view" android:title="Linear" />
+
+</menu>

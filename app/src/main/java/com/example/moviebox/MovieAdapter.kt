@@ -6,12 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.moviebox.databinding.ItemGridMovieBinding
 import com.example.moviebox.databinding.ItemMovieBinding
 import com.example.moviebox.model.Result
 import com.example.moviebox.util.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 
-class MovieAdapter : ListAdapter<Result, MovieAdapter.MovieViewHolder>(MovieDiffCallback()) {
+class MovieAdapter(
+    private val isGridLayout: Boolean,
+) : ListAdapter<Result, RecyclerView.ViewHolder>(MovieDiffCallback()) {
     inner class MovieViewHolder(
         private val binding: ItemMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -26,19 +29,41 @@ class MovieAdapter : ListAdapter<Result, MovieAdapter.MovieViewHolder>(MovieDiff
         }
     }
 
+    inner class MovieGridViewHolder(
+        private val binding: ItemGridMovieBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(movie: Result) {
+            binding.ivMovie.load(IMAGE_BASE_URL + movie.poster_path) {
+                crossfade(CROSSFADE_DURATION)
+                placeholder(R.drawable.ic_generic_movie_poster)
+            }
+        }
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): MovieViewHolder {
-        val binding = ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieViewHolder(binding)
-    }
+    ): RecyclerView.ViewHolder =
+        if (isGridLayout) {
+            val binding =
+                ItemGridMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            MovieGridViewHolder(binding)
+        } else {
+            val binding =
+                ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            MovieViewHolder(binding)
+        }
 
     override fun onBindViewHolder(
-        holder: MovieViewHolder,
+        holder: RecyclerView.ViewHolder,
         position: Int,
     ) {
-        holder.bind(movie = getItem(position))
+        val movie = getItem(position)
+        if (isGridLayout) {
+            (holder as MovieGridViewHolder).bind(movie)
+        } else {
+            (holder as MovieViewHolder).bind(movie)
+        }
     }
 }
 
