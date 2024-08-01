@@ -26,6 +26,7 @@ import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -36,6 +37,7 @@ class MoviesFragment :
 
     val movieViewModel: MovieViewModel by viewModels()
 
+    // TODO: This will be handled to just observe
     private val isGridLayout get() = movieViewModel.isGridLayout.value
 
     private lateinit var movieAdapter: MovieAdapter
@@ -84,17 +86,26 @@ class MoviesFragment :
                 }
             }
         }
+
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            movieViewModel.isGridLayout.collect{ isGrid ->
+//                setUpRecyclerView(isGrid)
+//
+//            }
+//        }
     }
 
+    // TODO: Save user choice for grid or linear and save the choice in datastore and start app with previous choice
     private fun saveScrollPosition() {
-       // val layoutManager = binding.rvMovies.layoutManager as LinearLayoutManager
+        // val layoutManager = binding.rvMovies.layoutManager as LinearLayoutManager
         val layoutManager = binding.rvMovies.layoutManager
 
-        val savedScrollPosition = when (layoutManager) {
-            is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
-            is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
-            else -> 0
-        }
+        val savedScrollPosition =
+            when (layoutManager) {
+                is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+                is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+                else -> 0
+            }
         movieViewModel.setItemPosition(savedScrollPosition)
     }
 
