@@ -21,6 +21,12 @@ class MovieViewModel
         private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading())
         val movies: StateFlow<Resource<Movie>> = _movies
 
+        private val _position = MutableStateFlow<Int>(0)
+        val position: StateFlow<Int> get() = _position
+
+        private val _isGridLayout= MutableStateFlow<Boolean>(false)
+        val isGridLayout: StateFlow<Boolean> get() = _isGridLayout
+
         fun getPopularMovies() {
             if (isLoading) return
             isLoading = true
@@ -38,4 +44,12 @@ class MovieViewModel
                 }
             }
         }
+
+        fun setItemPosition(position: Int) {
+            _position.value = position
+        }
+
+    fun setGridLayout(isGridLayout: Boolean) {
+        _isGridLayout.value = isGridLayout
+    }
     }

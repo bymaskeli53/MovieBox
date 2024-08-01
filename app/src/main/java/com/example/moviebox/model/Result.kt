@@ -19,4 +19,9 @@ data class Result(
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Int,
-) : Parcelable
+) : Parcelable {
+    /**
+     * To string method is overriden to show movie title on detail screen
+     **/
+    override fun toString(): String = this.title
+}

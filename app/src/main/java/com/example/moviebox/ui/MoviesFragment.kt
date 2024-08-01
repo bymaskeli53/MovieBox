@@ -12,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviebox.MovieAdapter
@@ -32,9 +34,9 @@ class MoviesFragment :
     MenuProvider {
     private var binding: FragmentMoviesBinding by autoCleared()
 
-    private var isGridLayout = false
-
     val movieViewModel: MovieViewModel by viewModels()
+
+    private val isGridLayout get() = movieViewModel.isGridLayout.value
 
     private lateinit var movieAdapter: MovieAdapter
 
@@ -52,8 +54,6 @@ class MoviesFragment :
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        setUpRecyclerView(isGridLayout)
-
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 movieViewModel.movies.collect { resource ->
@@ -62,8 +62,11 @@ class MoviesFragment :
                             currentMovieList = resource.data?.results
                             val data = resource.data
                             if (data != null) {
+                                setUpRecyclerView(isGridLayout)
                                 movieAdapter.submitList(data.results)
+                                binding.rvMovies.itemAnimator = DefaultItemAnimator()
                                 binding.rvMovies.adapter = movieAdapter
+
                                 binding.shimmerView.stopShimmer()
                                 binding.shimmerView.hide()
                             }
@@ -83,19 +86,45 @@ class MoviesFragment :
         }
     }
 
+    private fun saveScrollPosition() {
+       // val layoutManager = binding.rvMovies.layoutManager as LinearLayoutManager
+        val layoutManager = binding.rvMovies.layoutManager
+
+        val savedScrollPosition = when (layoutManager) {
+            is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+            is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+            else -> 0
+        }
+        movieViewModel.setItemPosition(savedScrollPosition)
+    }
+
     private fun setUpRecyclerView(isGridLayout: Boolean) {
-        movieAdapter = MovieAdapter(isGridLayout)
+        movieAdapter =
+            MovieAdapter(isGridLayout, onMovieClick = { movie ->
+                saveScrollPosition()
+                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
+                findNavController().navigate(action)
+            })
+
+        // TODO: Recycler view kendini yeniden yaratıyor ve her seferinde linear oluyor view modele taşımalı veya shared preferences kullanmalı
         binding.rvMovies.layoutManager =
             if (isGridLayout) {
                 GridLayoutManager(requireContext(), 3)
             } else {
                 LinearLayoutManager(requireContext())
             }
+        binding.rvMovies.itemAnimator = DefaultItemAnimator()
         binding.rvMovies.adapter = movieAdapter
 
         currentMovieList?.let {
             movieAdapter.submitList(it)
         }
+
+//        binding.rvMovies.post {
+//            binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
+//        }
+
+        binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
     }
 
     override fun onCreateMenu(
@@ -108,14 +137,16 @@ class MoviesFragment :
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.grid_recycler_view -> {
-                isGridLayout = true
+                movieViewModel.setGridLayout(true)
+
                 setUpRecyclerView(isGridLayout)
                 return true
             }
 
             // TODO: This way will be changed after code refactoring because this is not extendable
             R.id.linear_recycler_view -> {
-                isGridLayout = false
+                movieViewModel.setGridLayout(false)
+
                 setUpRecyclerView(isGridLayout)
                 return true
             }

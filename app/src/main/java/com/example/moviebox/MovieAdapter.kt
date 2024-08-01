@@ -14,6 +14,7 @@ import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 
 class MovieAdapter(
     private val isGridLayout: Boolean,
+    private val onMovieClick: (Result) -> Unit = {},
 ) : ListAdapter<Result, RecyclerView.ViewHolder>(MovieDiffCallback()) {
     inner class MovieViewHolder(
         private val binding: ItemMovieBinding,
@@ -26,6 +27,9 @@ class MovieAdapter(
 
                 // transformations(CircleCropTransformation())
             }
+            binding.root.setOnClickListener {
+                onMovieClick(movie)
+            }
         }
     }
 
@@ -36,6 +40,9 @@ class MovieAdapter(
             binding.ivMovie.load(IMAGE_BASE_URL + movie.poster_path) {
                 crossfade(CROSSFADE_DURATION)
                 placeholder(R.drawable.ic_generic_movie_poster)
+            }
+            binding.root.setOnClickListener {
+                onMovieClick(movie)
             }
         }
     }

@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/moviesFragment"
         android:name="com.example.moviebox.ui.MoviesFragment"
-        android:label="MoviesFragment" >
+        android:label="Movies" >
         <action
             android:id="@+id/action_moviesFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -15,5 +15,9 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.example.moviebox.ui.DetailsFragment"
-        android:label="DetailsFragment" />
+        android:label="{movie}" >
+        <argument
+            android:name="movie"
+            app:argType="com.example.moviebox.model.Result" />
+    </fragment>
 </navigation>
