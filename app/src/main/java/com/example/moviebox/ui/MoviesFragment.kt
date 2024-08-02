@@ -86,7 +86,12 @@ class MoviesFragment :
                         }
 
                         is Resource.Error -> {
-                            Toast.makeText(requireContext(),"${resource.message}",Toast.LENGTH_SHORT).show()
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    "${resource.message}",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
                         }
                     }
                 }
@@ -100,13 +105,17 @@ class MoviesFragment :
 //            }
 //        }
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
-        networkConnectionLiveData.observe(viewLifecycleOwner){ isConnected ->
+        networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 movieViewModel.getPopularMovies()
+                Toast
+                    .makeText(
+                        requireContext(),
+                        getString(R.string.user_connected_to_internet),
+                        Toast.LENGTH_SHORT,
+                    ).show()
             }
         }
-
-
     }
 
     // TODO: Save user choice for grid or linear and save the choice in datastore and start app with previous choice

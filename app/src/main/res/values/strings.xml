@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MovieBox</string>
+    <string name="user_connected_to_internet">User connected to internet</string>
 </resources>
