@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import com.example.moviebox.R
 import com.example.moviebox.Resource
 import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.model.Result
+import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
 import com.example.moviebox.util.show
@@ -34,6 +36,8 @@ class MoviesFragment :
     Fragment(R.layout.fragment_movies),
     MenuProvider {
     private var binding: FragmentMoviesBinding by autoCleared()
+
+    private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
     val movieViewModel: MovieViewModel by viewModels()
 
@@ -69,6 +73,8 @@ class MoviesFragment :
                                 binding.rvMovies.itemAnimator = DefaultItemAnimator()
                                 binding.rvMovies.adapter = movieAdapter
 
+                                // TODO: Uygulama tekrar çalıştırılmadan internet açıldığında veri çekilecek.
+
                                 binding.shimmerView.stopShimmer()
                                 binding.shimmerView.hide()
                             }
@@ -80,7 +86,7 @@ class MoviesFragment :
                         }
 
                         is Resource.Error -> {
-                            println(resource.message)
+                            Toast.makeText(requireContext(),"${resource.message}",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -93,6 +99,14 @@ class MoviesFragment :
 //
 //            }
 //        }
+        networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
+        networkConnectionLiveData.observe(viewLifecycleOwner){ isConnected ->
+            if (isConnected) {
+                movieViewModel.getPopularMovies()
+            }
+        }
+
+
     }
 
     // TODO: Save user choice for grid or linear and save the choice in datastore and start app with previous choice

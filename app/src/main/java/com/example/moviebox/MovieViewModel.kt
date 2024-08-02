@@ -24,7 +24,7 @@ class MovieViewModel
         private val _position = MutableStateFlow<Int>(0)
         val position: StateFlow<Int> get() = _position
 
-        private val _isGridLayout= MutableStateFlow<Boolean>(false)
+        private val _isGridLayout = MutableStateFlow<Boolean>(false)
         val isGridLayout: StateFlow<Boolean> get() = _isGridLayout
 
         fun getPopularMovies() {
@@ -38,7 +38,7 @@ class MovieViewModel
                     //  val currentData = (_movies.value as? Resource.Success)?.data
                     _movies.update { Resource.Success(result) }
                 } catch (e: Exception) {
-                    _movies.update { Resource.Error(e.message.toString()) }
+                    _movies.update { Resource.Error(e.localizedMessage.toString()) }
                 } finally {
                     isLoading = false
                 }
@@ -49,7 +49,7 @@ class MovieViewModel
             _position.value = position
         }
 
-    fun setGridLayout(isGridLayout: Boolean) {
-        _isGridLayout.value = isGridLayout
-    }
+        fun setGridLayout(isGridLayout: Boolean) {
+            _isGridLayout.value = isGridLayout
+        }
     }

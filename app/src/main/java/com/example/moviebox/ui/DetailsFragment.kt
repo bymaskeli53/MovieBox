@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import coil.load
 import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentDetailsBinding
+import com.example.moviebox.util.NetworkConstants
 import com.example.moviebox.util.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,13 +17,23 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private val args: DetailsFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailsBinding.bind(view)
+        val movie = args.movie
 
-       binding.tvMovieTitle.text =  args.movie.title
-       binding.tvMovieOverview.text =  args.movie.overview
-        binding.tvMovieReleaseDate.text = args.movie.release_date
+        val posterUrl = NetworkConstants.IMAGE_BASE_URL + movie.poster_path
 
+        binding.ivBackground.load(posterUrl) {
+            placeholder(R.drawable.ic_generic_movie_poster)
+            error(R.drawable.ic_launcher_background)
+        }
+
+        binding.tvMovieTitle.text = movie.title
+        binding.tvMovieOverview.text = movie.overview
+        binding.tvMovieReleaseDate.text = movie.release_date
     }
 }

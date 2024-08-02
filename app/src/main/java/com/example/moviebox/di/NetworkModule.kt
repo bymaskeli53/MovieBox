@@ -1,15 +1,18 @@
 package com.example.moviebox.di
 
+import android.content.Context
 import com.example.moviebox.BuildConfig
 import com.example.moviebox.GetPopularMoviesUseCase
 import com.example.moviebox.MovieRepository
 import com.example.moviebox.MovieRepositoryImpl
 import com.example.moviebox.remote.MovieApi
 import com.example.moviebox.util.DurationConstants.TIMEOUT_DURATION
+import com.example.moviebox.util.NetworkConnectionInterceptor
 import com.example.moviebox.util.NetworkConstants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,13 +39,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun provideNetworkConnectionInterceptor(
+        @ApplicationContext context: Context,
+    ): NetworkConnectionInterceptor = NetworkConnectionInterceptor(context)
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        networkConnectionInterceptor: NetworkConnectionInterceptor,
+    ): OkHttpClient =
         OkHttpClient
             .Builder()
             .callTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
             .connectTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(networkConnectionInterceptor)
             .build()
 
     /**

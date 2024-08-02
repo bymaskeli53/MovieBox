@@ -65,6 +65,9 @@ dependencies {
     @Suppress("ktlint:standard:property-naming")
     val nav_version = "2.7.7"
 
+    @Suppress("ktlint:standard:property-naming")
+    val paging_version = "3.3.1"
+
     ksp("androidx.room:room-compiler:$room_version")
 
     implementation(libs.androidx.core.ktx)
@@ -111,6 +114,9 @@ dependencies {
 
     // Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0@aar")
+
+    // paging
+    implementation("androidx.paging:paging-runtime:$paging_version")
 }
 kapt {
     correctErrorTypes = true
