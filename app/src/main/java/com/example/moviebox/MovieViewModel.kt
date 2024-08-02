@@ -3,6 +3,7 @@ package com.example.moviebox
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebox.model.Movie
+import com.example.moviebox.util.FormatDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,7 @@ class MovieViewModel
     @Inject
     constructor(
         private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
+        private val formatDateUseCase: FormatDateUseCase,
     ) : ViewModel() {
         private var isLoading = false
 
@@ -52,4 +54,6 @@ class MovieViewModel
         fun setGridLayout(isGridLayout: Boolean) {
             _isGridLayout.value = isGridLayout
         }
+
+        fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
     }
