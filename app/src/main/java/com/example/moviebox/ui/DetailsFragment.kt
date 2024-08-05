@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -26,6 +27,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment(R.layout.fragment_details) {
+    private var isFavorite = false
+
     private var actorList: List<Cast>? = null
     private var binding: FragmentDetailsBinding by autoCleared()
 
@@ -86,6 +89,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             movieViewModel.fetchTrailerKey(movieId)
         }
 
+        binding.ivStar.setOnClickListener {
+            toggleFavorite()
+        }
+
         movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
             trailerKey?.let {
                 val intent =
@@ -93,5 +100,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 startActivity(intent)
             }
         }
+    }
+
+    private fun toggleFavorite() {
+        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
+
+        if (isFavorite) {
+            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
+        } else {
+            binding.ivStar.setImageResource(R.drawable.ic_star_filled)
+            binding.ivStar.startAnimation(animation)
+
+        }
+        isFavorite = !isFavorite
     }
 }
