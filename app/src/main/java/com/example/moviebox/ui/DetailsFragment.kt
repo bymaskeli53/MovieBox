@@ -1,5 +1,7 @@
 package com.example.moviebox.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -27,9 +29,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var actorList: List<Cast>? = null
     private var binding: FragmentDetailsBinding by autoCleared()
 
-    private val movieViewModel : MovieViewModel by viewModels()
-    
-    private val creditsViewModel : CreditsViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by viewModels()
+
+    private val creditsViewModel: CreditsViewModel by viewModels()
 
     private val args: DetailsFragmentArgs by navArgs()
 
@@ -53,9 +55,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.text = movie.overview
         binding.tvMovieReleaseDate.text = formattedDateToDayMonthYear
-        
-        viewLifecycleOwner.lifecycleScope.launch {repeatOnLifecycle(Lifecycle.State.STARTED) {
-                creditsViewModel.actors.collect{ resource ->
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                creditsViewModel.actors.collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
                             actorList = resource.data?.cast
@@ -64,19 +67,31 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                                 val actorsAdapter = ActorsAdapter()
                                 actorsAdapter.submitList(actorList)
                                 binding.rvActors.adapter = actorsAdapter
-
+                            }
                         }
-                    }
+                        // TODO: Bu durumlar handle edilecek
                         is Resource.Loading -> {
                             println("Loading")
                         }
+
                         is Resource.Error -> {
                             println("Error")
                         }
                     }
-
                 }
-        } }
-        
+            }
+        }
+        binding.cardYoutube.setOnClickListener {
+            val movieId = args.movie.id
+            movieViewModel.fetchTrailerKey(movieId)
+        }
+
+        movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
+            trailerKey?.let {
+                val intent =
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$it"))
+                startActivity(intent)
+            }
+        }
     }
 }

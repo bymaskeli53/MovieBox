@@ -1,5 +1,7 @@
 package com.example.moviebox
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebox.model.Movie
@@ -17,11 +19,15 @@ class MovieViewModel
     constructor(
         private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
         private val formatDateUseCase: FormatDateUseCase,
+        private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase
     ) : ViewModel() {
         private var isLoading = false
 
         private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading())
         val movies: StateFlow<Resource<Movie>> = _movies
+
+    private val _trailerKey = MutableLiveData<String?>()
+    val trailerKey: LiveData<String?> get() = _trailerKey
 
         private val _position = MutableStateFlow<Int>(0)
         val position: StateFlow<Int> get() = _position
@@ -56,4 +62,12 @@ class MovieViewModel
         }
 
         fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
+
+
+    fun fetchTrailerKey(movieId: Int) {
+        viewModelScope.launch {
+            val key = getMovieTrailerKeyUseCase(movieId)
+            _trailerKey.value = key
+        }
+        }
     }

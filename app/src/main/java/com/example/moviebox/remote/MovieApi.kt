@@ -3,6 +3,7 @@ package com.example.moviebox.remote
 import com.example.moviebox.BuildConfig
 import com.example.moviebox.model.Actors
 import com.example.moviebox.model.Movie
+import com.example.moviebox.model.TrailerResponse
 import com.example.moviebox.util.NetworkConstants
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -23,4 +24,10 @@ interface MovieApi {
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
     ): Actors
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieTrailers(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+    ): TrailerResponse
 }
