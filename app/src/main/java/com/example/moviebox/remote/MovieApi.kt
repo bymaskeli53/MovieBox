@@ -1,10 +1,12 @@
 package com.example.moviebox.remote
 
 import com.example.moviebox.BuildConfig
+import com.example.moviebox.model.Actors
 import com.example.moviebox.model.Movie
 import com.example.moviebox.util.NetworkConstants
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieApi {
@@ -15,4 +17,10 @@ interface MovieApi {
         @Header("Authorization") authorizationHeader: String = NetworkConstants.AUTHORIZATION_HEADER,
         @Header("Accept") acceptHeader: String = NetworkConstants.ACCEPT_HEADER,
     ): Movie
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+    ): Actors
 }
