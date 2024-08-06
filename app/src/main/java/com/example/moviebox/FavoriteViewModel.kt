@@ -3,9 +3,11 @@ package com.example.moviebox
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,5 +42,13 @@ class FavoriteViewModel
             viewModelScope.launch {
                 movieRepository.deleteFavoriteMovie(movie)
             }
+        }
+
+    fun onFavoriteButtonClick(movie: MovieEntity) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                movieRepository.updateFavoriteStatus(movie)
+            }
+        }
         }
     }

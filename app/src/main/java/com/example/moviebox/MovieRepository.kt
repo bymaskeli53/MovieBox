@@ -18,5 +18,7 @@ interface MovieRepository {
 
     suspend fun deleteFavoriteMovie(movieEntity: MovieEntity)
 
+    suspend fun updateFavoriteStatus(movieEntity: MovieEntity)
+
 
 }

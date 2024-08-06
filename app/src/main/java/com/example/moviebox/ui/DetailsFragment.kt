@@ -111,18 +111,20 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
         val movieEntity =
             MovieEntity(
+                id = args.movie.id,
                 title = args.movie.title,
                 overview = args.movie.overview,
                 releaseDate = args.movie.release_date,
             )
         if (isFavorite) {
             binding.ivStar.setImageResource(R.drawable.ic_star_empty)
-            favoriteViewModel.deleteFavoriteMovie(movieEntity)
+
         } else {
             binding.ivStar.setImageResource(R.drawable.ic_star_filled)
             binding.ivStar.startAnimation(animation)
-            favoriteViewModel.insertFavoriteMovie(movieEntity)
         }
+        favoriteViewModel.onFavoriteButtonClick(movieEntity)
+
         isFavorite = !isFavorite
 
         viewLifecycleOwner.lifecycleScope.launch {

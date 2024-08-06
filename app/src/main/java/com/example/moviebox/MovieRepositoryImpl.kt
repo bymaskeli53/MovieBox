@@ -19,7 +19,7 @@ class MovieRepositoryImpl
 
         override suspend fun getMovieTrailers(movieId: Int): TrailerResponse = movieApi.getMovieTrailers(movieId)
 
-        override fun getFavoriteMovies(): Flow<List<MovieEntity>> = movieDao.getAllMovies()
+        override fun getFavoriteMovies(): Flow<List<MovieEntity>> = movieDao.getFavoriteMovies()
 
         override suspend fun insertFavoriteMovie(movieEntity: MovieEntity) {
             movieDao.insertMovie(movieEntity)
@@ -27,5 +27,17 @@ class MovieRepositoryImpl
 
         override suspend fun deleteFavoriteMovie(movieEntity: MovieEntity) {
             movieDao.deleteMovie(movieEntity)
+        }
+
+        override suspend fun updateFavoriteStatus(movieEntity: MovieEntity) {
+            val movie = movieDao.getMovieById(movieEntity.id)
+
+            if (movie != null) {
+                movie.isFavorite = !movie.isFavorite
+                movieDao.update(movie)
+            } else {
+                movieEntity.isFavorite = true
+                movieDao.insertMovie(movieEntity)
+            }
         }
     }

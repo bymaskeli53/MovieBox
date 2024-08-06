@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.moviebox.util.DatabaseConstants.MOVIE_TABLE
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,13 @@ interface MovieDao {
 
     @Delete
     suspend fun deleteMovie(movieEntity: MovieEntity)
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE isFavorite=1")
+    fun getFavoriteMovies(): Flow<List<MovieEntity>>
+
+    @Query("SELECT * FROM movie_table WHERE id = :movieId")
+    suspend fun getMovieById(movieId: Int?): MovieEntity?
+
+    @Update
+    suspend fun update(movie: MovieEntity)
 }
