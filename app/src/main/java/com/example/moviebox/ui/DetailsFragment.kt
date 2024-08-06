@@ -3,6 +3,7 @@ package com.example.moviebox.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
@@ -14,6 +15,8 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.moviebox.ActorsAdapter
 import com.example.moviebox.CreditsViewModel
+import com.example.moviebox.FavoriteViewModel
+import com.example.moviebox.MovieEntity
 import com.example.moviebox.MovieViewModel
 import com.example.moviebox.R
 import com.example.moviebox.Resource
@@ -35,6 +38,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private val movieViewModel: MovieViewModel by viewModels()
 
     private val creditsViewModel: CreditsViewModel by viewModels()
+
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     private val args: DetailsFragmentArgs by navArgs()
 
@@ -104,14 +109,30 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private fun toggleFavorite() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
-
+        val movieEntity =
+            MovieEntity(
+                title = args.movie.title,
+                overview = args.movie.overview,
+                releaseDate = args.movie.release_date,
+            )
         if (isFavorite) {
             binding.ivStar.setImageResource(R.drawable.ic_star_empty)
+            favoriteViewModel.deleteFavoriteMovie(movieEntity)
         } else {
             binding.ivStar.setImageResource(R.drawable.ic_star_filled)
             binding.ivStar.startAnimation(animation)
-
+            favoriteViewModel.insertFavoriteMovie(movieEntity)
         }
         isFavorite = !isFavorite
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favoriteViewModel.favoriteMovies.collect { movieEntity ->
+                    for (movie in movieEntity) {
+                        Log.d("FavoriteMovies", movie.title)
+                    }
+                }
+            }
+        }
     }
 }

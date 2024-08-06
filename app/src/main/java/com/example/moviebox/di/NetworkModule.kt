@@ -3,6 +3,7 @@ package com.example.moviebox.di
 import android.content.Context
 import com.example.moviebox.BuildConfig
 import com.example.moviebox.GetPopularMoviesUseCase
+import com.example.moviebox.MovieDao
 import com.example.moviebox.MovieRepository
 import com.example.moviebox.MovieRepositoryImpl
 import com.example.moviebox.remote.MovieApi
@@ -82,7 +83,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(movieApi: MovieApi): MovieRepository = MovieRepositoryImpl(movieApi)
+    fun provideMovieRepository(movieApi: MovieApi,movieDao: MovieDao): MovieRepository = MovieRepositoryImpl(movieApi,movieDao)
 
     @Provides
     @Singleton
