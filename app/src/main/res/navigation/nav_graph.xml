@@ -23,4 +23,12 @@
             android:name="movie"
             app:argType="com.example.moviebox.model.Result" />
     </fragment>
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.moviebox.ui.FavoritesFragment"
+        android:label="Favorites" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.moviebox.ui.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

@@ -3,4 +3,7 @@
     <string name="user_connected_to_internet">User connected to internet</string>
     <string name="youtube_button">Watch the trailer</string>
     <string name="watch_trailer_on_youtube">Watch Trailer on YouTube</string>
+    <string name="movies">Movies</string>
+    <string name="favorites">Favorites</string>
+    <string name="search">Search</string>
 </resources>
