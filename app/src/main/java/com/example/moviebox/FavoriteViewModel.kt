@@ -23,7 +23,7 @@ class FavoriteViewModel
             getFavoriteMovies()
         }
 
-        private fun getFavoriteMovies() {
+         fun getFavoriteMovies() {
             viewModelScope.launch {
                 movieRepository.getFavoriteMovies().collect {
                     _favoriteMovies.value = it
