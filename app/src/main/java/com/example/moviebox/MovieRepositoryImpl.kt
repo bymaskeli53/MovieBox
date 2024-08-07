@@ -40,4 +40,6 @@ class MovieRepositoryImpl
                 movieDao.insertMovie(movieEntity)
             }
         }
+
+        override suspend fun searchMovies(query: String): Movie = movieApi.searchMovies(query = query)
     }

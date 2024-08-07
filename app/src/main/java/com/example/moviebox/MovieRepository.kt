@@ -20,5 +20,7 @@ interface MovieRepository {
 
     suspend fun updateFavoriteStatus(movieEntity: MovieEntity)
 
+    suspend fun searchMovies(query: String): Movie
+
 
 }
