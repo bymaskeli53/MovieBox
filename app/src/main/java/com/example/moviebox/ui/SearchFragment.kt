@@ -6,6 +6,7 @@ import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviebox.MovieAdapter2
 import com.example.moviebox.R
 import com.example.moviebox.Resource
@@ -30,6 +31,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
+        // ViewCompat.requestApplyInsets(view)
 
         binding.searchView.setOnQueryTextListener(
             object : OnQueryTextListener {
@@ -54,8 +56,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         val data = movies.data
                         val adapter = data?.results?.let { MovieAdapter2(it) }
                         binding.rvSearch.adapter = adapter
-                        adapter?.notifyDataSetChanged()
-
+                        binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
                     }
                 }
             }
