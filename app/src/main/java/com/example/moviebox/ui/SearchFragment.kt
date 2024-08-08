@@ -53,8 +53,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     is Resource.Loading -> binding.progressBar.show()
                     is Resource.Success -> {
                         binding.progressBar.hide()
+
                         val data = movies.data
-                        val adapter = data?.results?.let { MovieAdapter2(it) }
+                        for (i in data?.results?.indices!!) {
+                            val formattedDateToDayMonthYear =
+                                searchViewModel.formatDate(data.results[i].release_date)
+                            data.results.get(i)?.release_date = formattedDateToDayMonthYear
+                        }
+                        val adapter = data.results.let { MovieAdapter2(it) }
                         binding.rvSearch.adapter = adapter
                         binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
                     }

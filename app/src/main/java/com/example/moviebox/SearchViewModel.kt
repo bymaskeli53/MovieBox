@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebox.model.Movie
+import com.example.moviebox.util.FormatDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(val repository: MovieRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(val repository: MovieRepository,
+                                          private val formatDateUseCase: FormatDateUseCase,) : ViewModel() {
 
     private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading())
     val movies: StateFlow<Resource<Movie>> = _movies
@@ -39,4 +41,6 @@ class SearchViewModel @Inject constructor(val repository: MovieRepository) : Vie
             }
         }
     }
+
+    fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
 }
