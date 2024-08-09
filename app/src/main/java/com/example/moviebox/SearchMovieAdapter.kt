@@ -10,6 +10,7 @@ import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 
 class SearchMovieAdapter(
     val movies: List<Result>,
+    private val onMovieClick: (Result) -> Unit = {},
 ) : RecyclerView.Adapter<SearchMovieAdapter.SearchMovieViewHolder>() {
     inner class SearchMovieViewHolder(
         val binding: ItemSearchMovieBinding,
@@ -36,5 +37,9 @@ class SearchMovieAdapter(
             placeholder(R.drawable.ic_generic_movie_poster)
         }
         holder.binding.textViewMovieDate.text = movies[position].release_date
+
+        holder.binding.root.setOnClickListener {
+            onMovieClick(movies[position])
+        }
     }
 }

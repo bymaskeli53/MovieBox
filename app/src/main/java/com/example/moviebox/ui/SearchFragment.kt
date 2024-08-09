@@ -6,6 +6,7 @@ import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviebox.R
 import com.example.moviebox.Resource
@@ -64,7 +65,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                     searchViewModel.formatDate(data.results[i].release_date)
                                 data.results.get(i)?.release_date = formattedDateToDayMonthYear
                             }
-                            val adapter = data.results.let { SearchMovieAdapter(it) }
+                            val adapter =
+                                data.results.let {
+                                    SearchMovieAdapter(it) {
+                                        val action =
+                                            SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
+                                                it,
+                                            )
+                                        findNavController().navigate(action)
+                                    }
+                                }
                             binding.rvSearch.adapter = adapter
                             binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
                         } else {

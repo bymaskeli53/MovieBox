@@ -30,5 +30,9 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.moviebox.ui.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
 </navigation>

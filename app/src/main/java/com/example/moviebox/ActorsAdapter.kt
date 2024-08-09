@@ -1,6 +1,5 @@
 package com.example.moviebox
 
-import android.content.ClipData.Item
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -28,13 +27,18 @@ class ActorsAdapter : ListAdapter<Cast, ActorsAdapter.ActorsViewHolder>(ActorsDi
         }
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorsViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ActorsViewHolder {
         val binding = ItemActorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ActorsViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ActorsViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ActorsViewHolder,
+        position: Int,
+    ) {
         holder.bind(getItem(position))
     }
 }
@@ -44,7 +48,6 @@ class ActorsDiffCallback : DiffUtil.ItemCallback<Cast>() {
         oldItem: Cast,
         newItem: Cast,
     ): Boolean = oldItem.id == newItem.id
-    
 
     override fun areContentsTheSame(
         oldItem: Cast,

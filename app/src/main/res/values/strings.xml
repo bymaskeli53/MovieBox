@@ -7,4 +7,6 @@
     <string name="favorites">Favorites</string>
     <string name="search">Search</string>
     <string name="could_not_find_movie">Could not find movie</string>
+    <string name="no_trailer_found">No Trailer Found</string>
+    <string name="could_not_find_trailer">Could not find trailer</string>
 </resources>

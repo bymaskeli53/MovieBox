@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -115,7 +116,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                         }
                         // TODO: Bu durumlar handle edilecek
                         is Resource.Loading -> {
-                           binding.progressBarActors.show()
+                            binding.progressBarActors.show()
                         }
 
                         is Resource.Error -> {
@@ -142,13 +143,20 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                     Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$it"))
                 startActivity(intent)
             }
+            if (trailerKey == null) {
+                Toast
+                    .makeText(
+                        requireContext(),
+                        getString(R.string.could_not_find_trailer),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+            }
         }
     }
 
     private fun toggleFavorite() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
 
-        // movieEntity in favoriteViewModel.favoriteMovies.value
         if (vs?.isFavorite == true) {
             binding.ivStar.setImageResource(R.drawable.ic_star_empty)
         } else {
