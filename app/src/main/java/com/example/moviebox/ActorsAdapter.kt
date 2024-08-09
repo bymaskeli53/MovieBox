@@ -26,6 +26,7 @@ class ActorsAdapter(
                 error(R.drawable.ic_generic_movie_poster)
             }
             binding.tvActorName.text = actor.name
+
             binding.root.setOnClickListener {
                 onActorClick(actor)
             }

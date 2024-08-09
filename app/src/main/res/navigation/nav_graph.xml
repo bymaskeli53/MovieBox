@@ -22,6 +22,9 @@
         <argument
             android:name="movie"
             app:argType="com.example.moviebox.model.Result" />
+        <action
+            android:id="@+id/action_detailsFragment_to_actorBottomSheetDialogFragment"
+            app:destination="@id/actorBottomSheetDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -35,4 +38,12 @@
             android:id="@+id/action_searchFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/actorBottomSheetDialogFragment"
+        android:name="com.example.moviebox.ActorBottomSheetDialogFragment"
+        android:label="ActorBottomSheetDialogFragment" >
+        <argument
+            android:name="actor"
+            app:argType="com.example.moviebox.model.Cast" />
+    </dialog>
 </navigation>

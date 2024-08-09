@@ -12,9 +12,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
-import com.example.moviebox.ActorBottomSheetDialogFragment
 import com.example.moviebox.ActorsAdapter
 import com.example.moviebox.CreditsViewModel
 import com.example.moviebox.FavoriteViewModel
@@ -110,10 +110,16 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                             actorList = resource.data?.cast
                             val data = resource.data
                             if (data != null) {
-                                val actorsAdapter = ActorsAdapter(onActorClick = {
-                                    val bottomSheetFragment = ActorBottomSheetDialogFragment()
-                                    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
-                                })
+                                val actorsAdapter =
+                                    ActorsAdapter(onActorClick = { actor ->
+                                        val action =
+                                            DetailsFragmentDirections.actionDetailsFragmentToActorBottomSheetDialogFragment(
+                                                actor,
+                                            )
+                                        findNavController().navigate(action)
+//                                    val bottomSheetFragment = ActorBottomSheetDialogFragment()
+//                                    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+                                    })
                                 actorsAdapter.submitList(actorList)
                                 binding.rvActors.adapter = actorsAdapter
                                 binding.progressBarActors.hide()
