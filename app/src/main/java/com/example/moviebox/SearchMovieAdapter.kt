@@ -10,24 +10,24 @@ import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 
 class SearchMovieAdapter(
     val movies: List<Result>,
-) : RecyclerView.Adapter<SearchMovieAdapter.MovieViewHolder2>() {
-    inner class MovieViewHolder2(
+) : RecyclerView.Adapter<SearchMovieAdapter.SearchMovieViewHolder>() {
+    inner class SearchMovieViewHolder(
         val binding: ItemSearchMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): MovieViewHolder2 {
+    ): SearchMovieViewHolder {
         val binding =
             ItemSearchMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieViewHolder2(binding)
+        return SearchMovieViewHolder(binding)
     }
 
     override fun getItemCount(): Int = movies.size
 
     override fun onBindViewHolder(
-        holder: MovieViewHolder2,
+        holder: SearchMovieViewHolder,
         position: Int,
     ) {
         holder.binding.textViewMovieTitle.text = movies[position].title

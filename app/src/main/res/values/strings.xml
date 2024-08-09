@@ -6,4 +6,5 @@
     <string name="movies">Movies</string>
     <string name="favorites">Favorites</string>
     <string name="search">Search</string>
+    <string name="could_not_find_movie">Could not find movie</string>
 </resources>

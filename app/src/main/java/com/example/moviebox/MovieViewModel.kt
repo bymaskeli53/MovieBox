@@ -23,7 +23,7 @@ class MovieViewModel
     ) : ViewModel() {
         private var isLoading = false
 
-        private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading())
+        private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading)
         val movies: StateFlow<Resource<Movie>> = _movies
 
     private val _trailerKey = MutableLiveData<String?>()
@@ -39,14 +39,14 @@ class MovieViewModel
             if (isLoading) return
             isLoading = true
             viewModelScope.launch {
-                _movies.update { Resource.Loading() }
+                _movies.update { Resource.Loading }
                 isLoading = true
                 try {
                     val result = getPopularMoviesUseCase()
                     //  val currentData = (_movies.value as? Resource.Success)?.data
                     _movies.update { Resource.Success(result) }
                 } catch (e: Exception) {
-                    _movies.update { Resource.Error(e.localizedMessage.toString()) }
+                    _movies.update { Resource.Error(exception = e) }
                 } finally {
                     isLoading = false
                 }

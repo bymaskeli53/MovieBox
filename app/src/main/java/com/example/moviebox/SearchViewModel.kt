@@ -1,7 +1,5 @@
 package com.example.moviebox
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebox.model.Movie
@@ -14,33 +12,36 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(val repository: MovieRepository,
-                                          private val formatDateUseCase: FormatDateUseCase,) : ViewModel() {
+class SearchViewModel
+    @Inject
+    constructor(
+        val repository: MovieRepository,
+        private val formatDateUseCase: FormatDateUseCase,
+    ) : ViewModel() {
+        private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Idle)
+        val movies: StateFlow<Resource<Movie>> = _movies
 
-    private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading())
-    val movies: StateFlow<Resource<Movie>> = _movies
+        private var isLoading = false
 
-    private var isLoading = false
-
-    fun searchMovies(query: String) {
-        if (isLoading) return
-        isLoading = true
-
-        viewModelScope.launch {
-            _movies.update { Resource.Loading() }
+        fun searchMovies(query: String) {
+            if (isLoading) return
             isLoading = true
-            try {
-                val response = repository.searchMovies(query)
-                _movies.update { Resource.Success(response) }
-                //_movies.value = response.results
-            } catch (e: Exception) {
-                _movies.update { Resource.Error(e.localizedMessage.toString()) }
-                // TODO: will be handled later
-            } finally {
-                isLoading = false
+
+            viewModelScope.launch {
+                _movies.update { Resource.Loading }
+                isLoading = true
+                try {
+                    val response = repository.searchMovies(query)
+                    _movies.update { Resource.Success(response) }
+                    // _movies.value = response.results
+                } catch (e: Exception) {
+                    _movies.update { Resource.Error(exception = e) }
+                    // TODO: will be handled later
+                } finally {
+                    isLoading = false
+                }
             }
         }
-    }
 
-    fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
-}
+        fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
+    }

@@ -16,7 +16,7 @@ class CreditsViewModel
     constructor(
         private val movieCreditsUseCase: GetMovieCreditsUseCase,
     ) : ViewModel() {
-        private val _actors = MutableStateFlow<Resource<Actors>>(Resource.Loading())
+        private val _actors = MutableStateFlow<Resource<Actors>>(Resource.Loading)
         val actors: StateFlow<Resource<Actors>> get() = _actors
 
         private var isLoading = false
@@ -25,14 +25,14 @@ class CreditsViewModel
             if (isLoading) return
             isLoading = true
             viewModelScope.launch {
-                _actors.update { Resource.Loading() }
+                _actors.update { Resource.Loading }
                 isLoading = true
 
                 try {
                     val result = movieCreditsUseCase(movieId = movieId)
                     _actors.update { Resource.Success(result) }
                 } catch (e: Exception) {
-                    _actors.update { Resource.Error(e.localizedMessage.toString()) }
+                    _actors.update { Resource.Error(exception = e) }
                 } finally {
                     isLoading = false
                 }

@@ -49,21 +49,31 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel.movies.collect { movies ->
                 when (movies) {
-                    is Resource.Error -> println("Hi")
+                    is Resource.Error -> throw Exception(movies.exception)
                     is Resource.Loading -> binding.progressBar.show()
                     is Resource.Success -> {
                         binding.progressBar.hide()
 
                         val data = movies.data
-                        for (i in data?.results?.indices!!) {
-                            val formattedDateToDayMonthYear =
-                                searchViewModel.formatDate(data.results[i].release_date)
-                            data.results.get(i)?.release_date = formattedDateToDayMonthYear
+
+                        if (data.results.isNotEmpty()) {
+                            binding.rvSearch.show()
+                            binding.tvNoMovieFound.hide()
+                            for (i in data?.results?.indices!!) {
+                                val formattedDateToDayMonthYear =
+                                    searchViewModel.formatDate(data.results[i].release_date)
+                                data.results.get(i)?.release_date = formattedDateToDayMonthYear
+                            }
+                            val adapter = data.results.let { SearchMovieAdapter(it) }
+                            binding.rvSearch.adapter = adapter
+                            binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
+                        } else {
+                            binding.rvSearch.hide()
+                            binding.tvNoMovieFound.show()
+
                         }
-                        val adapter = data.results.let { SearchMovieAdapter(it) }
-                        binding.rvSearch.adapter = adapter
-                        binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
-                    }
+
+                    } else -> {}
                 }
             }
         }

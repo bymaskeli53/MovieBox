@@ -118,6 +118,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                         is Resource.Error -> {
                             println("Error")
                         }
+
+                        else -> {}
                     }
                 }
             }
@@ -126,8 +128,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             val movieId = args.movie.id
             movieViewModel.fetchTrailerKey(movieId)
         }
-
-        // binding.ivStar.setImageResource(if (movieEntity.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_empty)
 
         binding.ivStar.setOnClickListener {
             toggleFavorite()

@@ -89,10 +89,12 @@ class MoviesFragment :
                             Toast
                                 .makeText(
                                     requireContext(),
-                                    "${resource.message}",
+                                    "${resource.exception.localizedMessage}",
                                     Toast.LENGTH_SHORT,
                                 ).show()
                         }
+
+                        else -> {}
                     }
                 }
             }
