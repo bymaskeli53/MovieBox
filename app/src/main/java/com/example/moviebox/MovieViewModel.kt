@@ -70,4 +70,6 @@ class MovieViewModel
             _trailerKey.value = key
         }
         }
+
+
     }

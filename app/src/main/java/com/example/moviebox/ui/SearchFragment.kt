@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.moviebox.MovieAdapter2
+import com.example.moviebox.SearchMovieAdapter
 import com.example.moviebox.R
 import com.example.moviebox.Resource
 import com.example.moviebox.SearchViewModel
@@ -60,7 +60,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                 searchViewModel.formatDate(data.results[i].release_date)
                             data.results.get(i)?.release_date = formattedDateToDayMonthYear
                         }
-                        val adapter = data.results.let { MovieAdapter2(it) }
+                        val adapter = data.results.let { SearchMovieAdapter(it) }
                         binding.rvSearch.adapter = adapter
                         binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
                     }

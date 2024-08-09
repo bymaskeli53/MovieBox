@@ -26,6 +26,8 @@ interface MovieDao {
     @Query("SELECT * FROM movie_table WHERE id = :movieId")
     suspend fun getMovieById(movieId: Int?): MovieEntity?
 
+
+
     @Update
     suspend fun update(movie: MovieEntity)
 }

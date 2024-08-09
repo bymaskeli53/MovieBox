@@ -19,11 +19,14 @@ class FavoriteViewModel
         private val _favoriteMovies = MutableStateFlow<List<MovieEntity>>(emptyList())
         val favoriteMovies: StateFlow<List<MovieEntity>> get() = _favoriteMovies
 
+        private val _currentMovie = MutableStateFlow<MovieEntity?>(null)
+        val currentMovie: StateFlow<MovieEntity?> = _currentMovie
+
         init {
             getFavoriteMovies()
         }
 
-         fun getFavoriteMovies() {
+        fun getFavoriteMovies() {
             viewModelScope.launch {
                 movieRepository.getFavoriteMovies().collect {
                     _favoriteMovies.value = it
@@ -44,11 +47,17 @@ class FavoriteViewModel
             }
         }
 
-    fun onFavoriteButtonClick(movie: MovieEntity) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                movieRepository.updateFavoriteStatus(movie)
+        fun onFavoriteButtonClick(movie: MovieEntity) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    movieRepository.updateFavoriteStatus(movie)
+                }
             }
         }
+
+        fun getMovieById(movieId: Int) {
+            viewModelScope.launch {
+                _currentMovie.value = movieRepository.getMovieById(movieId)
+            }
         }
     }

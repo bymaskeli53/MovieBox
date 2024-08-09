@@ -22,5 +22,5 @@ interface MovieRepository {
 
     suspend fun searchMovies(query: String): Movie
 
-
+    suspend fun getMovieById(movieId: Int): MovieEntity?
 }

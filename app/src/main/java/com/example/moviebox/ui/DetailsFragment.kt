@@ -41,6 +41,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
+    private lateinit var movieEntity: MovieEntity
+    private var vs: MovieEntity? = null
+
     private val args: DetailsFragmentArgs by navArgs()
 
     override fun onViewCreated(
@@ -59,6 +62,36 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             error(R.drawable.ic_launcher_background)
         }
         val formattedDateToDayMonthYear = movieViewModel.formatDate(movie.release_date)
+
+        movieEntity =
+            MovieEntity(
+                id = args.movie.id,
+                title = args.movie.title,
+                overview = args.movie.overview,
+                releaseDate = args.movie.release_date,
+            )
+
+        favoriteViewModel.getMovieById(args.movie.id)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favoriteViewModel.currentMovie.collect { movie ->
+                    if (movie != null) {
+                        if (movie.isFavorite) {
+                            binding.ivStar.setImageResource(R.drawable.ic_star_filled)
+                        } else {
+                            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
+                        }
+                    }
+                }
+            }
+        }
+
+        if (vs?.isFavorite == true) {
+            binding.ivStar.setImageResource(R.drawable.ic_star_filled)
+        } else {
+            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
+        }
 
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.text = movie.overview
@@ -94,6 +127,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             movieViewModel.fetchTrailerKey(movieId)
         }
 
+        // binding.ivStar.setImageResource(if (movieEntity.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_empty)
+
         binding.ivStar.setOnClickListener {
             toggleFavorite()
         }
@@ -109,22 +144,16 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private fun toggleFavorite() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
-        val movieEntity =
-            MovieEntity(
-                id = args.movie.id,
-                title = args.movie.title,
-                overview = args.movie.overview,
-                releaseDate = args.movie.release_date,
-            )
-        if (isFavorite) {
-            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
 
+        // movieEntity in favoriteViewModel.favoriteMovies.value
+        if (vs?.isFavorite == true) {
+            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
         } else {
             binding.ivStar.setImageResource(R.drawable.ic_star_filled)
             binding.ivStar.startAnimation(animation)
         }
         favoriteViewModel.onFavoriteButtonClick(movieEntity)
-
+        vs?.isFavorite = !(vs?.isFavorite)!!
         isFavorite = !isFavorite
 
         viewLifecycleOwner.lifecycleScope.launch {

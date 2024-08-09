@@ -8,9 +8,9 @@ import com.example.moviebox.databinding.ItemSearchMovieBinding
 import com.example.moviebox.model.Result
 import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 
-class MovieAdapter2(
+class SearchMovieAdapter(
     val movies: List<Result>,
-) : RecyclerView.Adapter<MovieAdapter2.MovieViewHolder2>() {
+) : RecyclerView.Adapter<SearchMovieAdapter.MovieViewHolder2>() {
     inner class MovieViewHolder2(
         val binding: ItemSearchMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root)

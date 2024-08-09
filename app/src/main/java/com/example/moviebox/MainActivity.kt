@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moviebox.databinding.ActivityMainBinding
+import com.example.moviebox.util.hide
+import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +38,18 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
 
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
+
+        setBottomNavVisibilityForEachFragment(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean = super.onSupportNavigateUp() || navController.navigateUp()
+
+    private fun setBottomNavVisibilityForEachFragment(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.detailsFragment -> binding.bottomNavView.hide()
+                else -> binding.bottomNavView.show()
+            }
+        }
+    }
 }

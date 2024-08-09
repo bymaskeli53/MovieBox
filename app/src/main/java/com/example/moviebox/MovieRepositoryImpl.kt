@@ -4,7 +4,9 @@ import com.example.moviebox.model.Actors
 import com.example.moviebox.model.Movie
 import com.example.moviebox.model.TrailerResponse
 import com.example.moviebox.remote.MovieApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MovieRepositoryImpl
@@ -42,4 +44,9 @@ class MovieRepositoryImpl
         }
 
         override suspend fun searchMovies(query: String): Movie = movieApi.searchMovies(query = query)
+
+        override suspend fun getMovieById(movieId: Int): MovieEntity? =
+            withContext(Dispatchers.IO) {
+                movieDao.getMovieById(movieId)
+            }
     }
