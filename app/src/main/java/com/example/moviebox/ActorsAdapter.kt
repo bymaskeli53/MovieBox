@@ -12,7 +12,9 @@ import com.example.moviebox.model.Cast
 import com.example.moviebox.util.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 
-class ActorsAdapter : ListAdapter<Cast, ActorsAdapter.ActorsViewHolder>(ActorsDiffCallback()) {
+class ActorsAdapter(
+    val onActorClick: (Cast) -> Unit = {},
+) : ListAdapter<Cast, ActorsAdapter.ActorsViewHolder>(ActorsDiffCallback()) {
     inner class ActorsViewHolder(
         private val binding: ItemActorBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -24,6 +26,9 @@ class ActorsAdapter : ListAdapter<Cast, ActorsAdapter.ActorsViewHolder>(ActorsDi
                 error(R.drawable.ic_generic_movie_poster)
             }
             binding.tvActorName.text = actor.name
+            binding.root.setOnClickListener {
+                onActorClick(actor)
+            }
         }
     }
 

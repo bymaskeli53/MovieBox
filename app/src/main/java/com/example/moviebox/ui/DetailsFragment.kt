@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import coil.load
+import com.example.moviebox.ActorBottomSheetDialogFragment
 import com.example.moviebox.ActorsAdapter
 import com.example.moviebox.CreditsViewModel
 import com.example.moviebox.FavoriteViewModel
@@ -27,6 +28,7 @@ import com.example.moviebox.util.NetworkConstants
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
 import com.example.moviebox.util.show
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -108,7 +110,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                             actorList = resource.data?.cast
                             val data = resource.data
                             if (data != null) {
-                                val actorsAdapter = ActorsAdapter()
+                                val actorsAdapter = ActorsAdapter(onActorClick = {
+                                    val bottomSheetFragment = ActorBottomSheetDialogFragment()
+                                    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+                                })
                                 actorsAdapter.submitList(actorList)
                                 binding.rvActors.adapter = actorsAdapter
                                 binding.progressBarActors.hide()
@@ -163,6 +168,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             binding.ivStar.setImageResource(R.drawable.ic_star_filled)
             binding.ivStar.startAnimation(animation)
         }
+        BottomSheetDialogFragment()
         favoriteViewModel.onFavoriteButtonClick(movieEntity)
         vs?.isFavorite = !(vs?.isFavorite)!!
         isFavorite = !isFavorite
