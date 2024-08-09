@@ -87,7 +87,8 @@
             android:id="@+id/card_youtube"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="32dp"
+
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -129,9 +130,16 @@
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_star_empty"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_movie_title" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_actors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_actors" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

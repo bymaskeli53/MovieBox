@@ -1,17 +1,14 @@
 package com.example.moviebox
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moviebox.databinding.ActivityMainBinding
-import com.example.moviebox.util.hide
+import com.example.moviebox.util.gone
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,14 +20,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(0, systemBars.top,0, 0)
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            v.setPadding(0, systemBars.top, 0, 0)
+//            insets
+//        }
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
@@ -47,8 +44,13 @@ class MainActivity : AppCompatActivity() {
     private fun setBottomNavVisibilityForEachFragment(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.detailsFragment -> binding.bottomNavView.hide()
-                else -> binding.bottomNavView.show()
+                R.id.detailsFragment -> {
+                    binding.bottomNavView.gone()
+                }
+
+                else -> {
+                    binding.bottomNavView.show()
+                }
             }
         }
     }

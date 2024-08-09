@@ -24,6 +24,8 @@ import com.example.moviebox.databinding.FragmentDetailsBinding
 import com.example.moviebox.model.Cast
 import com.example.moviebox.util.NetworkConstants
 import com.example.moviebox.util.autoCleared
+import com.example.moviebox.util.hide
+import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -108,11 +110,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                                 val actorsAdapter = ActorsAdapter()
                                 actorsAdapter.submitList(actorList)
                                 binding.rvActors.adapter = actorsAdapter
+                                binding.progressBarActors.hide()
                             }
                         }
                         // TODO: Bu durumlar handle edilecek
                         is Resource.Loading -> {
-                            println("Loading")
+                           binding.progressBarActors.show()
                         }
 
                         is Resource.Error -> {

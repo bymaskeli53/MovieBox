@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.moviebox.SearchMovieAdapter
 import com.example.moviebox.R
 import com.example.moviebox.Resource
+import com.example.moviebox.SearchMovieAdapter
 import com.example.moviebox.SearchViewModel
 import com.example.moviebox.databinding.FragmentSearchBinding
 import com.example.moviebox.util.autoCleared
@@ -70,10 +70,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         } else {
                             binding.rvSearch.hide()
                             binding.tvNoMovieFound.show()
-
                         }
+                    }
 
-                    } else -> {}
+                    else -> {}
                 }
             }
         }
