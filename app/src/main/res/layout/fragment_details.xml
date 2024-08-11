@@ -21,6 +21,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -54,6 +55,35 @@
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_movie_rating"
+            android:text="@string/movie_rating"
+            android:textSize="24sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey"
+            app:layout_constraintTop_toTopOf="@id/iv_star"
+            app:layout_constraintBottom_toBottomOf="@id/iv_star"
+            app:layout_constraintStart_toStartOf="@id/rating_bar"
+            app:layout_constraintEnd_toEndOf="@id/rating_bar"
+            />
+
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/rating_bar"
+            style="@style/Widget.MaterialRatingBar.RatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:minWidth="24dp"
+            android:isIndicator="true"
+            android:rating="4"
+            android:minHeight="24dp"
+            android:numStars="10"
+            app:layout_constraintEnd_toStartOf="@id/iv_star"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_star" />
 
         <TextView
             android:id="@+id/tv_movie_release_date"
@@ -107,7 +137,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:contentDescription="@string/youtube_button"
-                    android:src="@drawable/ic_youtube" />
+                    android:src="@drawable/ic_youtube2" />
 
                 <TextView
                     android:id="@+id/tv_youtube"

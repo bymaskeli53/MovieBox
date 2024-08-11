@@ -100,7 +100,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.text = movie.overview
+        binding.ratingBar.rating = movie.vote_average.toFloat()
         binding.tvMovieReleaseDate.text = formattedDateToDayMonthYear
+
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

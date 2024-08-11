@@ -117,6 +117,10 @@ dependencies {
 
     // paging
     implementation("androidx.paging:paging-runtime:$paging_version")
+
+
+    // material rating bar
+    implementation ("me.zhanghai.android.materialratingbar:library:1.4.0")
 }
 kapt {
     correctErrorTypes = true
