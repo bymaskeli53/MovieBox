@@ -11,6 +11,8 @@ import com.example.moviebox.databinding.ItemMovieBinding
 import com.example.moviebox.model.Result
 import com.example.moviebox.util.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
+import com.example.moviebox.util.hide
+import com.example.moviebox.util.show
 
 class MovieAdapter(
     private val isGridLayout: Boolean,
@@ -30,6 +32,11 @@ class MovieAdapter(
             binding.root.setOnClickListener {
                 onMovieClick(movie)
             }
+            if (movie.isFavorite) {
+                binding.ivFavorite.show()
+            } else {
+                binding.ivFavorite.hide()
+            }
         }
     }
 
@@ -44,6 +51,7 @@ class MovieAdapter(
             binding.root.setOnClickListener {
                 onMovieClick(movie)
             }
+
         }
     }
 
@@ -83,5 +91,5 @@ class MovieDiffCallback : DiffUtil.ItemCallback<Result>() {
     override fun areContentsTheSame(
         oldItem: Result,
         newItem: Result,
-    ) = oldItem == newItem
+    ) = oldItem == newItem && oldItem.isFavorite == newItem.isFavorite
 }

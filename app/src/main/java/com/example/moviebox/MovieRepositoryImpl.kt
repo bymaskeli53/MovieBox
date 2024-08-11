@@ -49,4 +49,6 @@ class MovieRepositoryImpl
             withContext(Dispatchers.IO) {
                 movieDao.getMovieById(movieId)
             }
+
+        override fun getFavoriteMovieIds(): Flow<List<Int>> = movieDao.getFavoriteMovieIds()
     }

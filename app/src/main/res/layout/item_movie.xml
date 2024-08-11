@@ -40,6 +40,19 @@
             android:textStyle="bold"
             tools:text="movie title" />
 
+        <ImageView
+            android:id="@+id/iv_favorite"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/movieTitleTextView"
+            android:layout_alignParentEnd="true"
+
+            android:layout_marginTop="48dp"
+            android:src="@drawable/ic_youtube" />
+
     </RelativeLayout>
+
+
+
 
 </androidx.cardview.widget.CardView>

@@ -9,6 +9,7 @@ import com.example.moviebox.util.FormatDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,15 +20,25 @@ class MovieViewModel
     constructor(
         private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
         private val formatDateUseCase: FormatDateUseCase,
-        private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase
+        private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase,
+        private val movieRepository: MovieRepository,
+        // TODO: Bunu use case taşı
     ) : ViewModel() {
+
+//        init {
+//            getFavoriteMovieIds()
+//        }
+
         private var isLoading = false
 
         private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading)
         val movies: StateFlow<Resource<Movie>> = _movies
 
-    private val _trailerKey = MutableLiveData<String?>()
-    val trailerKey: LiveData<String?> get() = _trailerKey
+        private val _favoriteMovieIds = MutableStateFlow<List<Int>>(emptyList())
+        val favoriteMovieIds: StateFlow<List<Int>> = _favoriteMovieIds
+
+        private val _trailerKey = MutableLiveData<String?>()
+        val trailerKey: LiveData<String?> get() = _trailerKey
 
         private val _position = MutableStateFlow<Int>(0)
         val position: StateFlow<Int> get() = _position
@@ -63,13 +74,18 @@ class MovieViewModel
 
         fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
 
-
-    fun fetchTrailerKey(movieId: Int) {
-        viewModelScope.launch {
-            val key = getMovieTrailerKeyUseCase(movieId)
-            _trailerKey.value = key
+        fun fetchTrailerKey(movieId: Int) {
+            viewModelScope.launch {
+                val key = getMovieTrailerKeyUseCase(movieId)
+                _trailerKey.value = key
+            }
         }
+
+        fun getFavoriteMovieIds() {
+            viewModelScope.launch {
+                movieRepository.getFavoriteMovieIds().collect {
+                    _favoriteMovieIds.value = it
+                }
+            }
         }
-
-
     }

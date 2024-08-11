@@ -56,6 +56,7 @@ class MoviesFragment :
         binding = FragmentMoviesBinding.bind(view)
 
         movieViewModel.getPopularMovies()
+        movieViewModel.getFavoriteMovieIds()
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -69,6 +70,13 @@ class MoviesFragment :
                             val data = resource.data
                             if (data != null) {
                                 setUpRecyclerView(isGridLayout)
+                                movieViewModel.favoriteMovieIds.collect { favoriteMovieIds ->
+                                    data.results.forEach { movie ->
+                                        movie.isFavorite = favoriteMovieIds.contains(movie.id)
+                                    }
+                                    binding.shimmerView.stopShimmer()
+                                    binding.shimmerView.hide()
+                                }
                                 movieAdapter.submitList(data.results)
                                 binding.rvMovies.itemAnimator = DefaultItemAnimator()
                                 binding.rvMovies.adapter = movieAdapter
@@ -83,6 +91,7 @@ class MoviesFragment :
                         is Resource.Loading -> {
                             binding.shimmerView.startShimmer()
                             binding.shimmerView.show()
+
                         }
 
                         is Resource.Error -> {

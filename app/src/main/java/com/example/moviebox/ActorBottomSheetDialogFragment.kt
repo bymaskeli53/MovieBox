@@ -6,7 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.moviebox.databinding.ActorBottomSheetDialogBinding
+import com.example.moviebox.model.Cast
+import com.example.moviebox.util.DurationConstants.CROSSFADE_DURATION
+import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 import com.example.moviebox.util.autoCleared
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -29,9 +34,13 @@ class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = ActorBottomSheetDialogBinding.bind(view)
 
-        binding.textView.text = navArgs.actor.name
-        binding.textView2.text = navArgs.actor.popularity.toString()
-        binding.textView3.text = navArgs.actor.character
+        val actor = navArgs.actor
+
+        binding.tvActorName.text = actor.name
+        binding.tvPopularity.text = actor.popularity.toString()
+        binding.tvCharacter.text = actor.character
+        binding.tvGender.text = genderDecider(actor.gender)
+        setActorImage(actor)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
@@ -56,5 +65,19 @@ class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
+    }
+
+    private fun setActorImage(actor: Cast) {
+        binding.ivActor.load(IMAGE_BASE_URL + actor.profile_path) {
+            crossfade(CROSSFADE_DURATION)
+            transformations(CircleCropTransformation())
+            placeholder(R.drawable.ic_generic_movie_poster)
+            error(R.drawable.ic_generic_movie_poster)
+        }
+    }
+
+    private fun genderDecider(gender: Int): String {
+        val genderEnum = Gender.fromInt(gender)
+        return getString(genderEnum.labelResourceId)
     }
 }

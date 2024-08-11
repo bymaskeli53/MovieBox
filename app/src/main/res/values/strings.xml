@@ -9,4 +9,9 @@
     <string name="could_not_find_movie">Could not find movie</string>
     <string name="no_trailer_found">No Trailer Found</string>
     <string name="could_not_find_trailer">Could not find trailer</string>
+    <string name="unknown">Unknown\n</string>
+    <string name="female">Female\n</string>
+    <string name="male">Male</string>
+    <string name="non_binary">Non Binary</string>
+    <string name="no_data">No data\n</string>
 </resources>
