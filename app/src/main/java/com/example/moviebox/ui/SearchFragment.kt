@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.moviebox.MovieViewModel
 import com.example.moviebox.R
 import com.example.moviebox.Resource
 import com.example.moviebox.SearchMovieAdapter
@@ -26,6 +27,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val searchViewModel: SearchViewModel by viewModels()
 
+    private val movieViewModel: MovieViewModel by viewModels()
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -33,6 +36,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
         // ViewCompat.requestApplyInsets(view)
+
+        movieViewModel.getFavoriteMovieIds()
 
         binding.searchView.setOnQueryTextListener(
             object : OnQueryTextListener {
@@ -64,10 +69,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                 val formattedDateToDayMonthYear =
                                     searchViewModel.formatDate(data.results[i].release_date)
                                 data.results.get(i)?.release_date = formattedDateToDayMonthYear
+
+
                             }
                             val adapter =
                                 data.results.let {
-                                    SearchMovieAdapter(it) {
+                                    SearchMovieAdapter {
                                         val action =
                                             SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
                                                 it,
@@ -75,8 +82,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                         findNavController().navigate(action)
                                     }
                                 }
+                            adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter
                             binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
+                            movieViewModel.favoriteMovieIds.collect{ favoriteMovieIds ->
+                                data.results.forEach { movie ->
+                                    movie.isFavorite = favoriteMovieIds.contains(movie.id)
+                                }
+                            }
                         } else {
                             binding.rvSearch.hide()
                             binding.tvNoMovieFound.show()
