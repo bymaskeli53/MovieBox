@@ -36,20 +36,14 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var isFavorite = false
-
-    private var actorList: List<Cast>? = null
     private var binding: FragmentDetailsBinding by autoCleared()
 
     private val movieViewModel: MovieViewModel by viewModels()
-
     private val creditsViewModel: CreditsViewModel by viewModels()
-
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
-    private lateinit var movieEntity: MovieEntity
-    private var vs: MovieEntity? = null
-
     private val args: DetailsFragmentArgs by navArgs()
+    private lateinit var movieEntity: MovieEntity
 
     override fun onViewCreated(
         view: View,
@@ -57,139 +51,105 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailsBinding.bind(view)
+
+        movieEntity = MovieEntity(
+            id = args.movie.id,
+            title = args.movie.title,
+            overview = args.movie.overview,
+            releaseDate = args.movie.release_date,
+        )
+
+        setupUI()
+        observeFavoriteMovie()
+        observeActors()
+        setupListeners()
+    }
+
+    private fun setupUI() {
         val movie = args.movie
-
-        val posterUrl = NetworkConstants.IMAGE_BASE_URL + movie.poster_path
-
-        creditsViewModel.getActors(args.movie.id)
-        binding.ivBackground.load(posterUrl) {
+        binding.ivBackground.load(NetworkConstants.IMAGE_BASE_URL + movie.poster_path) {
             placeholder(R.drawable.ic_generic_movie_poster)
             error(R.drawable.ic_launcher_background)
         }
-        val formattedDateToDayMonthYear = movieViewModel.formatDate(movie.release_date)
-
-        movieEntity =
-            MovieEntity(
-                id = args.movie.id,
-                title = args.movie.title,
-                overview = args.movie.overview,
-                releaseDate = args.movie.release_date,
-            )
-
-        favoriteViewModel.getMovieById(args.movie.id)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                favoriteViewModel.currentMovie.collect { movie ->
-                    if (movie != null) {
-                        if (movie.isFavorite) {
-                            binding.ivStar.setImageResource(R.drawable.ic_star_filled)
-                        } else {
-                            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
-                        }
-                    }
-                }
-            }
-        }
-
-        if (vs?.isFavorite == true) {
-            binding.ivStar.setImageResource(R.drawable.ic_star_filled)
-        } else {
-            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
-        }
-
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.text = movie.overview
         binding.ratingBar.rating = movie.vote_average.toFloat()
-        binding.tvMovieReleaseDate.text = formattedDateToDayMonthYear
+        binding.tvMovieReleaseDate.text = movieViewModel.formatDate(movie.release_date)
+    }
 
+    private fun setupListeners() {
+        binding.ivStar.setOnClickListener { toggleFavorite() }
+        binding.cardYoutube.setOnClickListener { openYoutubeTrailer(args.movie.id) }
+    }
 
+    private fun openYoutubeTrailer(movieId: Int) {
+        movieViewModel.fetchTrailerKey(movieId)
+        movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
+            if (trailerKey != null) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$trailerKey"))
+                startActivity(intent)
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.could_not_find_trailer), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
+    private fun observeFavoriteMovie() {
+        favoriteViewModel.getMovieById(args.movie.id)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favoriteViewModel.currentMovie.collect { movie ->
+                    isFavorite = movie?.isFavorite == true
+                    binding.ivStar.setImageResource(
+                        if (isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_empty
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeActors() {
+        creditsViewModel.getActors(args.movie.id)
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 creditsViewModel.actors.collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            actorList = resource.data?.cast
-                            val data = resource.data
-                            if (data != null) {
-                                val actorsAdapter =
-                                    ActorsAdapter(onActorClick = { actor ->
-                                        val action =
-                                            DetailsFragmentDirections.actionDetailsFragmentToActorBottomSheetDialogFragment(
-                                                actor,
-                                            )
-                                        findNavController().navigate(action)
-//                                    val bottomSheetFragment = ActorBottomSheetDialogFragment()
-//                                    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
-                                    })
-                                actorsAdapter.submitList(actorList)
-                                binding.rvActors.adapter = actorsAdapter
-                                binding.progressBarActors.hide()
-                            }
+                            val actorList = resource.data?.cast
+                            updateActors(actorList)
+                            binding.progressBarActors.hide()
                         }
-                        // TODO: Bu durumlar handle edilecek
-                        is Resource.Loading -> {
-                            binding.progressBarActors.show()
-                        }
-
-                        is Resource.Error -> {
-                            println("Error")
-                        }
-
-                        else -> {}
+                        is Resource.Loading -> binding.progressBarActors.show()
+                        is Resource.Error -> Log.e("DetailsFragment", "Failed to load actors")
+                        is Resource.Idle -> Log.e("DetailFragment","Idle")
                     }
                 }
             }
         }
-        binding.cardYoutube.setOnClickListener {
-            val movieId = args.movie.id
-            movieViewModel.fetchTrailerKey(movieId)
-        }
+    }
 
-        binding.ivStar.setOnClickListener {
-            toggleFavorite()
-        }
-
-        movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
-            trailerKey?.let {
-                val intent =
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$it"))
-                startActivity(intent)
-            }
-            if (trailerKey == null) {
-                Toast
-                    .makeText(
-                        requireContext(),
-                        getString(R.string.could_not_find_trailer),
-                        Toast.LENGTH_SHORT,
-                    ).show()
-            }
+    private fun updateActors(actorList: List<Cast>?) {
+        if (actorList != null) {
+            val actorsAdapter = ActorsAdapter(onActorClick = { actor ->
+                val action = DetailsFragmentDirections.actionDetailsFragmentToActorBottomSheetDialogFragment(actor)
+                findNavController().navigate(action)
+            })
+            actorsAdapter.submitList(actorList)
+            binding.rvActors.adapter = actorsAdapter
         }
     }
 
     private fun toggleFavorite() {
-        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
-
-        if (vs?.isFavorite == true) {
+        binding.ivStar.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.bounce))
+        if (isFavorite) {
             binding.ivStar.setImageResource(R.drawable.ic_star_empty)
         } else {
             binding.ivStar.setImageResource(R.drawable.ic_star_filled)
-            binding.ivStar.startAnimation(animation)
         }
-        BottomSheetDialogFragment()
-        favoriteViewModel.onFavoriteButtonClick(movieEntity)
-        vs?.isFavorite = !(vs?.isFavorite)!!
         isFavorite = !isFavorite
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                favoriteViewModel.favoriteMovies.collect { movieEntity ->
-                    for (movie in movieEntity) {
-                        Log.d("FavoriteMovies", movie.title)
-                    }
-                }
-            }
-        }
+        movieEntity.isFavorite = isFavorite
+        favoriteViewModel.onFavoriteButtonClick(movieEntity)
     }
 }
+
+
