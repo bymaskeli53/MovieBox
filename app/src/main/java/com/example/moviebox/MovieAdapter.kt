@@ -1,7 +1,6 @@
 package com.example.moviebox
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -30,6 +29,8 @@ class MovieAdapter(
 
                 // transformations(CircleCropTransformation())
             }
+            binding.tvReleaseDate.text = movie.release_date
+            binding.tvPopularity.text = movie.vote_average.toString()
             binding.root.setOnClickListener {
                 onMovieClick(movie)
             }
@@ -38,8 +39,7 @@ class MovieAdapter(
             } else {
                 binding.ivFavorite.hide()
             }
-           // binding.ivFavorite.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
-
+            // binding.ivFavorite.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
         }
     }
 
@@ -54,7 +54,6 @@ class MovieAdapter(
             binding.root.setOnClickListener {
                 onMovieClick(movie)
             }
-
         }
     }
 

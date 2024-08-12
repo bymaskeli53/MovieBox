@@ -113,7 +113,8 @@ class MoviesFragment :
         binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
 
         movieAdapter.addLoadStateListener { loadState ->
-            if (loadState.refresh is androidx.paging.LoadState.Loading) {
+            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
+                loadState.source.append is androidx.paging.LoadState.Loading) {
                 binding.shimmerView.show()
                 binding.shimmerView.startShimmer()
             } else {
