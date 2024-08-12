@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
-    android:layout_margin="8dp"
+   android:layout_marginTop="4dp"
     android:backgroundTint="@color/colorBlue1"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
@@ -45,17 +45,29 @@
             android:textStyle="bold"
             tools:text="movie title" />
 
+
         <ImageView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <ImageView
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/iv_favorite"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_below="@+id/movieTitleTextView"
-            android:layout_alignParentEnd="true"
+
 
             android:layout_marginTop="48dp"
-            android:src="@drawable/ic_youtube" />
+            android:src="@drawable/ic_heart" />
 
 
         <TextView
