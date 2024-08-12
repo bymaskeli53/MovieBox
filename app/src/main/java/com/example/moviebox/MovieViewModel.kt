@@ -4,88 +4,70 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviebox.model.Movie
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.moviebox.model.Result
 import com.example.moviebox.util.FormatDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieViewModel
-    @Inject
-    constructor(
-        private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
-        private val formatDateUseCase: FormatDateUseCase,
-        private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase,
-        private val movieRepository: MovieRepository,
-        // TODO: Bunu use case taşı
-    ) : ViewModel() {
+class MovieViewModel @Inject constructor(
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
+    private val formatDateUseCase: FormatDateUseCase,
+    private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase,
+    private val movieRepository: MovieRepository
+) : ViewModel() {
 
-//        init {
-//            getFavoriteMovieIds()
-//        }
+    // PagingData for the popular movies
+    val movies: StateFlow<PagingData<Result>> = movieRepository.getPopularMovies()
+        .cachedIn(viewModelScope)
+        .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
-        private var isLoading = false
+    // StateFlow for favorite movie IDs
+    private val _favoriteMovieIds = MutableStateFlow<List<Int>>(emptyList())
+    val favoriteMovieIds: StateFlow<List<Int>> = _favoriteMovieIds
 
-        private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Loading)
-        val movies: StateFlow<Resource<Movie>> = _movies
+    // LiveData for trailer key
+    private val _trailerKey = MutableLiveData<String?>()
+    val trailerKey: LiveData<String?> get() = _trailerKey
 
-        private val _favoriteMovieIds = MutableStateFlow<List<Int>>(emptyList())
-        val favoriteMovieIds: StateFlow<List<Int>> = _favoriteMovieIds
+    // StateFlow for tracking the position of the selected item
+    private val _position = MutableStateFlow(0)
+    val position: StateFlow<Int> get() = _position
 
-        private val _trailerKey = MutableLiveData<String?>()
-        val trailerKey: LiveData<String?> get() = _trailerKey
+    // StateFlow for grid layout toggle
+    private val _isGridLayout = MutableStateFlow(false)
+    val isGridLayout: StateFlow<Boolean> get() = _isGridLayout
 
-        private val _position = MutableStateFlow<Int>(0)
-        val position: StateFlow<Int> get() = _position
+    // Format the date using the injected use case
+    fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
 
-        private val _isGridLayout = MutableStateFlow<Boolean>(false)
-        val isGridLayout: StateFlow<Boolean> get() = _isGridLayout
-
-        fun getPopularMovies() {
-            if (isLoading) return
-            isLoading = true
-            viewModelScope.launch {
-                _movies.update { Resource.Loading }
-                isLoading = true
-                try {
-                    val result = getPopularMoviesUseCase()
-                    //  val currentData = (_movies.value as? Resource.Success)?.data
-                    _movies.update { Resource.Success(result) }
-                } catch (e: Exception) {
-                    _movies.update { Resource.Error(exception = e) }
-                } finally {
-                    isLoading = false
-                }
-            }
+    // Fetch trailer key based on the movie ID
+    fun fetchTrailerKey(movieId: Int) {
+        viewModelScope.launch {
+            _trailerKey.value = getMovieTrailerKeyUseCase(movieId)
         }
+    }
 
-        fun setItemPosition(position: Int) {
-            _position.value = position
-        }
-
-        fun setGridLayout(isGridLayout: Boolean) {
-            _isGridLayout.value = isGridLayout
-        }
-
-        fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
-
-        fun fetchTrailerKey(movieId: Int) {
-            viewModelScope.launch {
-                val key = getMovieTrailerKeyUseCase(movieId)
-                _trailerKey.value = key
-            }
-        }
-
-        fun getFavoriteMovieIds() {
-            viewModelScope.launch {
-                movieRepository.getFavoriteMovieIds().collect {
-                    _favoriteMovieIds.value = it
-                }
+    // Retrieve favorite movie IDs and update the StateFlow
+    fun getFavoriteMovieIds() {
+        viewModelScope.launch {
+            movieRepository.getFavoriteMovieIds().collect { ids ->
+                _favoriteMovieIds.value = ids
             }
         }
     }
+
+    // Set the position of the selected item
+    fun setItemPosition(position: Int) {
+        _position.value = position
+    }
+
+    // Toggle grid layout
+    fun setGridLayout(isGridLayout: Boolean) {
+        _isGridLayout.value = isGridLayout
+    }
+}

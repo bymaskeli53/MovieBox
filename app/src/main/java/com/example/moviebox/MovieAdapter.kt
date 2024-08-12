@@ -1,9 +1,10 @@
 package com.example.moviebox
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.moviebox.databinding.ItemGridMovieBinding
@@ -17,7 +18,7 @@ import com.example.moviebox.util.show
 class MovieAdapter(
     private val isGridLayout: Boolean,
     private val onMovieClick: (Result) -> Unit = {},
-) : ListAdapter<Result, RecyclerView.ViewHolder>(MovieDiffCallback()) {
+) : PagingDataAdapter<Result, RecyclerView.ViewHolder>(MovieDiffCallback()) {
     inner class MovieViewHolder(
         private val binding: ItemMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -37,6 +38,8 @@ class MovieAdapter(
             } else {
                 binding.ivFavorite.hide()
             }
+           // binding.ivFavorite.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
+
         }
     }
 
@@ -74,10 +77,12 @@ class MovieAdapter(
         position: Int,
     ) {
         val movie = getItem(position)
-        if (isGridLayout) {
-            (holder as MovieGridViewHolder).bind(movie)
-        } else {
-            (holder as MovieViewHolder).bind(movie)
+        if (movie != null) {
+            if (isGridLayout) {
+                (holder as MovieGridViewHolder).bind(movie)
+            } else {
+                (holder as MovieViewHolder).bind(movie)
+            }
         }
     }
 }

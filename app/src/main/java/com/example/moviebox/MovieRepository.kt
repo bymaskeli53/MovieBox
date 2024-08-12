@@ -1,12 +1,14 @@
 package com.example.moviebox
 
+import androidx.paging.PagingData
 import com.example.moviebox.model.Actors
 import com.example.moviebox.model.Movie
+import com.example.moviebox.model.Result
 import com.example.moviebox.model.TrailerResponse
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    suspend fun getPopularMovies(): Movie
+    fun getPopularMovies(): Flow<PagingData<Result>>
 
     suspend fun getMovieCredits(movieId: Int): Actors
 

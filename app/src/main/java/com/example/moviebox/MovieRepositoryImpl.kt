@@ -1,8 +1,13 @@
 package com.example.moviebox
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.moviebox.model.Actors
 import com.example.moviebox.model.Movie
+import com.example.moviebox.model.Result
 import com.example.moviebox.model.TrailerResponse
+import com.example.moviebox.paging.MoviePagingSource
 import com.example.moviebox.remote.MovieApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +20,15 @@ class MovieRepositoryImpl
         private val movieApi: MovieApi,
         private val movieDao: MovieDao,
     ) : MovieRepository {
-        override suspend fun getPopularMovies(): Movie = movieApi.getPopularMovies()
+        override  fun getPopularMovies(): Flow<PagingData<Result>> {
+            return Pager(
+                config = PagingConfig(
+                    pageSize = 20,
+                    enablePlaceholders = false,
+                ),
+                pagingSourceFactory = {MoviePagingSource(movieApi)}
+            ).flow
+        }
 
         override suspend fun getMovieCredits(movieId: Int): Actors = movieApi.getMovieCredits(movieId)
 
