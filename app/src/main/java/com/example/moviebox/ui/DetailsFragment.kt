@@ -28,7 +28,6 @@ import com.example.moviebox.util.NetworkConstants
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
 import com.example.moviebox.util.show
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -52,12 +51,13 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailsBinding.bind(view)
 
-        movieEntity = MovieEntity(
-            id = args.movie.id,
-            title = args.movie.title,
-            overview = args.movie.overview,
-            releaseDate = args.movie.release_date,
-        )
+        movieEntity =
+            MovieEntity(
+                id = args.movie.id,
+                title = args.movie.title,
+                overview = args.movie.overview,
+                releaseDate = args.movie.release_date,
+            )
 
         setupUI()
         observeFavoriteMovie()
@@ -86,10 +86,19 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         movieViewModel.fetchTrailerKey(movieId)
         movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
             if (trailerKey != null) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$trailerKey"))
+                val intent =
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.youtube.com/watch?v=$trailerKey"),
+                    )
                 startActivity(intent)
             } else {
-                Toast.makeText(requireContext(), getString(R.string.could_not_find_trailer), Toast.LENGTH_SHORT).show()
+                Toast
+                    .makeText(
+                        requireContext(),
+                        getString(R.string.could_not_find_trailer),
+                        Toast.LENGTH_SHORT,
+                    ).show()
             }
         }
     }
@@ -101,7 +110,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                 favoriteViewModel.currentMovie.collect { movie ->
                     isFavorite = movie?.isFavorite == true
                     binding.ivStar.setImageResource(
-                        if (isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_empty
+                        if (isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_empty,
                     )
                 }
             }
@@ -119,9 +128,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                             updateActors(actorList)
                             binding.progressBarActors.hide()
                         }
+
                         is Resource.Loading -> binding.progressBarActors.show()
                         is Resource.Error -> Log.e("DetailsFragment", "Failed to load actors")
-                        is Resource.Idle -> Log.e("DetailFragment","Idle")
+                        is Resource.Idle -> Log.e("DetailFragment", "Idle")
                     }
                 }
             }
@@ -130,10 +140,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private fun updateActors(actorList: List<Cast>?) {
         if (actorList != null) {
-            val actorsAdapter = ActorsAdapter(onActorClick = { actor ->
-                val action = DetailsFragmentDirections.actionDetailsFragmentToActorBottomSheetDialogFragment(actor)
-                findNavController().navigate(action)
-            })
+            val actorsAdapter =
+                ActorsAdapter(onActorClick = { actor ->
+                    val action =
+                        DetailsFragmentDirections.actionDetailsFragmentToActorBottomSheetDialogFragment(
+                            actor,
+                        )
+                    findNavController().navigate(action)
+                })
             actorsAdapter.submitList(actorList)
             binding.rvActors.adapter = actorsAdapter
         }
@@ -151,5 +165,3 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         favoriteViewModel.onFavoriteButtonClick(movieEntity)
     }
 }
-
-
