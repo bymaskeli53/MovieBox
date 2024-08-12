@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import coil.load
 import com.example.moviebox.ActorsAdapter
 import com.example.moviebox.CreditsViewModel
@@ -43,6 +44,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private val args: DetailsFragmentArgs by navArgs()
     private lateinit var movieEntity: MovieEntity
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        /**
+         * Screen opening animation
+         * İnflater
+         */
+        val inflater  = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide_in)
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onViewCreated(
         view: View,

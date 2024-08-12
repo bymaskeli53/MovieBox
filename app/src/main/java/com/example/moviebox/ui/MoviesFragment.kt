@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 class MoviesFragment :
     Fragment(R.layout.fragment_movies),
     MenuProvider {
-
     private var binding: FragmentMoviesBinding by autoCleared()
     private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
@@ -48,23 +47,21 @@ class MoviesFragment :
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMoviesBinding.bind(view)
 
-
         movieViewModel.getFavoriteMovieIds()
         setupMenu()
         observeViewModel()
-
-
 
         setupRecyclerView()
 
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.user_connected_to_internet),
-                    Toast.LENGTH_SHORT,
-                ).show()
+                Toast
+                    .makeText(
+                        requireContext(),
+                        getString(R.string.user_connected_to_internet),
+                        Toast.LENGTH_SHORT,
+                    ).show()
             }
         }
     }
@@ -78,15 +75,15 @@ class MoviesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 movieViewModel.movies.collectLatest { pagingData ->
-                    movieViewModel.favoriteMovieIds.collect { favoriteMovieIds ->
-                        val updatedPagingData = pagingData.map { movie ->
-                            movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
-                        }
+                    movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
+                        val updatedPagingData =
+                            pagingData.map { movie ->
+                                movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
+                            }
                         movieAdapter.submitData(updatedPagingData)
                     }
                 }
-                }
-
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -97,17 +94,19 @@ class MoviesFragment :
     }
 
     private fun setupRecyclerView(isGridLayout: Boolean = movieViewModel.isGridLayout.value) {
-        movieAdapter = MovieAdapter(isGridLayout) { movie ->
-            saveScrollPosition()
-            val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
-            findNavController().navigate(action)
-        }
+        movieAdapter =
+            MovieAdapter(isGridLayout) { movie ->
+                saveScrollPosition()
+                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
+                findNavController().navigate(action)
+            }
 
-        binding.rvMovies.layoutManager = if (isGridLayout) {
-            GridLayoutManager(requireContext(), 3)
-        } else {
-            LinearLayoutManager(requireContext())
-        }
+        binding.rvMovies.layoutManager =
+            if (isGridLayout) {
+                GridLayoutManager(requireContext(), 3)
+            } else {
+                LinearLayoutManager(requireContext())
+            }
 
         binding.rvMovies.itemAnimator = DefaultItemAnimator()
         binding.rvMovies.adapter = movieAdapter
@@ -126,29 +125,34 @@ class MoviesFragment :
 
     private fun saveScrollPosition() {
         val layoutManager = binding.rvMovies.layoutManager
-        val savedScrollPosition = when (layoutManager) {
-            is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
-            is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
-            else -> 0
-        }
+        val savedScrollPosition =
+            when (layoutManager) {
+                is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+                is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+                else -> 0
+            }
         movieViewModel.setItemPosition(savedScrollPosition)
     }
 
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+    override fun onCreateMenu(
+        menu: Menu,
+        menuInflater: MenuInflater,
+    ) {
         menuInflater.inflate(R.menu.menu, menu)
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+        when (menuItem.itemId) {
             R.id.grid_recycler_view -> {
                 movieViewModel.setGridLayout(true)
                 true
             }
+
             R.id.linear_recycler_view -> {
                 movieViewModel.setGridLayout(false)
                 true
             }
+
             else -> false
         }
-    }
 }
