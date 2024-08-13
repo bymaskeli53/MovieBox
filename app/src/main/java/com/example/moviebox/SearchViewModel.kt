@@ -2,9 +2,13 @@ package com.example.moviebox
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.moviebox.model.Movie
+import com.example.moviebox.model.Result
 import com.example.moviebox.util.FormatDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -44,4 +48,9 @@ class SearchViewModel
         }
 
         fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
+
+    fun searchMovies2(query: String): Flow<PagingData<Result>> {
+        return repository.searchMovies2(query)
+            .cachedIn(viewModelScope)
+    }
     }

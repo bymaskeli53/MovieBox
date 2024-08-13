@@ -44,7 +44,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             object : OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let {
-                        
                         searchViewModel.searchMovies(query)
                         hideKeyboard()
                         binding.searchView.clearFocus()
@@ -72,8 +71,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                 val formattedDateToDayMonthYear =
                                     searchViewModel.formatDate(data.results[i].release_date)
                                 data.results.get(i)?.release_date = formattedDateToDayMonthYear
-
-
                             }
                             val adapter =
                                 data.results.let {
@@ -88,7 +85,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                             adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter
                             binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
-                            movieViewModel.favoriteMovieIds.collectLatest{ favoriteMovieIds ->
+                            movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                                 data.results.forEach { movie ->
                                     movie.isFavorite = favoriteMovieIds.contains(movie.id)
                                 }

@@ -73,6 +73,7 @@ object NetworkModule {
         Retrofit
             .Builder()
             .client(okHttpClient)
+
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()

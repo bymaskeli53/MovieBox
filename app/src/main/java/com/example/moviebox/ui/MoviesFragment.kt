@@ -1,6 +1,7 @@
 package com.example.moviebox.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.filter
 import androidx.paging.map
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,14 +26,17 @@ import androidx.transition.TransitionInflater
 import com.example.moviebox.MovieAdapter
 import com.example.moviebox.MovieViewModel
 import com.example.moviebox.R
+import com.example.moviebox.SearchViewModel
 import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
+import com.example.moviebox.util.hideKeyboard
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -42,6 +47,7 @@ class MoviesFragment :
     private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
     private val movieViewModel: MovieViewModel by viewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +68,15 @@ class MoviesFragment :
         observeViewModel()
 
         setupRecyclerView(false)
+
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                searchViewModel.movies.collectLatest {
+//                    movieAdapter.submitData(it)
+//                }
+//            }
+//        }
+
 
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
@@ -99,7 +114,7 @@ class MoviesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             movieViewModel.isGridLayout.collectLatest { isGridLayout ->
                 setupRecyclerView(isGridLayout)
-                movieAdapter.notifyDataSetChanged()
+               // movieAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -227,6 +242,38 @@ class MoviesFragment :
 
         searchView.queryHint = getString(R.string.search_movies)
 
+//        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener
+//        {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                query?.let {
+//                    searchMovies(it)
+//                    hideKeyboard()
+//
+//                }
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                return false
+//            }
+//
+//        })
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED){
+//                searchViewModel.searchMovies2("bat").collectLatest{
+//                    Log.d("TAG",it.toString())
+//                    movieAdapter.submitData(it)
+//
+//                }
+//            }
+//
+//
+//        }
+//        searchView.setOnCloseListener {
+//            searchItem.collapseActionView()
+//            true
+//        }
+
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
@@ -243,10 +290,31 @@ class MoviesFragment :
                 true
             }
             R.id.action_search -> {
-                menuItem.collapseActionView()
+               // menuItem.collapseActionView()
+                true
 
             }
 
             else -> false
         }
+
+    private fun searchMovies(query: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            searchViewModel.searchMovies2(query).collectLatest{
+                it.map {
+                    Log.d("PAGE",it.title)
+                }
+
+                Log.d("SearchResults","Paging data: ${it.toString()}")
+                movieAdapter.submitData(it)
+                movieAdapter.notifyDataSetChanged()
+
+
+
+
+
+            }
+        }
+    }
 }
