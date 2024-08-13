@@ -67,7 +67,7 @@ class MoviesFragment :
         setupMenu()
         observeViewModel()
 
-        setupRecyclerView(false)
+       // setupRecyclerView(false)
 
 //        viewLifecycleOwner.lifecycleScope.launch {
 //            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -100,12 +100,18 @@ class MoviesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 movieViewModel.movies.collectLatest { pagingData ->
+                    Log.d("MoviesFragment", "PagingData: ${pagingData}")
                     movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                         val updatedPagingData =
                             pagingData.map { movie ->
                                 movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
                             }
                         movieAdapter.submitData(updatedPagingData)
+//                        if (movieAdapter.itemCount > 0) {
+//                            Log.d("PagingData", "Adapter has data.")
+//                        } else {
+//                            Log.d("PagingData", "Adapter is empty.")
+//                        }
                     }
                 }
             }
@@ -113,8 +119,17 @@ class MoviesFragment :
 
         viewLifecycleOwner.lifecycleScope.launch {
             movieViewModel.isGridLayout.collectLatest { isGridLayout ->
-                setupRecyclerView(isGridLayout)
-               // movieAdapter.notifyDataSetChanged()
+
+               setupRecyclerView(isGridLayout)
+//
+//                movieViewModel.movies.value?.let { pagingData ->
+//                    val favoriteMovieIds = movieViewModel.favoriteMovieIds.value
+//                    val updatedPagingData = pagingData.map { movie ->
+//                        movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
+//                    }
+//                    movieAdapter.submitData(updatedPagingData)
+//                }
+                //movieAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -126,15 +141,35 @@ class MoviesFragment :
             findNavController().navigate(action)
         }
 
+        if (movieAdapter.itemCount > 0) {
+            Log.d("PagingData", "Adapter has data.")
+        } else {
+            Log.d("PagingData","No data in adapter")
+        }
+
         binding.rvMovies.layoutManager =
             if (isGridLayout) {
+
                 GridLayoutManager(requireContext(), 3)
+
             } else {
                 LinearLayoutManager(requireContext())
             }
+        Log.d("Mov",binding.rvMovies.layoutManager.toString())
 
         binding.rvMovies.adapter = movieAdapter
         binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            movieViewModel.movies.collectLatest { pagingData ->
+                val favoriteMovieIds = movieViewModel.favoriteMovieIds.value
+                val updatedPagingData = pagingData.map { movie ->
+                    movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
+                }
+                movieAdapter.submitData(updatedPagingData)
+            }
+        }
 
         movieAdapter.addLoadStateListener { loadState ->
             if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
@@ -280,6 +315,7 @@ class MoviesFragment :
         when (menuItem.itemId) {
             R.id.grid_recycler_view -> {
                 movieViewModel.setGridLayout(true)
+
                 setupRecyclerView(true)
                 true
             }
@@ -308,7 +344,7 @@ class MoviesFragment :
 
                 Log.d("SearchResults","Paging data: ${it.toString()}")
                 movieAdapter.submitData(it)
-                movieAdapter.notifyDataSetChanged()
+              //  movieAdapter.notifyDataSetChanged()
 
 
 
