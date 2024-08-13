@@ -30,14 +30,14 @@
         android:id="@+id/favoritesFragment"
         android:name="com.example.moviebox.ui.FavoritesFragment"
         android:label="Favorites" />
-    <fragment
+    <swipeable
         android:id="@+id/searchFragment"
         android:name="com.example.moviebox.ui.SearchFragment"
         android:label="Search" >
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
-    </fragment>
+    </swipeable>
     <dialog
         android:id="@+id/actorBottomSheetDialogFragment"
         android:name="com.example.moviebox.ActorBottomSheetDialogFragment"

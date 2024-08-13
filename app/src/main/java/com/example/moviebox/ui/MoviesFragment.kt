@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -220,6 +221,12 @@ class MoviesFragment :
         menuInflater: MenuInflater,
     ) {
         menuInflater.inflate(R.menu.menu, menu)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
+
+        searchView.queryHint = getString(R.string.search_movies)
+
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
@@ -234,6 +241,10 @@ class MoviesFragment :
                 movieViewModel.setGridLayout(false)
                 setupRecyclerView(false)
                 true
+            }
+            R.id.action_search -> {
+                menuItem.collapseActionView()
+
             }
 
             else -> false

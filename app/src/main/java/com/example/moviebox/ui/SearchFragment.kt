@@ -19,6 +19,7 @@ import com.example.moviebox.util.hide
 import com.example.moviebox.util.hideKeyboard
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,13 +39,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         // ViewCompat.requestApplyInsets(view)
 
         movieViewModel.getFavoriteMovieIds()
-
+        // TODO: Make search more efficient to show favorites later
         binding.searchView.setOnQueryTextListener(
             object : OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let {
+                        
                         searchViewModel.searchMovies(query)
                         hideKeyboard()
+                        binding.searchView.clearFocus()
                     }
                     return true
                 }
@@ -53,7 +56,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             },
         )
         viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.movies.collect { movies ->
+            searchViewModel.movies.collectLatest { movies ->
                 when (movies) {
                     is Resource.Error -> throw Exception(movies.exception)
                     is Resource.Loading -> binding.progressBar.show()
@@ -85,7 +88,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                             adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter
                             binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
-                            movieViewModel.favoriteMovieIds.collect{ favoriteMovieIds ->
+                            movieViewModel.favoriteMovieIds.collectLatest{ favoriteMovieIds ->
                                 data.results.forEach { movie ->
                                     movie.isFavorite = favoriteMovieIds.contains(movie.id)
                                 }
