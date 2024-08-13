@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,6 +19,7 @@ import androidx.paging.map
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionInflater
 import com.example.moviebox.MovieAdapter
 import com.example.moviebox.MovieViewModel
 import com.example.moviebox.R
@@ -27,6 +29,7 @@ import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -40,6 +43,12 @@ class MoviesFragment :
     private val movieViewModel: MovieViewModel by viewModels()
     private lateinit var movieAdapter: MovieAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater  = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide_in_top)
+    }
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -51,7 +60,7 @@ class MoviesFragment :
         setupMenu()
         observeViewModel()
 
-        setupRecyclerView()
+        setupRecyclerView(false)
 
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
@@ -89,17 +98,17 @@ class MoviesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             movieViewModel.isGridLayout.collectLatest { isGridLayout ->
                 setupRecyclerView(isGridLayout)
+                movieAdapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun setupRecyclerView(isGridLayout: Boolean = movieViewModel.isGridLayout.value) {
-        movieAdapter =
-            MovieAdapter(isGridLayout) { movie ->
-                saveScrollPosition()
-                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
-                findNavController().navigate(action)
-            }
+    private fun setupRecyclerView(isGridLayout: Boolean) {
+        movieAdapter = MovieAdapter(isGridLayout) { movie ->
+            saveScrollPosition()
+            val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
+            findNavController().navigate(action)
+        }
 
         binding.rvMovies.layoutManager =
             if (isGridLayout) {
@@ -108,7 +117,6 @@ class MoviesFragment :
                 LinearLayoutManager(requireContext())
             }
 
-        binding.rvMovies.itemAnimator = DefaultItemAnimator()
         binding.rvMovies.adapter = movieAdapter
         binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
 
@@ -123,6 +131,78 @@ class MoviesFragment :
             }
         }
     }
+
+//    private fun setupRecyclerView(isGridLayout: Boolean = movieViewModel.isGridLayout.value) {
+//        if (!::movieAdapter.isInitialized) {
+//            movieAdapter = MovieAdapter(isGridLayout) { movie ->
+//                saveScrollPosition()
+//                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
+//                findNavController().navigate(action)
+//            }
+//        }
+//
+//        val layoutManager = if (isGridLayout) {
+//            GridLayoutManager(requireContext(), 3)
+//        } else {
+//            LinearLayoutManager(requireContext())
+//        }
+//
+//        binding.rvMovies.layoutManager = layoutManager
+//        binding.rvMovies.adapter = movieAdapter // Re-set adapter to force it to use the correct ViewHolder
+//
+//        // This ensures that data is rebound when layout changes
+//        movieAdapter.notifyDataSetChanged()
+//
+//        binding.rvMovies.itemAnimator = DefaultItemAnimator()
+//
+//        // Restore scroll position
+//        layoutManager.scrollToPosition(movieViewModel.position.value)
+//
+//        movieAdapter.addLoadStateListener { loadState ->
+//            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
+//                loadState.source.append is androidx.paging.LoadState.Loading) {
+//                binding.shimmerView.show()
+//                binding.shimmerView.startShimmer()
+//            } else {
+//                binding.shimmerView.hide()
+//                binding.shimmerView.stopShimmer()
+//            }
+//        }
+//    }
+
+
+//    private fun setupRecyclerView(isGridLayout: Boolean = movieViewModel.isGridLayout.value) {
+//        movieAdapter =
+//            MovieAdapter(isGridLayout) { movie ->
+//                saveScrollPosition()
+//                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
+//                findNavController().navigate(action)
+//            }
+//
+//        binding.rvMovies.layoutManager =
+//            if (isGridLayout) {
+//                GridLayoutManager(requireContext(), 3)
+//            } else {
+//                LinearLayoutManager(requireContext())
+//            }
+//
+//        binding.rvMovies.itemAnimator = DefaultItemAnimator()
+//        binding.rvMovies.adapter = movieAdapter
+//        binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
+//
+//
+//
+//        movieAdapter.addLoadStateListener { loadState ->
+//            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
+//                loadState.source.append is androidx.paging.LoadState.Loading) {
+//                binding.shimmerView.show()
+//                binding.shimmerView.startShimmer()
+//            } else {
+//                binding.shimmerView.hide()
+//                binding.shimmerView.stopShimmer()
+//            }
+//        }
+//    }
 
     private fun saveScrollPosition() {
         val layoutManager = binding.rvMovies.layoutManager
@@ -146,11 +226,13 @@ class MoviesFragment :
         when (menuItem.itemId) {
             R.id.grid_recycler_view -> {
                 movieViewModel.setGridLayout(true)
+                setupRecyclerView(true)
                 true
             }
 
             R.id.linear_recycler_view -> {
                 movieViewModel.setGridLayout(false)
+                setupRecyclerView(false)
                 true
             }
 

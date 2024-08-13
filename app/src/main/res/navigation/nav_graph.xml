@@ -5,7 +5,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/moviesFragment">
 
-    <fragment
+    <swipeable
         android:id="@+id/moviesFragment"
         android:name="com.example.moviebox.ui.MoviesFragment"
         android:label="Movies"
@@ -13,8 +13,8 @@
         <action
             android:id="@+id/action_moviesFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
-    </fragment>
-    <fragment
+    </swipeable>
+    <swipeable
         android:id="@+id/detailsFragment"
         android:name="com.example.moviebox.ui.DetailsFragment"
         android:label="{movie}"
@@ -25,7 +25,7 @@
         <action
             android:id="@+id/action_detailsFragment_to_actorBottomSheetDialogFragment"
             app:destination="@id/actorBottomSheetDialogFragment" />
-    </fragment>
+    </swipeable>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.moviebox.ui.FavoritesFragment"

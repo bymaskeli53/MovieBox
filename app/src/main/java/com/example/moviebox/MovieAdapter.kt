@@ -13,6 +13,7 @@ import com.example.moviebox.util.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 import com.example.moviebox.util.hide
 import com.example.moviebox.util.show
+import java.util.Locale
 
 class MovieAdapter(
     private val isGridLayout: Boolean,
@@ -30,7 +31,8 @@ class MovieAdapter(
                 // transformations(CircleCropTransformation())
             }
             binding.tvReleaseDate.text = movie.release_date
-            binding.tvPopularity.text = movie.vote_average.toString()
+            binding.tvPopularity.text =
+                String.format(locale = Locale.getDefault(), format = "%.1f", movie.vote_average)
             binding.root.setOnClickListener {
                 onMovieClick(movie)
             }
@@ -71,6 +73,7 @@ class MovieAdapter(
             MovieViewHolder(binding)
         }
 
+
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
@@ -84,6 +87,8 @@ class MovieAdapter(
             }
         }
     }
+
+
 }
 
 class MovieDiffCallback : DiffUtil.ItemCallback<Result>() {
