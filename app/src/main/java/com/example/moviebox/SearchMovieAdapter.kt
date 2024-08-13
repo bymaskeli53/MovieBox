@@ -65,6 +65,6 @@ class SearchMovieDiffCallback : DiffUtil.ItemCallback<Result>() {
 
     override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
         // Check if the content of the items is the same
-        return oldItem == newItem
+        return oldItem == newItem && oldItem.isFavorite == newItem.isFavorite
     }
 }
