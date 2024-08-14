@@ -343,6 +343,8 @@ class MoviesFragment :
 
             R.id.action_search -> {
                 // menuItem.collapseActionView()
+
+
                 true
             }
 

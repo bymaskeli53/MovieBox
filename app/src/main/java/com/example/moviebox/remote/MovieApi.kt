@@ -38,6 +38,7 @@ interface MovieApi {
     suspend fun searchMovies(
         @Query("query") query: String,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("page") page: Int = 1,
     ): Movie
 
     @GET("search/movie")
