@@ -30,7 +30,7 @@ class MovieAdapter(
 
                 // transformations(CircleCropTransformation())
             }
-            binding.tvReleaseDate.text = movie.release_date
+            binding.tvReleaseDate.text = movie.release_date.substringBefore("-")
             binding.tvPopularity.text =
                 String.format(locale = Locale.getDefault(), format = "%.1f", movie.vote_average)
             binding.root.setOnClickListener {

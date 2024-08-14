@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
 
    android:layout_marginTop="4dp"
-    android:backgroundTint="@color/colorBlue1"
+    android:backgroundTint="@color/red_mixed_orange"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     >
@@ -71,7 +71,7 @@
 
 
         <TextView
-            android:textColor="@color/grey"
+            android:textColor="@color/white"
             android:id="@+id/tv_release_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +27,18 @@ class SearchViewModel
     ) : ViewModel() {
         private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Idle)
         val movies: StateFlow<Resource<Movie>> = _movies
+
+    private val _searchQuery = MutableStateFlow("")
+
+    val moviesFlow: Flow<PagingData<Result>> = _searchQuery.flatMapLatest { query ->
+        if (query.isEmpty()) {
+            repository.getPopularMovies()
+        } else {
+            repository.searchMovies2(query)
+        }
+    }.cachedIn(viewModelScope)
+
+
 
     private val _searchResults = MutableStateFlow<PagingData<Result>>(PagingData.empty())
     val searchResults: StateFlow<PagingData<Result>> get() = _searchResults

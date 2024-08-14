@@ -2,10 +2,12 @@ package com.example.moviebox.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
@@ -51,6 +53,7 @@ class MoviesFragment :
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_in_top)
     }
+
 
     override fun onViewCreated(
         view: View,
@@ -281,20 +284,26 @@ class MoviesFragment :
 
         searchView.queryHint = getString(R.string.search_movies)
 
-        searchView.setOnQueryTextListener(
-            object :
-                androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        searchViewModel.searchMovies2(it)
-                        hideKeyboard()
-                    }
-                    return true
-                }
+//        searchView.setOnQueryTextListener(
+//            object :
+//                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//                override fun onQueryTextSubmit(query: String?): Boolean {
+//                    query?.let {
+//                        searchViewModel.searchMovies2(it)
+//                        hideKeyboard()
+//                    }
+//                    return true
+//                }
+//
+//                override fun onQueryTextChange(newText: String?): Boolean = false
+//            },
+//        )
 
-                override fun onQueryTextChange(newText: String?): Boolean = false
-            },
-        )
+//        lifecycleScope.launchWhenStarted {
+//            searchViewModel.moviesFlow.collectLatest {
+//                movieAdapter.submitData(it)
+//            }
+//        }
 
 //        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener
 //        {

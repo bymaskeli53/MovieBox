@@ -1,8 +1,16 @@
 package com.example.moviebox.ui
 
+import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.database.Cursor
+import android.database.MatrixCursor
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.view.View
+import android.widget.CursorAdapter
 import android.widget.SearchView.OnQueryTextListener
+import android.widget.SimpleCursorAdapter
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,6 +45,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
         // ViewCompat.requestApplyInsets(view)
+        // binding.searchView.suggestionsAdapter = null
+        val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
+        val to = intArrayOf(R.id.item_label)
+        val cursorAdapter =
+            SimpleCursorAdapter(
+                requireContext(),
+                R.layout.item_suggestion,
+                null,
+                from,
+                to,
+                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER,
+            )
+
+        val suggestions = listOf("Lord Of The Rings", "Batman", "Interstellar", "Avengers")
+        binding.searchView.suggestionsAdapter = cursorAdapter
+
 
         movieViewModel.getFavoriteMovieIds()
         // TODO: Make search more efficient to show favorites later
@@ -51,9 +75,40 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     return true
                 }
 
-                override fun onQueryTextChange(newText: String?): Boolean = false
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+                   newText?.let {
+                       suggestions.forEachIndexed { index, suggestion ->
+                           if (suggestion.contains(newText,true)){
+                                   cursor.addRow(arrayOf(index, suggestion))
+                               }
+                       }
+                       cursorAdapter.changeCursor(cursor)
+                       return true
+
+                   }
+
+                    return true
+                }
             },
         )
+
+        binding.searchView.setOnSuggestionListener(object: android.widget.SearchView.OnSuggestionListener{
+            override fun onSuggestionSelect(position: Int): Boolean {
+                return false
+            }
+
+            @SuppressLint("Range")
+            override fun onSuggestionClick(position: Int): Boolean {
+                hideKeyboard()
+                val cursor = binding.searchView.suggestionsAdapter.getItem(position) as Cursor
+                val selection = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                binding.searchView.setQuery(selection, false)
+                return true
+            }
+
+        })
+
         viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel.movies.collectLatest { movies ->
                 when (movies) {

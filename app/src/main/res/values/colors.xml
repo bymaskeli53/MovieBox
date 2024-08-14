@@ -17,6 +17,18 @@
 
     <color name="green">#0F9D58</color>
     <color name="gray">#808080</color>
+    <color name="orange">#ff7f00</color>
+    <color name="mustard">#ffdb58</color>
 
+    <color name="turkuaz">#00BCD4</color>
 
+    <color name="red_mixed_orange">#FF5722</color>
+
+    <color name="dark_blue">#1A237E</color>
+    <color name="dark_green">#006400</color>"
+
+    <color name="dark_red">#8B0000</color>"
+
+    <color name="soft_grey">#E0E0E0</color>
+    <color name="yellow_2">#FFEB3B</color>
 </resources>
