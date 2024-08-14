@@ -22,12 +22,20 @@ class MovieViewModel
         private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase,
         private val movieRepository: MovieRepository,
     ) : ViewModel() {
-        // PagingData for the popular movies
-        val movies: StateFlow<PagingData<Result>> =
-            movieRepository
-                .getPopularMovies()
-                .cachedIn(viewModelScope)
-                .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+
+    private val _movies = MutableStateFlow<PagingData<Result>>(PagingData.empty())
+    val movies: StateFlow<PagingData<Result>> = _movies.asStateFlow()
+
+    init {
+        refreshMovies()
+    }
+
+//        // PagingData for the popular movies
+//        val movies: StateFlow<PagingData<Result>> =
+//            movieRepository
+//                .getPopularMovies()
+//                .cachedIn(viewModelScope)
+//                .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
         // StateFlow for favorite movie IDs
         private val _favoriteMovieIds = MutableStateFlow<List<Int>>(emptyList())
@@ -73,4 +81,15 @@ class MovieViewModel
         fun setGridLayout(isGridLayout: Boolean) {
             _isGridLayout.value = isGridLayout
         }
+
+    fun refreshMovies() {
+        viewModelScope.launch {
+            movieRepository.getPopularMovies()
+                .cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _movies.value = pagingData
+                }
+        }
+    }
+
     }

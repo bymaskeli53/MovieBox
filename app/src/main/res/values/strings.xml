@@ -17,4 +17,6 @@
     <string name="movie_rating">Movie Rating</string>
     <string name="search_movies">Search Movies\n</string>
     <string name="popularity">Popularity: </string>
+    <string name="there_is_no_internet_connection">There is no internet connection</string>
+    <string name="user_not_connected_to_internet">User is not connected to internet</string>
 </resources>

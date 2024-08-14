@@ -85,6 +85,14 @@ class MoviesFragment :
                         getString(R.string.user_connected_to_internet),
                         Toast.LENGTH_SHORT,
                     ).show()
+                movieViewModel.refreshMovies()
+
+            } else {
+                Toast
+                    .makeText(
+                        requireContext(),
+                        getString(R.string.user_not_connected_to_internet),
+                        Toast.LENGTH_SHORT,).show()
             }
         }
     }
@@ -98,45 +106,20 @@ class MoviesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 movieViewModel.movies.collectLatest { pagingData ->
-                    Log.d("MoviesFragment", "PagingData: $pagingData")
                     movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                         val updatedPagingData =
                             pagingData.map { movie ->
                                 movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
                             }
                         movieAdapter.submitData(updatedPagingData)
-//                        if (movieAdapter.itemCount > 0) {
-//                            Log.d("PagingData", "Adapter has data.")
-//                        } else {
-//                            Log.d("PagingData", "Adapter is empty.")
-//                        }
                     }
                 }
             }
         }
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                searchViewModel.searchResults.collectLatest { pagingData ->
-//
-//                    movieAdapter.submitData(pagingData)
-//                }
-//            }
-//        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             movieViewModel.isGridLayout.collectLatest { isGridLayout ->
-
                 setupRecyclerView(isGridLayout)
-//
-//                movieViewModel.movies.value?.let { pagingData ->
-//                    val favoriteMovieIds = movieViewModel.favoriteMovieIds.value
-//                    val updatedPagingData = pagingData.map { movie ->
-//                        movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
-//                    }
-//                    movieAdapter.submitData(updatedPagingData)
-//                }
-                // movieAdapter.notifyDataSetChanged()
             }
         }
     }

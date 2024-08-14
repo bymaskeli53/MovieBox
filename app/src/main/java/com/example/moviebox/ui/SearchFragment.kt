@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.CursorAdapter
 import android.widget.SearchView.OnQueryTextListener
 import android.widget.SimpleCursorAdapter
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -113,7 +114,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel.movies.collectLatest { movies ->
                 when (movies) {
-                    is Resource.Error -> throw Exception(movies.exception)
+                    is Resource.Error ->{
+                        if (movies.exception is java.net.UnknownHostException) {
+                            Toast.makeText(requireContext(),
+                                getString(R.string.there_is_no_internet_connection),
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    } 
                     is Resource.Loading -> binding.progressBar.show()
                     is Resource.Success -> {
                         binding.progressBar.hide()

@@ -56,7 +56,7 @@ object NetworkModule {
             .connectTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(networkConnectionInterceptor)
+            .addNetworkInterceptor(networkConnectionInterceptor)
             .build()
 
     /**
