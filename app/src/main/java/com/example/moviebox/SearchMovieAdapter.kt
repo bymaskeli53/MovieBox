@@ -38,6 +38,7 @@ class SearchMovieAdapter(
                 binding.ivFavorite.gone()
 
             }
+
         }
     }
 

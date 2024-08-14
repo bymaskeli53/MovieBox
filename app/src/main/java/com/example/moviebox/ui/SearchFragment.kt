@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviebox.MovieViewModel
 import com.example.moviebox.R
 import com.example.moviebox.Resource
@@ -144,9 +145,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 //                                        findNavController().navigate(action)
 //                                    }
                                 }
+
                             adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter
-                            binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
+                         //   binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
+                            binding.rvSearch.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                             movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                                 data.results.forEach { movie ->
                                     movie.isFavorite = favoriteMovieIds.contains(movie.id)
