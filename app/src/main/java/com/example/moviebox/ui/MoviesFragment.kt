@@ -49,6 +49,8 @@ class MoviesFragment :
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var searchMovieAdapter: SearchMovieAdapter
 
+    private lateinit var searchView: androidx.appcompat.widget.SearchView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
@@ -292,19 +294,24 @@ class MoviesFragment :
         menuInflater.inflate(R.menu.menu, menu)
 
         val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
+        searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
 
         searchView.queryHint = getString(R.string.search_movies)
 
+
+
         searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                searchItem.expandActionView()
-                binding.rvMovies.visibility = View.GONE
-                binding.rvSearchMovies.visibility = View.VISIBLE
-            } else {
-                binding.rvMovies.visibility = View.VISIBLE
-                binding.rvSearchMovies.visibility = View.GONE
+            if (isAdded){
+                if (hasFocus) {
+                    searchItem.expandActionView()
+                    binding.rvMovies.visibility = View.GONE
+                    binding.rvSearchMovies.visibility = View.VISIBLE
+                } else {
+                    binding.rvMovies.visibility = View.VISIBLE
+                    binding.rvSearchMovies.visibility = View.GONE
+                }
             }
+
         }
 
         searchView.setOnCloseListener {
@@ -410,6 +417,12 @@ class MoviesFragment :
 
             else -> false
         }
+
+    override fun onDestroyView() {
+        searchView.setOnQueryTextFocusChangeListener(null)
+        super.onDestroyView()
+    }
+
 }
 
 //    private fun searchMovies(query: String) {
