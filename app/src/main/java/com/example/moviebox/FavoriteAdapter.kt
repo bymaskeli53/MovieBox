@@ -2,10 +2,12 @@ package com.example.moviebox
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviebox.databinding.ItemMovieBinding
 
-class FavoriteAdapter(val liste: List<MovieEntity>) : RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
+class FavoriteAdapter : ListAdapter<MovieEntity, FavoriteAdapter.FavoriteViewHolder>(MovieDiffCallback()) {
 
     inner class FavoriteViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -14,12 +16,19 @@ class FavoriteAdapter(val liste: List<MovieEntity>) : RecyclerView.Adapter<Favor
         return FavoriteViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return liste.size
+    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
+        val movieEntity = getItem(position)
+        holder.binding.movieTitleTextView.text = movieEntity.title
+        holder.binding.movieImageView.setImageResource(R.drawable.ic_star_filled)
     }
 
-    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
-        holder.binding.movieTitleTextView.text = liste[position].title
-        holder.binding.movieImageView.setImageResource(R.drawable.ic_star_filled)
+    class MovieDiffCallback : DiffUtil.ItemCallback<MovieEntity>() {
+        override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem.id == newItem.id // Assuming `id` is a unique identifier for `MovieEntity`
+        }
+
+        override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem == newItem
+        }
     }
 }

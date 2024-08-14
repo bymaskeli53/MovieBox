@@ -29,7 +29,10 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             favoriteViewModel.favoriteMovies.collect {
-                binding.rvFavorites.adapter = FavoriteAdapter(it)
+                binding.rvFavorites.adapter = FavoriteAdapter().apply {
+                    submitList(it)
+                }
+
             }
         }
     }
