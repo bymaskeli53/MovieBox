@@ -2,12 +2,10 @@ package com.example.moviebox.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
@@ -30,7 +28,6 @@ import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
-import com.example.moviebox.util.hideKeyboard
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -53,7 +50,6 @@ class MoviesFragment :
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_in_top)
     }
-
 
     override fun onViewCreated(
         view: View,
@@ -86,13 +82,13 @@ class MoviesFragment :
                         Toast.LENGTH_SHORT,
                     ).show()
                 movieViewModel.refreshMovies()
-
             } else {
                 Toast
                     .makeText(
                         requireContext(),
                         getString(R.string.user_not_connected_to_internet),
-                        Toast.LENGTH_SHORT,).show()
+                        Toast.LENGTH_SHORT,
+                    ).show()
             }
         }
     }
@@ -267,6 +263,20 @@ class MoviesFragment :
 
         searchView.queryHint = getString(R.string.search_movies)
 
+        searchView.setOnQueryTextFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) {
+                searchItem.expandActionView()
+                binding.constraintLayout.visibility = View.GONE
+            } else {
+                binding.constraintLayout.visibility = View.VISIBLE
+            }
+        }
+
+        searchView.setOnCloseListener {
+            binding.constraintLayout.visibility = View.VISIBLE
+            false
+        }
+
 //        searchView.setOnQueryTextListener(
 //            object :
 //                androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -343,7 +353,6 @@ class MoviesFragment :
 
             R.id.action_search -> {
                 // menuItem.collapseActionView()
-
 
                 true
             }
