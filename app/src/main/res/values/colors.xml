@@ -25,10 +25,26 @@
     <color name="red_mixed_orange">#FF5722</color>
 
     <color name="dark_blue">#1A237E</color>
-    <color name="dark_green">#006400</color>"
+    <color name="dark_green">#006400</color>
+
+    <color name="burgundy">#800020</color>
+
+    <color name="wine">#722F37</color>
+
 
     <color name="dark_red">#8B0000</color>"
 
     <color name="soft_grey">#E0E0E0</color>
     <color name="yellow_2">#FFEB3B</color>
+
+    <color name="amaranth">#9F2B68</color>
+    <color name="green_very_dark">#2f3b22</color>
+    
+    <color name="aqua_marine">#7fffd4</color>
+    <color name="aqua_marine2">#458b74</color>
+    <color name="yellow_4">#8b8b00</color>
+
+    <color name="sienna_4">#8b4726</color>
+
+    <color name="aged_paper">#ecab53</color>
 </resources>
