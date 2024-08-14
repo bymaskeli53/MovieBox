@@ -16,4 +16,5 @@
     <string name="no_data">No data\n</string>
     <string name="movie_rating">Movie Rating</string>
     <string name="search_movies">Search Movies\n</string>
+    <string name="popularity">Popularity: </string>
 </resources>

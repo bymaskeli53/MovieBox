@@ -11,15 +11,16 @@ class SearchPagingSource(
 ) : PagingSource<Int, com.example.moviebox.model.Result>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
+        val position = params.key ?: 1
         return try {
-            val position = params.key ?: 1
-            val response = apiService.searchMovies2(query, page = position)
-            val movies = response.results
 
+            val response = apiService.searchMovies2(query = query, page = position)
+
+            val movie = response.results
             LoadResult.Page(
-                data = movies,
+                data = movie,
                 prevKey = if (position == 1) null else position - 1,
-                nextKey = if (movies.isEmpty()) null else position + 1
+                nextKey = if (movie.isEmpty()) null else position + 1
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

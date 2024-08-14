@@ -16,5 +16,5 @@ data class Cast(
     val order: Int,
     val original_name: String,
     val popularity: Double,
-    val profile_path: String
+    val profile_path: String?
 ) : Parcelable

@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,9 +22,13 @@ class SearchViewModel
     constructor(
         val repository: MovieRepository,
         private val formatDateUseCase: FormatDateUseCase,
+        private val searchMoviesUseCase: SearchMoviesUseCase
     ) : ViewModel() {
         private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Idle)
         val movies: StateFlow<Resource<Movie>> = _movies
+
+    private val _searchResults = MutableStateFlow<PagingData<Result>>(PagingData.empty())
+    val searchResults: StateFlow<PagingData<Result>> get() = _searchResults
 
         private var isLoading = false
 
@@ -49,8 +54,13 @@ class SearchViewModel
 
         fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
 
-    fun searchMovies2(query: String): Flow<PagingData<Result>> {
-        return repository.searchMovies2(query)
-            .cachedIn(viewModelScope)
+    fun searchMovies2(query: String) {
+        viewModelScope.launch {
+            searchMoviesUseCase(query)
+                .cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _searchResults.value = pagingData
+                }
+        }
     }
     }

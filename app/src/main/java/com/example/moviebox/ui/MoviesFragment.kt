@@ -10,16 +10,13 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.paging.filter
 import androidx.paging.map
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
@@ -34,7 +31,6 @@ import com.example.moviebox.util.hide
 import com.example.moviebox.util.hideKeyboard
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -52,7 +48,7 @@ class MoviesFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val inflater  = TransitionInflater.from(requireContext())
+        val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_in_top)
     }
 
@@ -67,7 +63,7 @@ class MoviesFragment :
         setupMenu()
         observeViewModel()
 
-       // setupRecyclerView(false)
+        // setupRecyclerView(false)
 
 //        viewLifecycleOwner.lifecycleScope.launch {
 //            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -76,7 +72,6 @@ class MoviesFragment :
 //                }
 //            }
 //        }
-
 
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
@@ -100,7 +95,7 @@ class MoviesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 movieViewModel.movies.collectLatest { pagingData ->
-                    Log.d("MoviesFragment", "PagingData: ${pagingData}")
+                    Log.d("MoviesFragment", "PagingData: $pagingData")
                     movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                         val updatedPagingData =
                             pagingData.map { movie ->
@@ -117,10 +112,19 @@ class MoviesFragment :
             }
         }
 
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                searchViewModel.searchResults.collectLatest { pagingData ->
+//
+//                    movieAdapter.submitData(pagingData)
+//                }
+//            }
+//        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             movieViewModel.isGridLayout.collectLatest { isGridLayout ->
 
-               setupRecyclerView(isGridLayout)
+                setupRecyclerView(isGridLayout)
 //
 //                movieViewModel.movies.value?.let { pagingData ->
 //                    val favoriteMovieIds = movieViewModel.favoriteMovieIds.value
@@ -129,51 +133,52 @@ class MoviesFragment :
 //                    }
 //                    movieAdapter.submitData(updatedPagingData)
 //                }
-                //movieAdapter.notifyDataSetChanged()
+                // movieAdapter.notifyDataSetChanged()
             }
         }
     }
 
     private fun setupRecyclerView(isGridLayout: Boolean) {
-        movieAdapter = MovieAdapter(isGridLayout) { movie ->
-            saveScrollPosition()
-            val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
-            findNavController().navigate(action)
-        }
+        // saveScrollPosition()
+        movieAdapter =
+            MovieAdapter(isGridLayout) { movie ->
+                saveScrollPosition()
+                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
+                findNavController().navigate(action)
+            }
 
         if (movieAdapter.itemCount > 0) {
             Log.d("PagingData", "Adapter has data.")
         } else {
-            Log.d("PagingData","No data in adapter")
+            Log.d("PagingData", "No data in adapter")
         }
 
         binding.rvMovies.layoutManager =
             if (isGridLayout) {
-
                 GridLayoutManager(requireContext(), 3)
-
             } else {
                 LinearLayoutManager(requireContext())
             }
-        Log.d("Mov",binding.rvMovies.layoutManager.toString())
+        Log.d("Mov", binding.rvMovies.layoutManager.toString())
 
         binding.rvMovies.adapter = movieAdapter
         binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
 
-
         viewLifecycleOwner.lifecycleScope.launch {
             movieViewModel.movies.collectLatest { pagingData ->
                 val favoriteMovieIds = movieViewModel.favoriteMovieIds.value
-                val updatedPagingData = pagingData.map { movie ->
-                    movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
-                }
+                val updatedPagingData =
+                    pagingData.map { movie ->
+                        movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
+                    }
                 movieAdapter.submitData(updatedPagingData)
             }
         }
 
         movieAdapter.addLoadStateListener { loadState ->
             if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
-                loadState.source.append is androidx.paging.LoadState.Loading) {
+                loadState.source.append is androidx.paging.LoadState.Loading
+            ) {
                 binding.shimmerView.show()
                 binding.shimmerView.startShimmer()
             } else {
@@ -220,7 +225,6 @@ class MoviesFragment :
 //            }
 //        }
 //    }
-
 
 //    private fun setupRecyclerView(isGridLayout: Boolean = movieViewModel.isGridLayout.value) {
 //        movieAdapter =
@@ -277,6 +281,21 @@ class MoviesFragment :
 
         searchView.queryHint = getString(R.string.search_movies)
 
+        searchView.setOnQueryTextListener(
+            object :
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        searchViewModel.searchMovies2(it)
+                        hideKeyboard()
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean = false
+            },
+        )
+
 //        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener
 //        {
 //            override fun onQueryTextSubmit(query: String?): Boolean {
@@ -297,8 +316,13 @@ class MoviesFragment :
 //            repeatOnLifecycle(Lifecycle.State.STARTED){
 //                searchViewModel.searchMovies2("bat").collectLatest{
 //                    Log.d("TAG",it.toString())
-//                    movieAdapter.submitData(it)
 //
+//                    movieAdapter.submitData(it)
+//                    if (movieAdapter.itemCount > 0) {
+//                        println("daw")
+//                    } else {
+//                        println("dwadkwa")
+//                    }
 //                }
 //            }
 //
@@ -308,7 +332,6 @@ class MoviesFragment :
 //            searchItem.collapseActionView()
 //            true
 //        }
-
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
@@ -325,32 +348,32 @@ class MoviesFragment :
                 setupRecyclerView(false)
                 true
             }
-            R.id.action_search -> {
-               // menuItem.collapseActionView()
-                true
 
+            R.id.action_search -> {
+                // menuItem.collapseActionView()
+                true
             }
 
             else -> false
         }
 
-    private fun searchMovies(query: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-
-            searchViewModel.searchMovies2(query).collectLatest{
-                it.map {
-                    Log.d("PAGE",it.title)
-                }
-
-                Log.d("SearchResults","Paging data: ${it.toString()}")
-                movieAdapter.submitData(it)
-              //  movieAdapter.notifyDataSetChanged()
-
-
-
-
-
-            }
-        }
-    }
+//    private fun searchMovies(query: String) {
+//        viewLifecycleOwner.lifecycleScope.launch {
+//
+//            searchViewModel.searchMovies2(query).collectLatest{
+//                it.map {
+//                    Log.d("PAGE",it.title)
+//                }
+//
+//                Log.d("SearchResults","Paging data: ${it.toString()}")
+//                movieAdapter.submitData(it)
+//              //  movieAdapter.notifyDataSetChanged()
+//
+//
+//
+//
+//
+//            }
+//        }
+//    }
 }

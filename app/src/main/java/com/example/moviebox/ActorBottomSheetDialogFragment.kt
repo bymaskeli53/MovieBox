@@ -37,7 +37,7 @@ class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val actor = navArgs.actor
 
         binding.tvActorName.text = actor.name
-        binding.tvPopularity.text = actor.popularity.toString()
+        binding.tvPopularity.text = getString(R.string.popularity) + actor.popularity.toString()
         binding.tvCharacter.text = actor.character
         binding.tvGender.text = genderDecider(actor.gender)
         setActorImage(actor)
