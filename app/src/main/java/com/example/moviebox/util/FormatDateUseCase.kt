@@ -16,7 +16,7 @@ class FormatDateUseCase
                     val date = inputFormatter.parse(inputDate)
                     return outputFormatter.format(date!!)
                 } catch (e: ParseException) {
-                    return "No Date"
+                    return "No Date because of parse exception"
                 }
             } else {
                 return "No Date"

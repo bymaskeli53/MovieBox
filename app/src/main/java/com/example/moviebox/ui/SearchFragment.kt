@@ -122,20 +122,27 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         if (data.results.isNotEmpty()) {
                             binding.rvSearch.show()
                             binding.tvNoMovieFound.hide()
-                            for (i in data?.results?.indices!!) {
-                                val formattedDateToDayMonthYear =
-                                    searchViewModel.formatDate(data.results[i].release_date)
-                                data.results.get(i)?.release_date = formattedDateToDayMonthYear
-                            }
+//                            for (i in data?.results?.indices!!) {
+//                                val formattedDateToDayMonthYear =
+//                                    searchViewModel.formatDate(data.results[i].release_date)
+//                                data.results.get(i)?.release_date = formattedDateToDayMonthYear
+//                            }
                             val adapter =
                                 data.results.let {
-                                    SearchMovieAdapter {
+                                    SearchMovieAdapter(onMovieClick = {
                                         val action =
                                             SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
                                                 it,
                                             )
                                         findNavController().navigate(action)
-                                    }
+                                    }, formatDate = {date -> searchViewModel.formatDate(date)})
+//                                    SearchMovieAdapter {
+//                                       onMovieC val action =
+//                                            SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
+//                                                it,
+//                                            )
+//                                        findNavController().navigate(action)
+//                                    }
                                 }
                             adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter

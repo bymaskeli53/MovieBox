@@ -11,9 +11,11 @@ import com.example.moviebox.model.Result
 import com.example.moviebox.util.NetworkConstants.IMAGE_BASE_URL
 import com.example.moviebox.util.gone
 import com.example.moviebox.util.show
+import okhttp3.internal.format
 
 class SearchMovieAdapter(
     private val onMovieClick: (Result) -> Unit = {},
+    private val formatDate: (String) -> String,
 ) : ListAdapter<Result, SearchMovieAdapter.SearchMovieViewHolder>(SearchMovieDiffCallback()) {
 
     inner class SearchMovieViewHolder(
@@ -25,7 +27,7 @@ class SearchMovieAdapter(
                 crossfade(true)
                 placeholder(R.drawable.ic_generic_movie_poster)
             }
-            binding.textViewMovieDate.text = movie.release_date
+            binding.textViewMovieDate.text = formatDate(movie.release_date)
 
             binding.root.setOnClickListener {
                 onMovieClick(movie)
