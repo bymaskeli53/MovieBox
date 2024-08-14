@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviebox.MovieViewModel
 import com.example.moviebox.R
@@ -63,7 +62,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val suggestions = listOf("Lord Of The Rings", "Batman", "Interstellar", "Avengers")
         binding.searchView.suggestionsAdapter = cursorAdapter
 
-
         movieViewModel.getFavoriteMovieIds()
         // TODO: Make search more efficient to show favorites later
         binding.searchView.setOnQueryTextListener(
@@ -78,49 +76,54 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
-                   newText?.let {
-                       suggestions.forEachIndexed { index, suggestion ->
-                           if (suggestion.contains(newText,true)){
-                                   cursor.addRow(arrayOf(index, suggestion))
-                               }
-                       }
-                       cursorAdapter.changeCursor(cursor)
-                       return true
-
-                   }
+                    val cursor =
+                        MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    newText?.let {
+                        suggestions.forEachIndexed { index, suggestion ->
+                            if (suggestion.contains(newText, true)) {
+                                cursor.addRow(arrayOf(index, suggestion))
+                            }
+                        }
+                        cursorAdapter.changeCursor(cursor)
+                        return true
+                    }
 
                     return true
                 }
             },
         )
 
-        binding.searchView.setOnSuggestionListener(object: android.widget.SearchView.OnSuggestionListener{
-            override fun onSuggestionSelect(position: Int): Boolean {
-                return false
-            }
+        binding.searchView.setOnSuggestionListener(
+            object :
+                android.widget.SearchView.OnSuggestionListener {
+                override fun onSuggestionSelect(position: Int): Boolean = false
 
-            @SuppressLint("Range")
-            override fun onSuggestionClick(position: Int): Boolean {
-                hideKeyboard()
-                val cursor = binding.searchView.suggestionsAdapter.getItem(position) as Cursor
-                val selection = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
-                binding.searchView.setQuery(selection, false)
-                return true
-            }
-
-        })
+                @SuppressLint("Range")
+                override fun onSuggestionClick(position: Int): Boolean {
+                    hideKeyboard()
+                    val cursor = binding.searchView.suggestionsAdapter.getItem(position) as Cursor
+                    val selection =
+                        cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    binding.searchView.setQuery(selection, false)
+                    return true
+                }
+            },
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel.movies.collectLatest { movies ->
                 when (movies) {
-                    is Resource.Error ->{
+                    is Resource.Error -> {
                         if (movies.exception is java.net.UnknownHostException) {
-                            Toast.makeText(requireContext(),
-                                getString(R.string.there_is_no_internet_connection),
-                                Toast.LENGTH_SHORT).show()
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    getString(R.string.there_is_no_internet_connection),
+                                    Toast.LENGTH_SHORT,
+                                ).show()
                         }
-                    } 
+                    }
+
                     is Resource.Loading -> binding.progressBar.show()
                     is Resource.Success -> {
                         binding.progressBar.hide()
@@ -143,7 +146,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                                 it,
                                             )
                                         findNavController().navigate(action)
-                                    }, formatDate = {date -> searchViewModel.formatDate(date)})
+                                    }, formatDate = { date -> searchViewModel.formatDate(date) })
 //                                    SearchMovieAdapter {
 //                                       onMovieC val action =
 //                                            SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
@@ -155,8 +158,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
                             adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter
-                         //   binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
-                            binding.rvSearch.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                            //   binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
+                            binding.rvSearch.layoutManager =
+                                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                             movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                                 data.results.forEach { movie ->
                                     movie.isFavorite = favoriteMovieIds.contains(movie.id)

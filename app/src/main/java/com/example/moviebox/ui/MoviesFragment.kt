@@ -23,11 +23,14 @@ import androidx.transition.TransitionInflater
 import com.example.moviebox.MovieAdapter
 import com.example.moviebox.MovieViewModel
 import com.example.moviebox.R
+import com.example.moviebox.Resource
+import com.example.moviebox.SearchMovieAdapter
 import com.example.moviebox.SearchViewModel
 import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.hide
+import com.example.moviebox.util.hideKeyboard
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -44,6 +47,7 @@ class MoviesFragment :
     private val movieViewModel: MovieViewModel by viewModels()
     private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var movieAdapter: MovieAdapter
+    private lateinit var searchMovieAdapter: SearchMovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +61,39 @@ class MoviesFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMoviesBinding.bind(view)
+        searchMovieAdapter =
+            SearchMovieAdapter(onMovieClick = {
+                val action =
+                    MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(
+                        it,
+                    )
+                findNavController().navigate(action)
+            }, formatDate = { date -> searchViewModel.formatDate(date) })
 
         movieViewModel.getFavoriteMovieIds()
         setupMenu()
         observeViewModel()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            searchViewModel.movies.collectLatest { movies ->
+                when (movies) {
+                    is Resource.Error -> {
+                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+                    }
+
+                    is Resource.Idle -> {}
+                    is Resource.Loading -> {}
+                    is Resource.Success -> {
+                        binding.rvSearchMovies.adapter = searchMovieAdapter
+                        val data = movies.data
+
+                        data.results.let {
+                        }
+                        searchMovieAdapter.submitList(data.results)
+                    }
+                }
+            }
+        }
 
         // setupRecyclerView(false)
 
@@ -263,19 +296,37 @@ class MoviesFragment :
 
         searchView.queryHint = getString(R.string.search_movies)
 
-        searchView.setOnQueryTextFocusChangeListener{ _, hasFocus ->
+        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 searchItem.expandActionView()
-                binding.constraintLayout.visibility = View.GONE
+                binding.rvMovies.visibility = View.GONE
+                binding.rvSearchMovies.visibility = View.VISIBLE
             } else {
-                binding.constraintLayout.visibility = View.VISIBLE
+                binding.rvMovies.visibility = View.VISIBLE
+                binding.rvSearchMovies.visibility = View.GONE
             }
         }
 
         searchView.setOnCloseListener {
-            binding.constraintLayout.visibility = View.VISIBLE
+            binding.rvMovies.visibility = View.VISIBLE
+            binding.rvSearchMovies.visibility = View.GONE
             false
         }
+
+        searchView.setOnQueryTextListener(
+            object :
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        searchViewModel.searchMovies(it)
+                        hideKeyboard()
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean = false
+            },
+        )
 
 //        searchView.setOnQueryTextListener(
 //            object :
@@ -359,6 +410,7 @@ class MoviesFragment :
 
             else -> false
         }
+}
 
 //    private fun searchMovies(query: String) {
 //        viewLifecycleOwner.lifecycleScope.launch {
@@ -379,4 +431,3 @@ class MoviesFragment :
 //            }
 //        }
 //    }
-}
