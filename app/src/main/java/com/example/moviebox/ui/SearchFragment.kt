@@ -45,8 +45,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
-        // ViewCompat.requestApplyInsets(view)
-        // binding.searchView.suggestionsAdapter = null
+        
+        
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)
         val cursorAdapter =
@@ -63,7 +63,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.searchView.suggestionsAdapter = cursorAdapter
 
         movieViewModel.getFavoriteMovieIds()
-        // TODO: Make search more efficient to show favorites later
+        
         binding.searchView.setOnQueryTextListener(
             object : OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -133,11 +133,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         if (data.results.isNotEmpty()) {
                             binding.rvSearch.show()
                             binding.tvNoMovieFound.hide()
-//                            for (i in data?.results?.indices!!) {
-//                                val formattedDateToDayMonthYear =
-//                                    searchViewModel.formatDate(data.results[i].release_date)
-//                                data.results.get(i)?.release_date = formattedDateToDayMonthYear
-//                            }
+
+
+
+
+
                             val adapter =
                                 data.results.let {
                                     SearchMovieAdapter(onMovieClick = {
@@ -147,18 +147,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                             )
                                         findNavController().navigate(action)
                                     }, formatDate = { date -> searchViewModel.formatDate(date) })
-//                                    SearchMovieAdapter {
-//                                       onMovieC val action =
-//                                            SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
-//                                                it,
-//                                            )
-//                                        findNavController().navigate(action)
-//                                    }
+
+
+
+
+
+
+
                                 }
 
                             adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter
-                            //   binding.rvSearch.layoutManager = GridLayoutManager(requireContext(), 2)
+                            
                             binding.rvSearch.layoutManager =
                                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                             movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->

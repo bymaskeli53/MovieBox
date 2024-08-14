@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -34,7 +33,6 @@ import com.example.moviebox.util.hideKeyboard
 import com.example.moviebox.util.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -97,16 +95,6 @@ class MoviesFragment :
             }
         }
 
-        // setupRecyclerView(false)
-
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                searchViewModel.movies.collectLatest {
-//                    movieAdapter.submitData(it)
-//                }
-//            }
-//        }
-
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
@@ -156,7 +144,6 @@ class MoviesFragment :
     }
 
     private fun setupRecyclerView(isGridLayout: Boolean) {
-        // saveScrollPosition()
         movieAdapter =
             MovieAdapter(isGridLayout) { movie ->
                 saveScrollPosition()
@@ -205,77 +192,6 @@ class MoviesFragment :
         }
     }
 
-//    private fun setupRecyclerView(isGridLayout: Boolean = movieViewModel.isGridLayout.value) {
-//        if (!::movieAdapter.isInitialized) {
-//            movieAdapter = MovieAdapter(isGridLayout) { movie ->
-//                saveScrollPosition()
-//                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
-//                findNavController().navigate(action)
-//            }
-//        }
-//
-//        val layoutManager = if (isGridLayout) {
-//            GridLayoutManager(requireContext(), 3)
-//        } else {
-//            LinearLayoutManager(requireContext())
-//        }
-//
-//        binding.rvMovies.layoutManager = layoutManager
-//        binding.rvMovies.adapter = movieAdapter // Re-set adapter to force it to use the correct ViewHolder
-//
-//        // This ensures that data is rebound when layout changes
-//        movieAdapter.notifyDataSetChanged()
-//
-//        binding.rvMovies.itemAnimator = DefaultItemAnimator()
-//
-//        // Restore scroll position
-//        layoutManager.scrollToPosition(movieViewModel.position.value)
-//
-//        movieAdapter.addLoadStateListener { loadState ->
-//            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
-//                loadState.source.append is androidx.paging.LoadState.Loading) {
-//                binding.shimmerView.show()
-//                binding.shimmerView.startShimmer()
-//            } else {
-//                binding.shimmerView.hide()
-//                binding.shimmerView.stopShimmer()
-//            }
-//        }
-//    }
-
-//    private fun setupRecyclerView(isGridLayout: Boolean = movieViewModel.isGridLayout.value) {
-//        movieAdapter =
-//            MovieAdapter(isGridLayout) { movie ->
-//                saveScrollPosition()
-//                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
-//                findNavController().navigate(action)
-//            }
-//
-//        binding.rvMovies.layoutManager =
-//            if (isGridLayout) {
-//                GridLayoutManager(requireContext(), 3)
-//            } else {
-//                LinearLayoutManager(requireContext())
-//            }
-//
-//        binding.rvMovies.itemAnimator = DefaultItemAnimator()
-//        binding.rvMovies.adapter = movieAdapter
-//        binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
-//
-//
-//
-//        movieAdapter.addLoadStateListener { loadState ->
-//            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
-//                loadState.source.append is androidx.paging.LoadState.Loading) {
-//                binding.shimmerView.show()
-//                binding.shimmerView.startShimmer()
-//            } else {
-//                binding.shimmerView.hide()
-//                binding.shimmerView.stopShimmer()
-//            }
-//        }
-//    }
-
     private fun saveScrollPosition() {
         val layoutManager = binding.rvMovies.layoutManager
         val savedScrollPosition =
@@ -298,10 +214,8 @@ class MoviesFragment :
 
         searchView.queryHint = getString(R.string.search_movies)
 
-
-
         searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (isAdded){
+            if (isAdded) {
                 if (hasFocus) {
                     searchItem.expandActionView()
                     binding.rvMovies.visibility = View.GONE
@@ -311,7 +225,6 @@ class MoviesFragment :
                     binding.rvSearchMovies.visibility = View.GONE
                 }
             }
-
         }
 
         searchView.setOnCloseListener {
@@ -334,64 +247,6 @@ class MoviesFragment :
                 override fun onQueryTextChange(newText: String?): Boolean = false
             },
         )
-
-//        searchView.setOnQueryTextListener(
-//            object :
-//                androidx.appcompat.widget.SearchView.OnQueryTextListener {
-//                override fun onQueryTextSubmit(query: String?): Boolean {
-//                    query?.let {
-//                        searchViewModel.searchMovies2(it)
-//                        hideKeyboard()
-//                    }
-//                    return true
-//                }
-//
-//                override fun onQueryTextChange(newText: String?): Boolean = false
-//            },
-//        )
-
-//        lifecycleScope.launchWhenStarted {
-//            searchViewModel.moviesFlow.collectLatest {
-//                movieAdapter.submitData(it)
-//            }
-//        }
-
-//        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener
-//        {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                query?.let {
-//                    searchMovies(it)
-//                    hideKeyboard()
-//
-//                }
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return false
-//            }
-//
-//        })
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED){
-//                searchViewModel.searchMovies2("bat").collectLatest{
-//                    Log.d("TAG",it.toString())
-//
-//                    movieAdapter.submitData(it)
-//                    if (movieAdapter.itemCount > 0) {
-//                        println("daw")
-//                    } else {
-//                        println("dwadkwa")
-//                    }
-//                }
-//            }
-//
-//
-//        }
-//        searchView.setOnCloseListener {
-//            searchItem.collapseActionView()
-//            true
-//        }
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
@@ -410,8 +265,6 @@ class MoviesFragment :
             }
 
             R.id.action_search -> {
-                // menuItem.collapseActionView()
-
                 true
             }
 
@@ -422,25 +275,4 @@ class MoviesFragment :
         searchView.setOnQueryTextFocusChangeListener(null)
         super.onDestroyView()
     }
-
 }
-
-//    private fun searchMovies(query: String) {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//
-//            searchViewModel.searchMovies2(query).collectLatest{
-//                it.map {
-//                    Log.d("PAGE",it.title)
-//                }
-//
-//                Log.d("SearchResults","Paging data: ${it.toString()}")
-//                movieAdapter.submitData(it)
-//              //  movieAdapter.notifyDataSetChanged()
-//
-//
-//
-//
-//
-//            }
-//        }
-//    }
