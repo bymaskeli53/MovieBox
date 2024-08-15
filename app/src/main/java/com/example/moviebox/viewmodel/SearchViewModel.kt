@@ -4,17 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.moviebox.repository.MovieRepository
-import com.example.moviebox.util.Resource
-import com.example.moviebox.model.Movie
-import com.example.moviebox.model.Result
 import com.example.moviebox.domain.FormatDateUseCase
 import com.example.moviebox.domain.SearchMoviesUseCase
+import com.example.moviebox.model.Movie
+import com.example.moviebox.model.Result
+import com.example.moviebox.repository.MovieRepository
+import com.example.moviebox.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -26,25 +25,25 @@ class SearchViewModel
     constructor(
         val repository: MovieRepository,
         private val formatDateUseCase: FormatDateUseCase,
-        private val searchMoviesUseCase: SearchMoviesUseCase
+        private val searchMoviesUseCase: SearchMoviesUseCase,
     ) : ViewModel() {
         private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Idle)
         val movies: StateFlow<Resource<Movie>> = _movies
 
-    private val _searchQuery = MutableStateFlow("")
+        private val _searchQuery = MutableStateFlow("")
 
-    val moviesFlow: Flow<PagingData<Result>> = _searchQuery.flatMapLatest { query ->
-        if (query.isEmpty()) {
-            repository.getPopularMovies()
-        } else {
-            repository.searchMovies2(query)
-        }
-    }.cachedIn(viewModelScope)
+        val moviesFlow: Flow<PagingData<Result>> =
+            _searchQuery
+                .flatMapLatest { query ->
+                    if (query.isEmpty()) {
+                        repository.getPopularMovies()
+                    } else {
+                        repository.searchMovies2(query)
+                    }
+                }.cachedIn(viewModelScope)
 
-
-
-    private val _searchResults = MutableStateFlow<PagingData<Result>>(PagingData.empty())
-    val searchResults: StateFlow<PagingData<Result>> get() = _searchResults
+        private val _searchResults = MutableStateFlow<PagingData<Result>>(PagingData.empty())
+        val searchResults: StateFlow<PagingData<Result>> get() = _searchResults
 
         private var isLoading = false
 
@@ -69,14 +68,4 @@ class SearchViewModel
         }
 
         fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
-
-    fun searchMovies2(query: String) {
-        viewModelScope.launch {
-            searchMoviesUseCase(query)
-                .cachedIn(viewModelScope)
-                .collectLatest { pagingData ->
-                    _searchResults.value = pagingData
-                }
-        }
-    }
     }

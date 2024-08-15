@@ -2,13 +2,13 @@ package com.example.moviebox.di
 
 import android.content.Context
 import com.example.moviebox.BuildConfig
-import com.example.moviebox.domain.GetPopularMoviesUseCase
 import com.example.moviebox.database.MovieDao
+import com.example.moviebox.domain.GetPopularMoviesUseCase
+import com.example.moviebox.remote.MovieApi
 import com.example.moviebox.repository.MovieRepository
 import com.example.moviebox.repository.MovieRepositoryImpl
-import com.example.moviebox.remote.MovieApi
-import com.example.moviebox.util.constant.DurationConstants.TIMEOUT_DURATION
 import com.example.moviebox.util.NetworkConnectionInterceptor
+import com.example.moviebox.util.constant.DurationConstants.TIMEOUT_DURATION
 import com.example.moviebox.util.constant.NetworkConstants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -73,7 +73,6 @@ object NetworkModule {
         Retrofit
             .Builder()
             .client(okHttpClient)
-
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()
@@ -84,7 +83,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(movieApi: MovieApi,movieDao: MovieDao): MovieRepository = MovieRepositoryImpl(movieApi,movieDao)
+    fun provideMovieRepository(
+        movieApi: MovieApi,
+        movieDao: MovieDao,
+    ): MovieRepository = MovieRepositoryImpl(movieApi, movieDao)
 
     @Provides
     @Singleton

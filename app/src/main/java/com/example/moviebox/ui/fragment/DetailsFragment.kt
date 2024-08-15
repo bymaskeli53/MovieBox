@@ -16,19 +16,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import coil.load
-import com.example.moviebox.ui.adapter.ActorsAdapter
-import com.example.moviebox.viewmodel.CreditsViewModel
-import com.example.moviebox.viewmodel.FavoriteViewModel
-import com.example.moviebox.database.MovieEntity
-import com.example.moviebox.viewmodel.MovieViewModel
 import com.example.moviebox.R
-import com.example.moviebox.util.Resource
+import com.example.moviebox.database.MovieEntity
 import com.example.moviebox.databinding.FragmentDetailsBinding
 import com.example.moviebox.model.Cast
-import com.example.moviebox.util.constant.NetworkConstants
+import com.example.moviebox.ui.adapter.ActorsAdapter
+import com.example.moviebox.util.Resource
 import com.example.moviebox.util.autoCleared
+import com.example.moviebox.util.constant.NetworkConstants
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.show
+import com.example.moviebox.viewmodel.CreditsViewModel
+import com.example.moviebox.viewmodel.FavoriteViewModel
+import com.example.moviebox.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -44,16 +44,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private val args: DetailsFragmentArgs by navArgs()
     private lateinit var movieEntity: MovieEntity
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         /**
          * Screen opening animation
          * İnflater
          */
-        val inflater  = TransitionInflater.from(requireContext())
+        val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_in)
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onViewCreated(

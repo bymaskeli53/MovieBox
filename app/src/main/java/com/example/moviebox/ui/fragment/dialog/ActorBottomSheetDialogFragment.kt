@@ -11,10 +11,10 @@ import coil.transform.CircleCropTransformation
 import com.example.moviebox.R
 import com.example.moviebox.databinding.ActorBottomSheetDialogBinding
 import com.example.moviebox.model.Cast
-import com.example.moviebox.util.constant.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.Gender
-import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
 import com.example.moviebox.util.autoCleared
+import com.example.moviebox.util.constant.DurationConstants.CROSSFADE_DURATION
+import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

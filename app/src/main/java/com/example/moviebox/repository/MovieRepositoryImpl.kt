@@ -68,14 +68,13 @@ class MovieRepositoryImpl
 
         override fun getFavoriteMovieIds(): Flow<List<Int>> = movieDao.getFavoriteMovieIds()
 
-        override fun searchMovies2(query: String): Flow<PagingData<Result>> {
-            return Pager(
-                config = PagingConfig(
-                    pageSize = 20,
-                    enablePlaceholders = false
-                ),
-                pagingSourceFactory = {SearchPagingSource(movieApi,query)}
+        override fun searchMovies2(query: String): Flow<PagingData<Result>> =
+            Pager(
+                config =
+                    PagingConfig(
+                        pageSize = 20,
+                        enablePlaceholders = false,
+                    ),
+                pagingSourceFactory = { SearchPagingSource(movieApi, query) },
             ).flow
-
-        }
     }

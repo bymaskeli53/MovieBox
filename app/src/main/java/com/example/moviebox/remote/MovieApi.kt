@@ -39,9 +39,9 @@ interface MovieApi {
     ): Movie
 
     @GET("search/movie")
-     fun searchMovies2(
+    fun searchMovies2(
         @Query("query") query: String,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
     ): Movie
 }

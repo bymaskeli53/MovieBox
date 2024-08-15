@@ -28,8 +28,6 @@ class MovieAdapter(
             binding.movieImageView.load(IMAGE_BASE_URL + movie.poster_path) {
                 crossfade(CROSSFADE_DURATION)
                 placeholder(R.drawable.ic_generic_movie_poster)
-
-                // transformations(CircleCropTransformation())
             }
             binding.tvReleaseDate.text = movie.release_date.substringBefore("-")
             binding.tvPopularity.text =
@@ -74,7 +72,6 @@ class MovieAdapter(
             MovieViewHolder(binding)
         }
 
-
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
@@ -88,8 +85,6 @@ class MovieAdapter(
             }
         }
     }
-
-
 }
 
 class MovieDiffCallback : DiffUtil.ItemCallback<Result>() {

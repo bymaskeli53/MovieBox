@@ -16,16 +16,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.moviebox.viewmodel.MovieViewModel
 import com.example.moviebox.R
-import com.example.moviebox.util.Resource
-import com.example.moviebox.ui.adapter.SearchMovieAdapter
-import com.example.moviebox.viewmodel.SearchViewModel
 import com.example.moviebox.databinding.FragmentSearchBinding
+import com.example.moviebox.ui.adapter.SearchMovieAdapter
+import com.example.moviebox.util.Resource
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.hideKeyboard
 import com.example.moviebox.util.extension.show
+import com.example.moviebox.viewmodel.MovieViewModel
+import com.example.moviebox.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,8 +44,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
-        
-        
+
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)
         val cursorAdapter =
@@ -62,7 +61,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.searchView.suggestionsAdapter = cursorAdapter
 
         movieViewModel.getFavoriteMovieIds()
-        
+
         binding.searchView.setOnQueryTextListener(
             object : OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -133,10 +132,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                             binding.rvSearch.show()
                             binding.tvNoMovieFound.hide()
 
-
-
-
-
                             val adapter =
                                 data.results.let {
                                     SearchMovieAdapter(onMovieClick = {
@@ -146,18 +141,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                             )
                                         findNavController().navigate(action)
                                     }, formatDate = { date -> searchViewModel.formatDate(date) })
-
-
-
-
-
-
-
                                 }
 
                             adapter.submitList(data.results)
                             binding.rvSearch.adapter = adapter
-                            
+
                             binding.rvSearch.layoutManager =
                                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                             movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->

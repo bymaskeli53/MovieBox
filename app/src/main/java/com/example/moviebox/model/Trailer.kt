@@ -10,5 +10,5 @@ data class Trailer(
     val type: String,
     val official: Boolean,
     val published_at: String,
-    val id: String
+    val id: String,
 )

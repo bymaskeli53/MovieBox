@@ -17,7 +17,6 @@ class SearchMovieAdapter(
     private val onMovieClick: (Result) -> Unit = {},
     private val formatDate: (String) -> String,
 ) : ListAdapter<Result, SearchMovieAdapter.SearchMovieViewHolder>(SearchMovieDiffCallback()) {
-
     inner class SearchMovieViewHolder(
         val binding: ItemSearchMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -36,9 +35,7 @@ class SearchMovieAdapter(
                 binding.ivFavorite.show()
             } else {
                 binding.ivFavorite.gone()
-
             }
-
         }
     }
 
@@ -61,12 +58,18 @@ class SearchMovieAdapter(
 }
 
 class SearchMovieDiffCallback : DiffUtil.ItemCallback<Result>() {
-    override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+    override fun areItemsTheSame(
+        oldItem: Result,
+        newItem: Result,
+    ): Boolean {
         // Check if items are the same based on their unique identifier (e.g., ID)
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+    override fun areContentsTheSame(
+        oldItem: Result,
+        newItem: Result,
+    ): Boolean {
         // Check if the content of the items is the same
         return oldItem == newItem && oldItem.isFavorite == newItem.isFavorite
     }
