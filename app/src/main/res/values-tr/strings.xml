@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MovieBox</string>
+    <string name="user_connected_to_internet">Kullanıcı internete bağlı</string>
+    <string name="youtube_button">Fragmanı İzle</string>
+    <string name="watch_trailer_on_youtube">YouTube\'da Fragmanı İzle</string>
+    <string name="movies">Filmler</string>
+    <string name="favorites">Favoriler</string>
+    <string name="search">Ara</string>
+    <string name="could_not_find_movie">Film bulunamadı</string>
+    <string name="no_trailer_found">Fragman Bulunamadı</string>
+    <string name="could_not_find_trailer">Fragman bulunamadı</string>
+    <string name="unknown">Bilinmiyor\n</string>
+    <string name="female">Kadın\n</string>
+    <string name="male">Erkek</string>
+    <string name="non_binary">Cinsiyetsiz</string>
+    <string name="no_data">Veri yok\n</string>
+    <string name="movie_rating">Film Puanı</string>
+    <string name="search_movies">Filmleri Ara\n</string>
+    <string name="popularity">Popülerlik: </string>
+    <string name="there_is_no_internet_connection">İnternet bağlantısı yok</string>
+    <string name="user_not_connected_to_internet">Kullanıcı internete bağlı değil</string>
+</resources>
