@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.moviebox.FavoriteAdapter
 import com.example.moviebox.viewmodel.FavoriteViewModel
 import com.example.moviebox.R
@@ -32,6 +34,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
                 binding.rvFavorites.adapter = FavoriteAdapter().apply {
                     submitList(it)
                 }
+                binding.rvFavorites.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
             }
         }
