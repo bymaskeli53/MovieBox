@@ -103,9 +103,12 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
-    implementation("io.coil-kt:coil:2.5.0")
 
-    // rooom
+    // coil
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-gif:2.5.0")
+
+    // room
     implementation(kotlin("stdlib-jdk8"))
     implementation("androidx.room:room-ktx:$room_version")
 

@@ -68,7 +68,7 @@
         android:layout_height="40dp"
         android:layout_below="@+id/textViewMovieDate"
         android:layout_alignEnd="@+id/containerMoviePoster"
-        android:src="@drawable/ic_youtube"/>
+        android:src="@drawable/ic_heart_search"/>
 
     </RelativeLayout>
 
