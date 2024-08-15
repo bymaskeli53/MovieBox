@@ -30,18 +30,20 @@
             android:id="@+id/tv_movie_overview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
             android:background="@android:color/white"
             android:elevation="2dp"
             android:ellipsize="end"
             android:lineSpacingExtra="4dp"
             android:padding="8dp"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+
             android:textColor="@android:color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/rating_bar" />
 
         <TextView
             android:id="@+id/tv_movie_title"
@@ -64,19 +66,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/movie_rating"
-            android:textColor="@color/grey"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_star"
+            app:layout_constraintBottom_toTopOf="@id/rating_bar"
             app:layout_constraintEnd_toEndOf="@id/rating_bar"
             app:layout_constraintStart_toStartOf="@id/rating_bar"
-            app:layout_constraintTop_toTopOf="@id/iv_star" />
+             />
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/rating_bar"
             style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:minWidth="24dp"
             android:minHeight="24dp"
             android:numStars="10"
