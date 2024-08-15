@@ -2,14 +2,14 @@ package com.example.moviebox.di
 
 import android.content.Context
 import com.example.moviebox.BuildConfig
-import com.example.moviebox.GetPopularMoviesUseCase
-import com.example.moviebox.MovieDao
-import com.example.moviebox.MovieRepository
-import com.example.moviebox.MovieRepositoryImpl
+import com.example.moviebox.domain.GetPopularMoviesUseCase
+import com.example.moviebox.database.MovieDao
+import com.example.moviebox.repository.MovieRepository
+import com.example.moviebox.repository.MovieRepositoryImpl
 import com.example.moviebox.remote.MovieApi
-import com.example.moviebox.util.DurationConstants.TIMEOUT_DURATION
+import com.example.moviebox.util.constant.DurationConstants.TIMEOUT_DURATION
 import com.example.moviebox.util.NetworkConnectionInterceptor
-import com.example.moviebox.util.NetworkConstants.BASE_URL
+import com.example.moviebox.util.constant.NetworkConstants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

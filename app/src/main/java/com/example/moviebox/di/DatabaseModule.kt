@@ -2,8 +2,8 @@ package com.example.moviebox.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.moviebox.MovieDatabase
-import com.example.moviebox.util.DatabaseConstants.MOVIE_DATABASE
+import com.example.moviebox.database.MovieDatabase
+import com.example.moviebox.util.constant.DatabaseConstants.MOVIE_DATABASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,6 +1,6 @@
 package com.example.moviebox.di
 
-import com.example.moviebox.util.FormatDateUseCase
+import com.example.moviebox.domain.FormatDateUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

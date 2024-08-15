@@ -1,13 +1,10 @@
 package com.example.moviebox.remote
 
-import androidx.paging.PagingData
 import com.example.moviebox.BuildConfig
 import com.example.moviebox.model.Actors
 import com.example.moviebox.model.Movie
-import com.example.moviebox.model.Result
 import com.example.moviebox.model.TrailerResponse
-import com.example.moviebox.util.NetworkConstants
-import kotlinx.coroutines.flow.Flow
+import com.example.moviebox.util.constant.NetworkConstants
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
