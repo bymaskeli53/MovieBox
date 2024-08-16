@@ -38,6 +38,8 @@ android {
             }
         }
         buildConfigField("String", "API_KEY", "\"${localProperties["API_KEY"]}\"")
+
+        buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
     }
     buildTypes {
         release {

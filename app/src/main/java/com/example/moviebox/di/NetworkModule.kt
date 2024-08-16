@@ -9,7 +9,7 @@ import com.example.moviebox.repository.MovieRepository
 import com.example.moviebox.repository.MovieRepositoryImpl
 import com.example.moviebox.util.NetworkConnectionInterceptor
 import com.example.moviebox.util.constant.DurationConstants.TIMEOUT_DURATION
-import com.example.moviebox.util.constant.NetworkConstants.BASE_URL
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -74,7 +74,7 @@ object NetworkModule {
             .Builder()
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .build()
 
     @Singleton
