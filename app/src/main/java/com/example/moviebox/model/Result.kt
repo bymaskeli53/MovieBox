@@ -2,6 +2,7 @@ package com.example.moviebox.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlin.coroutines.coroutineContext
 
 @Parcelize
 data class Result(
@@ -25,5 +26,5 @@ data class Result(
      * To string method is overriden to show movie title on detail screen
      **/
 
-    override fun toString(): String = this.title!!
+    override fun toString(): String = this.title ?: "movie name not found"
 }

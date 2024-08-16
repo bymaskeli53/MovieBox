@@ -19,4 +19,7 @@
     <string name="popularity">Popülerlik: </string>
     <string name="there_is_no_internet_connection">İnternet bağlantısı yok</string>
     <string name="user_not_connected_to_internet">Kullanıcı internete bağlı değil</string>
+    <string name="no_release_date">No release date</string>
+    <string name="no_title">No title</string>
+    <string name="no_overview">No overview</string>
 </resources>

@@ -66,9 +66,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         movieEntity =
             MovieEntity(
                 id = args.movie.id,
-                title = args.movie.title!!,
-                overview = args.movie.overview!!,
-                releaseDate = args.movie.release_date!!,
+                title = args.movie.title ?: getString(R.string.no_title),
+                overview = args.movie.overview ?: getString(R.string.no_overview),
+                releaseDate = args.movie.release_date ?: getString(R.string.no_release_date),
             )
 
         setupUI()

@@ -19,4 +19,7 @@
     <string name="popularity">Popularity: </string>
     <string name="there_is_no_internet_connection">There is no internet connection</string>
     <string name="user_not_connected_to_internet">User is not connected to internet</string>
+    <string name="no_release_date">No release date</string>
+    <string name="no_title">No title</string>
+    <string name="no_overview">No overview</string>
 </resources>
