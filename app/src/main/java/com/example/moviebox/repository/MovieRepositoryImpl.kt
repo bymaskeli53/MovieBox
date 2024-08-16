@@ -14,6 +14,7 @@ import com.example.moviebox.paging.SearchPagingSource
 import com.example.moviebox.remote.MovieApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -28,10 +29,11 @@ class MovieRepositoryImpl
                 config =
                     PagingConfig(
                         pageSize = 20,
-                        enablePlaceholders = false,
+                        enablePlaceholders = true,
                     ),
                 pagingSourceFactory = { MoviePagingSource(movieApi) },
             ).flow
+
 
         override suspend fun getMovieCredits(movieId: Int): Actors = movieApi.getMovieCredits(movieId)
 

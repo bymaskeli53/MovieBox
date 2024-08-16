@@ -56,7 +56,7 @@ object NetworkModule {
             .connectTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
-            .addNetworkInterceptor(networkConnectionInterceptor)
+            .addInterceptor(networkConnectionInterceptor)
             .build()
 
     /**
@@ -69,7 +69,7 @@ object NetworkModule {
      */
     @Singleton
     @Provides
-    fun provideProductApi(okHttpClient: OkHttpClient): Retrofit =
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit
             .Builder()
             .client(okHttpClient)

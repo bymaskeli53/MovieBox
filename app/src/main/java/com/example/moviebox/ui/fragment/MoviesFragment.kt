@@ -9,12 +9,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.paging.map
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -82,8 +84,12 @@ class MoviesFragment :
                         Toast.makeText(requireContext(), movies.exception.localizedMessage, Toast.LENGTH_LONG).show()
                     }
 
-                    is Resource.Idle -> {}
-                    is Resource.Loading -> {}
+                    is Resource.Idle -> {
+                        println("Hİ")
+                    }
+                    is Resource.Loading -> {
+                        println("Hello")
+                    }
                     is Resource.Success -> {
                         binding.rvSearchMovies.adapter = searchMovieAdapter
                         val data = movies.data
@@ -130,7 +136,9 @@ class MoviesFragment :
                         val updatedPagingData =
                             pagingData.map { movie ->
                                 movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
+
                             }
+
                         movieAdapter.submitData(updatedPagingData)
                     }
                 }
@@ -180,17 +188,38 @@ class MoviesFragment :
             }
         }
 
+//        movieAdapter.addLoadStateListener { loadState ->
+//            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
+//                loadState.source.append is androidx.paging.LoadState.Loading
+//            ) {
+//                binding.shimmerView.show()
+//                binding.shimmerView.startShimmer()
+//            } else {
+//                binding.shimmerView.hide()
+//                binding.shimmerView.stopShimmer()
+//            }
+//        }
+
         movieAdapter.addLoadStateListener { loadState ->
-            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
-                loadState.source.append is androidx.paging.LoadState.Loading
-            ) {
-                binding.shimmerView.show()
-                binding.shimmerView.startShimmer()
-            } else {
-                binding.shimmerView.hide()
-                binding.shimmerView.stopShimmer()
+            when (val state = loadState.refresh){
+                is LoadState.Loading -> {
+                    binding.shimmerView.show()
+                    binding.shimmerView.startShimmer()
+                }
+                is LoadState.NotLoading -> {
+                    binding.shimmerView.hide()
+                    binding.shimmerView.stopShimmer()
+                    binding.rvMovies.isVisible = movieAdapter.itemCount > 0
+                }
+                is LoadState.Error -> {
+                    binding.shimmerView.hide()
+                    binding.shimmerView.stopShimmer()
+                    Toast.makeText(requireContext(), state.error.localizedMessage, Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
+
     }
 
     private fun saveScrollPosition() {
