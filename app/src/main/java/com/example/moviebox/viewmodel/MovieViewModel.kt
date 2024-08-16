@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.moviebox.domain.FormatDateUseCase
+import com.example.moviebox.domain.GetFavoriteMovieIDsUseCase
 import com.example.moviebox.domain.GetMovieTrailerKeyUseCase
 import com.example.moviebox.domain.GetPopularMoviesUseCase
 import com.example.moviebox.model.Result
-import com.example.moviebox.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class MovieViewModel
         private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
         private val formatDateUseCase: FormatDateUseCase,
         private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase,
-        private val movieRepository: MovieRepository,
+        private val getFavoriteMovieIDsUseCase: GetFavoriteMovieIDsUseCase,
     ) : ViewModel() {
         private val _movies = MutableStateFlow<PagingData<Result>>(PagingData.empty())
         val movies: StateFlow<PagingData<Result>> = _movies.asStateFlow()
@@ -59,9 +59,17 @@ class MovieViewModel
         }
 
         // Retrieve favorite movie IDs and update the StateFlow
-        fun getFavoriteMovieIds() {
+//        fun getFavoriteMovieIDs() {
+//            viewModelScope.launch {
+//                movieRepository.getFavoriteMovieIDs().collect { ids ->
+//                    _favoriteMovieIds.value = ids
+//                }
+//            }
+//        }
+
+        fun getFavoriteMovieIDs() {
             viewModelScope.launch {
-                movieRepository.getFavoriteMovieIds().collect { ids ->
+                getFavoriteMovieIDsUseCase().collect { ids ->
                     _favoriteMovieIds.value = ids
                 }
             }
@@ -79,8 +87,7 @@ class MovieViewModel
 
         fun refreshMovies() {
             viewModelScope.launch {
-                movieRepository
-                    .getPopularMovies()
+                getPopularMoviesUseCase()
                     .cachedIn(viewModelScope)
                     .collectLatest { pagingData ->
                         _movies.value = pagingData

@@ -60,7 +60,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val suggestions = listOf("Lord Of The Rings", "Batman", "Interstellar", "Avengers")
         binding.searchView.suggestionsAdapter = cursorAdapter
 
-        movieViewModel.getFavoriteMovieIds()
+        movieViewModel.getFavoriteMovieIDs()
 
         binding.searchView.setOnQueryTextListener(
             object : OnQueryTextListener {

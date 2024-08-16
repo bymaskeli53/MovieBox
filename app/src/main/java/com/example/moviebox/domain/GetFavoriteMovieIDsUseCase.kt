@@ -1,15 +1,13 @@
 package com.example.moviebox.domain
 
-import androidx.paging.PagingData
-import com.example.moviebox.model.Result
 import com.example.moviebox.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetPopularMoviesUseCase
+class GetFavoriteMovieIDsUseCase
     @Inject
     constructor(
         private val movieRepository: MovieRepository,
     ) {
-        operator fun invoke(): Flow<PagingData<Result>> = movieRepository.getPopularMovies()
+        operator fun invoke(): Flow<List<Int>> = movieRepository.getFavoriteMovieIDs()
     }

@@ -70,7 +70,7 @@ class MoviesFragment :
                 findNavController().navigate(action)
             }, formatDate = { date -> searchViewModel.formatDate(date) })
 
-        movieViewModel.getFavoriteMovieIds()
+        movieViewModel.getFavoriteMovieIDs()
         setupMenu()
         observeViewModel()
 

@@ -29,7 +29,7 @@ class MovieAdapter(
                 crossfade(CROSSFADE_DURATION)
                 placeholder(R.drawable.ic_generic_movie_poster)
             }
-            binding.tvReleaseDate.text = movie.release_date.substringBefore("-")
+            binding.tvReleaseDate.text = movie.release_date?.substringBefore("-")
             binding.tvPopularity.text =
                 String.format(locale = Locale.getDefault(), format = "%.1f", movie.vote_average)
             binding.root.setOnClickListener {

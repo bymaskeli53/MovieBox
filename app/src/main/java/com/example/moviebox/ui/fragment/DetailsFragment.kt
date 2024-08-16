@@ -61,12 +61,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailsBinding.bind(view)
 
+
+
         movieEntity =
             MovieEntity(
                 id = args.movie.id,
-                title = args.movie.title,
-                overview = args.movie.overview,
-                releaseDate = args.movie.release_date,
+                title = args.movie.title!!,
+                overview = args.movie.overview!!,
+                releaseDate = args.movie.release_date!!,
             )
 
         setupUI()
@@ -83,8 +85,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.text = movie.overview
-        binding.ratingBar.rating = movie.vote_average.toFloat()
-        binding.tvMovieReleaseDate.text = movieViewModel.formatDate(movie.release_date)
+        binding.ratingBar.rating = movie.vote_average?.toFloat() ?: 0.0f
+        binding.tvMovieReleaseDate.text = movie.release_date?.let { movieViewModel.formatDate(it) }
     }
 
     private fun setupListeners() {

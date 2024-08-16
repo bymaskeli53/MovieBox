@@ -66,7 +66,7 @@ class MovieRepositoryImpl
                 movieDao.getMovieById(movieId)
             }
 
-        override fun getFavoriteMovieIds(): Flow<List<Int>> = movieDao.getFavoriteMovieIds()
+        override fun getFavoriteMovieIDs(): Flow<List<Int>> = movieDao.getFavoriteMovieIDs()
 
         override fun searchMovies2(query: String): Flow<PagingData<Result>> =
             Pager(

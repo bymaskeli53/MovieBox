@@ -26,7 +26,7 @@ class SearchMovieAdapter(
                 crossfade(true)
                 placeholder(R.drawable.ic_generic_movie_poster)
             }
-            binding.textViewMovieDate.text = formatDate(movie.release_date)
+            binding.textViewMovieDate.text = formatDate(movie.release_date!!)
 
             binding.root.setOnClickListener {
                 onMovieClick(movie)

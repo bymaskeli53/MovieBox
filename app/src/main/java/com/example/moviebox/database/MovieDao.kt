@@ -30,5 +30,5 @@ interface MovieDao {
     suspend fun update(movie: MovieEntity)
 
     @Query("SELECT id FROM MOVIE_TABLE WHERE isFavorite=1")
-    fun getFavoriteMovieIds(): Flow<List<Int>>
+    fun getFavoriteMovieIDs(): Flow<List<Int>>
 }
