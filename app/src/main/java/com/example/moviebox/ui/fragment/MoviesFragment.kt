@@ -26,6 +26,7 @@ import com.example.moviebox.ui.adapter.SearchMovieAdapter
 import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.Resource
 import com.example.moviebox.util.autoCleared
+import com.example.moviebox.util.extension.gone
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.hideKeyboard
 import com.example.moviebox.util.extension.show
@@ -78,7 +79,7 @@ class MoviesFragment :
             searchViewModel.movies.collectLatest { movies ->
                 when (movies) {
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), movies.exception.localizedMessage, Toast.LENGTH_LONG).show()
                     }
 
                     is Resource.Idle -> {}
@@ -218,18 +219,18 @@ class MoviesFragment :
             if (isAdded) {
                 if (hasFocus) {
                     searchItem.expandActionView()
-                    binding.rvMovies.visibility = View.GONE
-                    binding.rvSearchMovies.visibility = View.VISIBLE
+                    binding.rvMovies.gone()
+                    binding.rvSearchMovies.show()
                 } else {
-                    binding.rvMovies.visibility = View.VISIBLE
-                    binding.rvSearchMovies.visibility = View.GONE
+                    binding.rvMovies.show()
+                    binding.rvSearchMovies.gone()
                 }
             }
         }
 
         searchView.setOnCloseListener {
-            binding.rvMovies.visibility = View.VISIBLE
-            binding.rvSearchMovies.visibility = View.GONE
+            binding.rvMovies.show()
+            binding.rvSearchMovies.gone()
             false
         }
 

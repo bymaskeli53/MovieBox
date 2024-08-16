@@ -82,6 +82,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         binding.ivBackground.load(NetworkConstants.IMAGE_BASE_URL + movie.poster_path) {
             placeholder(R.drawable.ic_generic_movie_poster)
             error(R.drawable.ic_launcher_background)
+
         }
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.text = movie.overview
