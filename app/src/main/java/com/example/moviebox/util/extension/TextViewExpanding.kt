@@ -174,8 +174,9 @@ private fun TextView.addClickablePartTextResizable(
 ): Spannable {
     val builder = SpannableStringBuilder(shortenedText)
     if (clickableText != null) {
+        builder.append(" ")
         builder.append(clickableText)
-        val startIndexOffset = if (viewMore) 4 else 0 // Do not highlight the 3 dots and the space
+        val startIndexOffset = if (viewMore) 0 else 0 // Do not highlight the 3 dots and the space
         builder.setSpan(object : NoUnderlineClickSpan(context) {
             override fun onClick(widget: View) {
                 if (viewMore) {

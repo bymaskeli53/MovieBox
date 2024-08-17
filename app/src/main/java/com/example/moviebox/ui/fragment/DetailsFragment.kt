@@ -22,6 +22,7 @@ import com.example.moviebox.model.Cast
 import com.example.moviebox.ui.adapter.ActorsAdapter
 import com.example.moviebox.util.Resource
 import com.example.moviebox.util.constant.NetworkConstants
+import com.example.moviebox.util.constant.ViewConstants.MAX_LINES_MOVIE_OVERVIEW
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.setResizableText
 import com.example.moviebox.util.extension.show
@@ -82,7 +83,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.setResizableText(
             fullText = movie.overview ?: getString(R.string.no_overview),
-            maxLines = 3,
+            maxLines = MAX_LINES_MOVIE_OVERVIEW,
             viewMore = true,
         )
 
