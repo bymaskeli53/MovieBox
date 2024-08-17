@@ -21,9 +21,9 @@ import com.example.moviebox.databinding.FragmentDetailsBinding
 import com.example.moviebox.model.Cast
 import com.example.moviebox.ui.adapter.ActorsAdapter
 import com.example.moviebox.util.Resource
-import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.constant.NetworkConstants
 import com.example.moviebox.util.extension.hide
+import com.example.moviebox.util.extension.setResizableText
 import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.CreditsViewModel
 import com.example.moviebox.viewmodel.FavoriteViewModel
@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::bind, R.layout.fragment_details) {
     private var isFavorite = false
-
 
     private val movieViewModel: MovieViewModel by viewModels()
     private val creditsViewModel: CreditsViewModel by viewModels()
@@ -81,7 +80,12 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
             error(R.drawable.ic_launcher_background)
         }
         binding.tvMovieTitle.text = movie.title
-        binding.tvMovieOverview.text = movie.overview
+        binding.tvMovieOverview.setResizableText(
+            fullText = movie.overview ?: getString(R.string.no_overview),
+            maxLines = 3,
+            viewMore = true,
+        )
+
         binding.ratingBar.rating = movie.vote_average?.toFloat() ?: 0.0f
         binding.tvMovieReleaseDate.text = movie.release_date?.let { movieViewModel.formatDate(it) }
     }

@@ -81,15 +81,22 @@ class MoviesFragment :
             searchViewModel.movies.collectLatest { movies ->
                 when (movies) {
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), movies.exception.localizedMessage, Toast.LENGTH_LONG).show()
+                        Toast
+                            .makeText(
+                                requireContext(),
+                                movies.exception.localizedMessage,
+                                Toast.LENGTH_LONG,
+                            ).show()
                     }
 
                     is Resource.Idle -> {
                         println("Hİ")
                     }
+
                     is Resource.Loading -> {
                         println("Hello")
                     }
+
                     is Resource.Success -> {
                         binding.rvSearchMovies.adapter = searchMovieAdapter
                         val data = movies.data
@@ -136,7 +143,6 @@ class MoviesFragment :
                         val updatedPagingData =
                             pagingData.map { movie ->
                                 movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
-
                             }
 
                         movieAdapter.submitData(updatedPagingData)
@@ -160,12 +166,6 @@ class MoviesFragment :
                 findNavController().navigate(action)
             }
 
-        if (movieAdapter.itemCount > 0) {
-            Log.d("PagingData", "Adapter has data.")
-        } else {
-            Log.d("PagingData", "No data in adapter")
-        }
-
         binding.rvMovies.layoutManager =
             if (isGridLayout) {
                 GridLayoutManager(requireContext(), 3)
@@ -188,38 +188,34 @@ class MoviesFragment :
             }
         }
 
-//        movieAdapter.addLoadStateListener { loadState ->
-//            if (loadState.source.refresh is androidx.paging.LoadState.Loading ||
-//                loadState.source.append is androidx.paging.LoadState.Loading
-//            ) {
-//                binding.shimmerView.show()
-//                binding.shimmerView.startShimmer()
-//            } else {
-//                binding.shimmerView.hide()
-//                binding.shimmerView.stopShimmer()
-//            }
-//        }
-
         movieAdapter.addLoadStateListener { loadState ->
-            when (val state = loadState.refresh){
+            when (val state = loadState.refresh) {
                 is LoadState.Loading -> {
                     binding.shimmerView.show()
                     binding.shimmerView.startShimmer()
                 }
+
                 is LoadState.NotLoading -> {
+                  //  saveScrollPosition()
                     binding.shimmerView.hide()
                     binding.shimmerView.stopShimmer()
                     binding.rvMovies.isVisible = movieAdapter.itemCount > 0
+                 //   binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
+
                 }
+
                 is LoadState.Error -> {
                     binding.shimmerView.hide()
                     binding.shimmerView.stopShimmer()
-                    Toast.makeText(requireContext(), state.error.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast
+                        .makeText(
+                            requireContext(),
+                            state.error.localizedMessage,
+                            Toast.LENGTH_SHORT,
+                        ).show()
                 }
-
             }
         }
-
     }
 
     private fun saveScrollPosition() {
