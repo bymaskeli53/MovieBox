@@ -60,7 +60,7 @@ class SearchViewModel
                     // _movies.value = response.results
                 } catch (e: Exception) {
                     _movies.update { Resource.Error(exception = e) }
-                    // TODO: will be handled later
+
                 } finally {
                     isLoading = false
                 }

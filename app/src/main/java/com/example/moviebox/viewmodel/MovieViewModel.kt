@@ -58,15 +58,6 @@ class MovieViewModel
             }
         }
 
-        // Retrieve favorite movie IDs and update the StateFlow
-//        fun getFavoriteMovieIDs() {
-//            viewModelScope.launch {
-//                movieRepository.getFavoriteMovieIDs().collect { ids ->
-//                    _favoriteMovieIds.value = ids
-//                }
-//            }
-//        }
-
         fun getFavoriteMovieIDs() {
             viewModelScope.launch {
                 getFavoriteMovieIDsUseCase().collect { ids ->

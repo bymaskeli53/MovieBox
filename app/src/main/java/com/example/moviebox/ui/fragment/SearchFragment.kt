@@ -112,15 +112,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             searchViewModel.movies.collectLatest { movies ->
                 when (movies) {
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(),movies.exception.localizedMessage,Toast.LENGTH_SHORT).show()
-//                        if (movies.exception is java.net.UnknownHostException) {
-//                            Toast
-//                                .makeText(
-//                                    requireContext(),
-//                                    getString(R.string.there_is_no_internet_connection),
-//                                    Toast.LENGTH_SHORT,
-//                                ).show()
-//                        }
+                        binding.progressBar.hide()
+                        Toast
+                            .makeText(
+                                requireContext(),
+                                movies.exception.localizedMessage,
+                                Toast.LENGTH_SHORT,
+                            ).show()
                     }
 
                     is Resource.Loading -> binding.progressBar.show()

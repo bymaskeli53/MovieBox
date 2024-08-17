@@ -3,6 +3,7 @@ package com.example.moviebox.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.example.moviebox.R
 import okhttp3.Interceptor
 import okhttp3.Response
 import okio.IOException
@@ -12,7 +13,7 @@ class NetworkConnectionInterceptor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         if (!isConnected()) {
-            throw IOException("No Internet Connection")
+            throw IOException(context.getString(R.string.no_internet_connection))
         }
         val builder = chain.request().newBuilder()
         return chain.proceed(builder.build())
