@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -33,9 +32,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment(R.layout.fragment_details) {
+class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::bind, R.layout.fragment_details) {
     private var isFavorite = false
-    private var binding: FragmentDetailsBinding by autoCleared()
+
 
     private val movieViewModel: MovieViewModel by viewModels()
     private val creditsViewModel: CreditsViewModel by viewModels()
@@ -61,8 +60,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailsBinding.bind(view)
 
-
-
         movieEntity =
             MovieEntity(
                 id = args.movie.id,
@@ -82,7 +79,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         binding.ivBackground.load(NetworkConstants.IMAGE_BASE_URL + movie.poster_path) {
             placeholder(R.drawable.ic_generic_movie_poster)
             error(R.drawable.ic_launcher_background)
-
         }
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.text = movie.overview
