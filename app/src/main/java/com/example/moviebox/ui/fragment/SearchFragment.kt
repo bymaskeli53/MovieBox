@@ -31,8 +31,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(R.layout.fragment_search) {
-    private var binding: FragmentSearchBinding by autoCleared()
+class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding::bind, R.layout.fragment_search) {
+
 
     private val searchViewModel: SearchViewModel by viewModels()
 
@@ -43,7 +43,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSearchBinding.bind(view)
+
 
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)

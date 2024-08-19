@@ -41,9 +41,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MoviesFragment :
-    Fragment(R.layout.fragment_movies),
+    BaseFragment<FragmentMoviesBinding>(FragmentMoviesBinding::bind, R.layout.fragment_movies),
     MenuProvider {
-    private var binding: FragmentMoviesBinding by autoCleared()
+
     private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
     private val movieViewModel: MovieViewModel by viewModels()
@@ -64,7 +64,7 @@ class MoviesFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentMoviesBinding.bind(view)
+
         searchMovieAdapter =
             SearchMovieAdapter(onMovieClick = {
                 val action =

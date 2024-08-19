@@ -59,7 +59,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentDetailsBinding.bind(view)
+
 
         movieEntity = MovieToMovieEntityMapper.map(args.movie)
 
