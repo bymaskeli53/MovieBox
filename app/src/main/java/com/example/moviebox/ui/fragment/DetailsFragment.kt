@@ -19,6 +19,7 @@ import com.example.moviebox.R
 import com.example.moviebox.database.MovieEntity
 import com.example.moviebox.databinding.FragmentDetailsBinding
 import com.example.moviebox.model.Cast
+import com.example.moviebox.model.mapper.MovieToMovieEntityMapper
 import com.example.moviebox.ui.adapter.ActorsAdapter
 import com.example.moviebox.util.Resource
 import com.example.moviebox.util.constant.NetworkConstants
@@ -60,13 +61,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailsBinding.bind(view)
 
-        movieEntity =
-            MovieEntity(
-                id = args.movie.id,
-                title = args.movie.title ?: getString(R.string.no_title),
-                overview = args.movie.overview ?: getString(R.string.no_overview),
-                releaseDate = args.movie.release_date ?: getString(R.string.no_release_date),
-            )
+        movieEntity = MovieToMovieEntityMapper.map(args.movie)
 
         setupUI()
         observeFavoriteMovie()
@@ -78,7 +73,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         val movie = args.movie
         binding.ivBackground.load(NetworkConstants.IMAGE_BASE_URL + movie.poster_path) {
             placeholder(R.drawable.ic_generic_movie_poster)
-            error(R.drawable.ic_launcher_background)
+            error(R.drawable.ic_generic_movie_poster)
         }
         binding.tvMovieTitle.text = movie.title
         binding.tvMovieOverview.setResizableText(

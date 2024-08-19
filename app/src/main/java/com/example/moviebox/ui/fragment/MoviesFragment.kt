@@ -35,6 +35,7 @@ import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.MovieViewModel
 import com.example.moviebox.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -138,6 +139,7 @@ class MoviesFragment :
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+
                 movieViewModel.movies.collectLatest { pagingData ->
                     movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                         val updatedPagingData =
