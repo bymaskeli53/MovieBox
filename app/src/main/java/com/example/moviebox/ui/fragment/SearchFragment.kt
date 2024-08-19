@@ -11,7 +11,6 @@ import android.widget.CursorAdapter
 import android.widget.SearchView.OnQueryTextListener
 import android.widget.SimpleCursorAdapter
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,7 +19,6 @@ import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentSearchBinding
 import com.example.moviebox.ui.adapter.SearchMovieAdapter
 import com.example.moviebox.util.Resource
-import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.hideKeyboard
 import com.example.moviebox.util.extension.show
@@ -127,12 +125,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
 
                         val data = movies.data
 
-                        if (data.results.isNotEmpty()) {
+                        if (data.movieResponse.isNotEmpty()) {
                             binding.rvSearch.show()
                             binding.tvNoMovieFound.hide()
 
                             val adapter =
-                                data.results.let {
+                                data.movieResponse.let {
                                     SearchMovieAdapter(onMovieClick = {
                                         val action =
                                             SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
@@ -142,13 +140,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
                                     }, formatDate = { date -> searchViewModel.formatDate(date) })
                                 }
 
-                            adapter.submitList(data.results)
+                            adapter.submitList(data.movieResponse)
                             binding.rvSearch.adapter = adapter
 
                             binding.rvSearch.layoutManager =
                                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                             movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
-                                data.results.forEach { movie ->
+                                data.movieResponse.forEach { movie ->
                                     movie.isFavorite = favoriteMovieIds.contains(movie.id)
                                 }
                             }

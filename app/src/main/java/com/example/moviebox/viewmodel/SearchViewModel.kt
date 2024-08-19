@@ -6,8 +6,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.moviebox.domain.FormatDateUseCase
 import com.example.moviebox.domain.SearchMoviesUseCase
-import com.example.moviebox.model.Movie
-import com.example.moviebox.model.Result
+import com.example.moviebox.model.MovieListResponse
+import com.example.moviebox.model.MovieItem
 import com.example.moviebox.repository.MovieRepository
 import com.example.moviebox.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,12 +27,12 @@ class SearchViewModel
         private val formatDateUseCase: FormatDateUseCase,
         private val searchMoviesUseCase: SearchMoviesUseCase,
     ) : ViewModel() {
-        private val _movies = MutableStateFlow<Resource<Movie>>(Resource.Idle)
-        val movies: StateFlow<Resource<Movie>> = _movies
+        private val _movies = MutableStateFlow<Resource<MovieListResponse>>(Resource.Idle)
+        val movies: StateFlow<Resource<MovieListResponse>> = _movies
 
         private val _searchQuery = MutableStateFlow("")
 
-        val moviesFlow: Flow<PagingData<Result>> =
+        val moviesFlow: Flow<PagingData<MovieItem>> =
             _searchQuery
                 .flatMapLatest { query ->
                     if (query.isEmpty()) {
@@ -42,8 +42,8 @@ class SearchViewModel
                     }
                 }.cachedIn(viewModelScope)
 
-        private val _searchResults = MutableStateFlow<PagingData<Result>>(PagingData.empty())
-        val searchResults: StateFlow<PagingData<Result>> get() = _searchResults
+        private val _searchResults = MutableStateFlow<PagingData<MovieItem>>(PagingData.empty())
+        val searchResults: StateFlow<PagingData<MovieItem>> get() = _searchResults
 
         private var isLoading = false
 

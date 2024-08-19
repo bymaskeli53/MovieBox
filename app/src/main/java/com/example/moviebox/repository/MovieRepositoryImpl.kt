@@ -6,15 +6,14 @@ import androidx.paging.PagingData
 import com.example.moviebox.database.MovieDao
 import com.example.moviebox.database.MovieEntity
 import com.example.moviebox.model.Actors
-import com.example.moviebox.model.Movie
-import com.example.moviebox.model.Result
+import com.example.moviebox.model.MovieListResponse
+import com.example.moviebox.model.MovieItem
 import com.example.moviebox.model.TrailerResponse
 import com.example.moviebox.paging.MoviePagingSource
 import com.example.moviebox.paging.SearchPagingSource
 import com.example.moviebox.remote.MovieApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -24,7 +23,7 @@ class MovieRepositoryImpl
         private val movieApi: MovieApi,
         private val movieDao: MovieDao,
     ) : MovieRepository {
-        override fun getPopularMovies(): Flow<PagingData<Result>> =
+        override fun getPopularMovies(): Flow<PagingData<MovieItem>> =
             Pager(
                 config =
                     PagingConfig(
@@ -61,7 +60,7 @@ class MovieRepositoryImpl
             }
         }
 
-        override suspend fun searchMovies(query: String): Movie = movieApi.searchMovies(query = query)
+        override suspend fun searchMovies(query: String): MovieListResponse = movieApi.searchMovies(query = query)
 
         override suspend fun getMovieById(movieId: Int): MovieEntity? =
             withContext(Dispatchers.IO) {
@@ -70,7 +69,7 @@ class MovieRepositoryImpl
 
         override fun getFavoriteMovieIDs(): Flow<List<Int>> = movieDao.getFavoriteMovieIDs()
 
-        override fun searchMovies2(query: String): Flow<PagingData<Result>> =
+        override fun searchMovies2(query: String): Flow<PagingData<MovieItem>> =
             Pager(
                 config =
                     PagingConfig(

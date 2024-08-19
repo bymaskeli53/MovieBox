@@ -10,7 +10,7 @@ import com.example.moviebox.domain.FormatDateUseCase
 import com.example.moviebox.domain.GetFavoriteMovieIDsUseCase
 import com.example.moviebox.domain.GetMovieTrailerKeyUseCase
 import com.example.moviebox.domain.GetPopularMoviesUseCase
-import com.example.moviebox.model.Result
+import com.example.moviebox.model.MovieItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -25,8 +25,8 @@ class MovieViewModel
         private val getMovieTrailerKeyUseCase: GetMovieTrailerKeyUseCase,
         private val getFavoriteMovieIDsUseCase: GetFavoriteMovieIDsUseCase,
     ) : ViewModel() {
-        private val _movies = MutableStateFlow<PagingData<Result>>(PagingData.empty())
-        val movies: StateFlow<PagingData<Result>> = _movies.asStateFlow()
+        private val _movies = MutableStateFlow<PagingData<MovieItem>>(PagingData.empty())
+        val movies: StateFlow<PagingData<MovieItem>> = _movies.asStateFlow()
 
         init {
             refreshMovies()

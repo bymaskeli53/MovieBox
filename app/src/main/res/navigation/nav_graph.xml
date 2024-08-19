@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_details">
         <argument
             android:name="movie"
-            app:argType="com.example.moviebox.model.Result" />
+            app:argType="com.example.moviebox.model.MovieItem" />
         <action
             android:id="@+id/action_detailsFragment_to_actorBottomSheetDialogFragment"
             app:destination="@id/actorBottomSheetDialogFragment" />

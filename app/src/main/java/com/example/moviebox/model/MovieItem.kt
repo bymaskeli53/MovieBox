@@ -2,10 +2,9 @@ package com.example.moviebox.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kotlin.coroutines.coroutineContext
 
 @Parcelize
-data class Result(
+data class MovieItem(
     val adult: Boolean?,
     val backdrop_path: String?,
     val genre_ids: List<Int>?,

@@ -1,11 +1,10 @@
 package com.example.moviebox.model.mapper
 
 import com.example.moviebox.database.MovieEntity
-import com.example.moviebox.model.Movie
-import com.example.moviebox.model.Result
+import com.example.moviebox.model.MovieItem
 
-object MovieToMovieEntityMapper : Mapper<Result, MovieEntity> {
-    override fun map(from: Result): MovieEntity = MovieEntity(
+object MovieToMovieEntityMapper : Mapper<MovieItem, MovieEntity> {
+    override fun map(from: MovieItem): MovieEntity = MovieEntity(
         id = from.id,
         title = from.title ?: "",
         overview = from.overview ?: "",

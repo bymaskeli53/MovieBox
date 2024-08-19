@@ -2,17 +2,17 @@ package com.example.moviebox.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.moviebox.model.Result
+import com.example.moviebox.model.MovieItem
 import com.example.moviebox.remote.MovieApi
 
 class MoviePagingSource(
     private val movieApi: MovieApi,
-) : PagingSource<Int, Result>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> =
+) : PagingSource<Int, MovieItem>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieItem> =
         try {
             val position = params.key ?: 1
             val response = movieApi.getPopularMovies(page = position)
-            val movies = response.results
+            val movies = response.movieResponse
 
             LoadResult.Page(
                 data = movies,
@@ -23,7 +23,7 @@ class MoviePagingSource(
             LoadResult.Error(e)
         }
 
-    override fun getRefreshKey(state: PagingState<Int, Result>): Int? =
+    override fun getRefreshKey(state: PagingState<Int, MovieItem>): Int? =
         state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)

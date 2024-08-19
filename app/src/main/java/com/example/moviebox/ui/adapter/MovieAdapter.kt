@@ -9,7 +9,7 @@ import coil.load
 import com.example.moviebox.R
 import com.example.moviebox.databinding.ItemGridMovieBinding
 import com.example.moviebox.databinding.ItemMovieBinding
-import com.example.moviebox.model.Result
+import com.example.moviebox.model.MovieItem
 import com.example.moviebox.util.constant.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
 import com.example.moviebox.util.extension.hide
@@ -18,12 +18,12 @@ import java.util.Locale
 
 class MovieAdapter(
     private val isGridLayout: Boolean,
-    private val onMovieClick: (Result) -> Unit = {},
-) : PagingDataAdapter<Result, RecyclerView.ViewHolder>(MovieDiffCallback()) {
+    private val onMovieClick: (MovieItem) -> Unit = {},
+) : PagingDataAdapter<MovieItem, RecyclerView.ViewHolder>(MovieDiffCallback()) {
     inner class MovieViewHolder(
         private val binding: ItemMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: Result) {
+        fun bind(movie: MovieItem) {
             binding.movieTitleTextView.text = movie.title
             binding.movieImageView.load(IMAGE_BASE_URL + movie.poster_path) {
                 crossfade(CROSSFADE_DURATION)
@@ -47,7 +47,7 @@ class MovieAdapter(
     inner class MovieGridViewHolder(
         private val binding: ItemGridMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: Result) {
+        fun bind(movie: MovieItem) {
             binding.ivMovie.load(IMAGE_BASE_URL + movie.poster_path) {
                 crossfade(CROSSFADE_DURATION)
                 placeholder(R.drawable.ic_generic_movie_poster)
@@ -87,14 +87,14 @@ class MovieAdapter(
     }
 }
 
-class MovieDiffCallback : DiffUtil.ItemCallback<Result>() {
+class MovieDiffCallback : DiffUtil.ItemCallback<MovieItem>() {
     override fun areItemsTheSame(
-        oldItem: Result,
-        newItem: Result,
+        oldItem: MovieItem,
+        newItem: MovieItem,
     ) = oldItem.id == newItem.id
 
     override fun areContentsTheSame(
-        oldItem: Result,
-        newItem: Result,
+        oldItem: MovieItem,
+        newItem: MovieItem,
     ) = oldItem == newItem && oldItem.isFavorite == newItem.isFavorite
 }

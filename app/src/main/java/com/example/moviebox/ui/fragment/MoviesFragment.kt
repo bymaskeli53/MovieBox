@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -27,7 +26,6 @@ import com.example.moviebox.ui.adapter.MovieAdapter
 import com.example.moviebox.ui.adapter.SearchMovieAdapter
 import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.Resource
-import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.extension.gone
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.hideKeyboard
@@ -35,7 +33,6 @@ import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.MovieViewModel
 import com.example.moviebox.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -102,9 +99,9 @@ class MoviesFragment :
                         binding.rvSearchMovies.adapter = searchMovieAdapter
                         val data = movies.data
 
-                        data.results.let {
+                        data.movieResponse.let {
                         }
-                        searchMovieAdapter.submitList(data.results)
+                        searchMovieAdapter.submitList(data.movieResponse)
                     }
                 }
             }
