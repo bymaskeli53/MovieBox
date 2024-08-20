@@ -35,7 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::bind, R.layout.fragment_details) {
+class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::inflate, R.layout.fragment_details) {
     private var isFavorite = false
 
     private val movieViewModel: MovieViewModel by viewModels()

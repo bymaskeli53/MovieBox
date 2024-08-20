@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FavoritesFragment :
     BaseFragment<FragmentFavoritesBinding>(
-        FragmentFavoritesBinding::bind,
+        FragmentFavoritesBinding::inflate,
         R.layout.fragment_favorites,
     ) {
     private val favoriteViewModel: FavoriteViewModel by viewModels()

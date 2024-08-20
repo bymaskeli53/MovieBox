@@ -44,6 +44,7 @@ class AutoClearedValue<T : Any>(
                                 override fun onDestroy(owner: LifecycleOwner) {
                                     _value = null
                                 }
+
                             },
                         )
                     }

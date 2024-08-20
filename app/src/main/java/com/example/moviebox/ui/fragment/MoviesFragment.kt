@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MoviesFragment :
-    BaseFragment<FragmentMoviesBinding>(FragmentMoviesBinding::bind, R.layout.fragment_movies),
+    BaseFragment<FragmentMoviesBinding>(FragmentMoviesBinding::inflate, R.layout.fragment_movies),
     MenuProvider {
     private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
@@ -168,7 +168,7 @@ class MoviesFragment :
             } else {
                 LinearLayoutManager(requireContext())
             }
-        Log.d("Mov", binding.rvMovies.layoutManager.toString())
+
 
         binding.rvMovies.adapter = movieAdapter
         binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
