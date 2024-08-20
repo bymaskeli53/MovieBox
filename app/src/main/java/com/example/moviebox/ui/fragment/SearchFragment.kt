@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentSearchBinding
 import com.example.moviebox.ui.adapter.SearchMovieAdapter
+import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.util.Resource
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.hideKeyboard

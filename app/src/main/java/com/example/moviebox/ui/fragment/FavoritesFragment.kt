@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.moviebox.FavoriteAdapter
 import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentFavoritesBinding
+import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

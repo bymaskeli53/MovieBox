@@ -14,9 +14,24 @@ import com.example.moviebox.util.extension.gone
 import com.example.moviebox.util.extension.show
 
 class SearchMovieAdapter(
-    private val onMovieClick: (MovieItem) -> Unit = {},
+   val onMovieClick: (MovieItem) -> Unit = {},
     private val formatDate: (String) -> String,
-) : ListAdapter<MovieItem, SearchMovieAdapter.SearchMovieViewHolder>(SearchMovieDiffCallback()) {
+) : BaseAdapter<MovieItem, SearchMovieAdapter.SearchMovieViewHolder>(SearchMovieDiffCallback(), onMovieClick) {
+
+    override fun createViewHolder(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        viewType: Int
+    ): SearchMovieViewHolder {
+        val binding =
+            ItemSearchMovieBinding.inflate(inflater, parent, false)
+        return SearchMovieViewHolder(binding)
+    }
+
+    override fun bind(holder: SearchMovieViewHolder, item: MovieItem) {
+        holder.bind(item)
+    }
+
     inner class SearchMovieViewHolder(
         val binding: ItemSearchMovieBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -30,7 +45,6 @@ class SearchMovieAdapter(
             }
             binding.textViewMovieDate.text =
                 formatDate(movie.release_date ?: context.getString(R.string.no_release_date))
-
             binding.root.setOnClickListener {
                 onMovieClick(movie)
             }
@@ -41,39 +55,9 @@ class SearchMovieAdapter(
             }
         }
     }
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int,
-    ): SearchMovieViewHolder {
-        val binding =
-            ItemSearchMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SearchMovieViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(
-        holder: SearchMovieViewHolder,
-        position: Int,
-    ) {
-        val movie = getItem(position)
-        holder.bind(movie)
-    }
 }
-
 class SearchMovieDiffCallback : DiffUtil.ItemCallback<MovieItem>() {
-    override fun areItemsTheSame(
-        oldItem: MovieItem,
-        newItem: MovieItem,
-    ): Boolean {
-        // Check if items are the same based on their unique identifier (e.g., ID)
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(
-        oldItem: MovieItem,
-        newItem: MovieItem,
-    ): Boolean {
-        // Check if the content of the items is the same
-        return oldItem == newItem && oldItem.isFavorite == newItem.isFavorite
-    }
+    override fun areItemsTheSame(oldItem: MovieItem, newItem: MovieItem) = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: MovieItem, newItem: MovieItem) = oldItem == newItem
 }
+

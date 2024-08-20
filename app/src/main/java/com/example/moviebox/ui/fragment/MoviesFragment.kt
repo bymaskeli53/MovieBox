@@ -24,6 +24,7 @@ import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.ui.adapter.MovieAdapter
 import com.example.moviebox.ui.adapter.SearchMovieAdapter
+import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.Resource
 import com.example.moviebox.util.extension.gone

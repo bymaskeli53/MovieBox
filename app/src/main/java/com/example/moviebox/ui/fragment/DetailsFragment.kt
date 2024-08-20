@@ -21,6 +21,7 @@ import com.example.moviebox.databinding.FragmentDetailsBinding
 import com.example.moviebox.model.Cast
 import com.example.moviebox.model.mapper.MovieToMovieEntityMapper
 import com.example.moviebox.ui.adapter.ActorsAdapter
+import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.util.Resource
 import com.example.moviebox.util.constant.NetworkConstants
 import com.example.moviebox.util.constant.ViewConstants.MAX_LINES_MOVIE_OVERVIEW
