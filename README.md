@@ -29,7 +29,7 @@ MovieBox is an Android application that allows users to browse and search for mo
 
 ## Demo Video
 
-[Watch the video](https://www.youtube.com/watch?v=example) <!-- Replace with your video link -->
+[Watch the video]([https://www.youtube.com/watch?v=example](https://youtube.com/shorts/XIJ_W9GXXDg?feature=share)) 
 
 # Libraries Used
 1. **Retrofit**
