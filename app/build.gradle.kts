@@ -128,6 +128,8 @@ dependencies {
 
     implementation("com.fragula2:fragula-core:2.10.1")
 
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
+
 
 }
 kapt {

@@ -41,7 +41,6 @@ import kotlinx.coroutines.launch
 class MoviesFragment :
     BaseFragment<FragmentMoviesBinding>(FragmentMoviesBinding::bind, R.layout.fragment_movies),
     MenuProvider {
-
     private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
     private val movieViewModel: MovieViewModel by viewModels()
@@ -89,11 +88,9 @@ class MoviesFragment :
                     }
 
                     is Resource.Idle -> {
-                        println("Hİ")
                     }
 
                     is Resource.Loading -> {
-                        println("Hello")
                     }
 
                     is Resource.Success -> {
@@ -137,7 +134,6 @@ class MoviesFragment :
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-
                 movieViewModel.movies.collectLatest { pagingData ->
                     movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
                         val updatedPagingData =
@@ -196,12 +192,11 @@ class MoviesFragment :
                 }
 
                 is LoadState.NotLoading -> {
-                  //  saveScrollPosition()
+                    //  saveScrollPosition()
                     binding.shimmerView.hide()
                     binding.shimmerView.stopShimmer()
                     binding.rvMovies.isVisible = movieAdapter.itemCount > 0
-                 //   binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
-
+                    //   binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
                 }
 
                 is LoadState.Error -> {
@@ -298,7 +293,12 @@ class MoviesFragment :
         }
 
     override fun onDestroyView() {
+        /**
+         * Searchview listeners set to null to avoid memory leak
+         */
         searchView.setOnQueryTextFocusChangeListener(null)
+        searchView.setOnQueryTextListener(null)
+        searchView.setOnCloseListener(null)
         super.onDestroyView()
     }
 }
