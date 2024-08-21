@@ -2,9 +2,7 @@ package com.example.moviebox.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.fillMaxWidth
-
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,28 +25,28 @@ fun FavoriteItem(
         modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Text(
             text = movie.title,
             style = MaterialTheme.typography.headlineSmall,
-
             color = Color.Black,
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
         )
 
-        Text(text = movie.overview,
+        Text(
+            text = movie.overview,
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Black,
             fontFamily = FontFamily.SansSerif,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
