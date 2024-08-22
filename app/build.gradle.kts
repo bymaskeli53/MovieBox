@@ -118,6 +118,7 @@ dependencies {
 
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
@@ -141,6 +142,7 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("io.coil-kt:coil-gif:2.5.0")
 
     // room
