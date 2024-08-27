@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentFavoritesBinding
 import com.example.moviebox.ui.components.FavoriteItem
+import com.example.moviebox.ui.components.FavoriteScreen
 import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.util.constant.Dimensions.ItemSeparatorHeight
 import com.example.moviebox.viewmodel.FavoriteViewModel
@@ -41,12 +42,7 @@ class FavoritesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             favoriteViewModel.favoriteMovies.collect { movie ->
                 binding.composeView.setContent {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(movie) {
-                            FavoriteItem(movie = it)
-                            Divider(color = Color.Gray, modifier = Modifier.height(ItemSeparatorHeight))
-                        }
-                    }
+                  FavoriteScreen(movie = movie)
                 }
 //                binding.rvFavorites.adapter =
 //                    FavoriteAdapter().apply {

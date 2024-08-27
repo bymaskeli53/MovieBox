@@ -44,11 +44,11 @@ class MoviesFragment :
     private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
     private val movieViewModel: MovieViewModel by viewModels()
-    private val searchViewModel: SearchViewModel by viewModels()
+   // private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var movieAdapter: MovieAdapter
-    private lateinit var searchMovieAdapter: SearchMovieAdapter
+    //private lateinit var searchMovieAdapter: SearchMovieAdapter
 
-    private lateinit var searchView: androidx.appcompat.widget.SearchView
+   private lateinit var searchView: androidx.appcompat.widget.SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,48 +62,48 @@ class MoviesFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchMovieAdapter =
-            SearchMovieAdapter(onMovieClick = {
-                val action =
-                    MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(
-                        it,
-                    )
-                findNavController().navigate(action)
-            }, formatDate = { date -> searchViewModel.formatDate(date) })
+//        searchMovieAdapter =
+//            SearchMovieAdapter(onMovieClick = {
+//                val action =
+//                    MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(
+//                        it,
+//                    )
+//                findNavController().navigate(action)
+//            }, formatDate = { date -> searchViewModel.formatDate(date) })
 
         movieViewModel.getFavoriteMovieIDs()
         setupMenu()
         observeViewModel()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.movies.collectLatest { movies ->
-                when (movies) {
-                    is Resource.Error -> {
-                        Toast
-                            .makeText(
-                                requireContext(),
-                                movies.exception.localizedMessage,
-                                Toast.LENGTH_LONG,
-                            ).show()
-                    }
-
-                    is Resource.Idle -> {
-                    }
-
-                    is Resource.Loading -> {
-                    }
-
-                    is Resource.Success -> {
-                        binding.rvSearchMovies.adapter = searchMovieAdapter
-                        val data = movies.data
-
-                        data.movieResponse.let {
-                        }
-                        searchMovieAdapter.submitList(data.movieResponse)
-                    }
-                }
-            }
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            searchViewModel.movies.collectLatest { movies ->
+//                when (movies) {
+//                    is Resource.Error -> {
+//                        Toast
+//                            .makeText(
+//                                requireContext(),
+//                                movies.exception.localizedMessage,
+//                                Toast.LENGTH_LONG,
+//                            ).show()
+//                    }
+//
+//                    is Resource.Idle -> {
+//                    }
+//
+//                    is Resource.Loading -> {
+//                    }
+//
+//                    is Resource.Success -> {
+//                        binding.rvSearchMovies.adapter = searchMovieAdapter
+//                        val data = movies.data
+//
+//                        data.movieResponse.let {
+//                        }
+//                        searchMovieAdapter.submitList(data.movieResponse)
+//                    }
+//                }
+//            }
+//        }
 
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
@@ -236,38 +236,38 @@ class MoviesFragment :
         searchView.queryHint = getString(R.string.search_movies)
 
         searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (isAdded) {
-                if (hasFocus) {
-                    searchItem.expandActionView()
-                    binding.rvMovies.gone()
-                    binding.rvSearchMovies.show()
-                } else {
-                    binding.rvMovies.show()
-                    binding.rvSearchMovies.gone()
-                }
-            }
+//            if (isAdded) {
+//                if (hasFocus) {
+//                    searchItem.expandActionView()
+//                    binding.rvMovies.gone()
+//                    binding.rvSearchMovies.show()
+//                } else {
+//                    binding.rvMovies.show()
+//                    binding.rvSearchMovies.gone()
+//                }
+//            }
         }
 
-        searchView.setOnCloseListener {
-            binding.rvMovies.show()
-            binding.rvSearchMovies.gone()
-            false
-        }
+//        searchView.setOnCloseListener {
+//            binding.rvMovies.show()
+//            binding.rvSearchMovies.gone()
+//            false
+//        }
 
-        searchView.setOnQueryTextListener(
-            object :
-                androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        searchViewModel.searchMovies(it)
-                        hideKeyboard()
-                    }
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean = false
-            },
-        )
+//        searchView.setOnQueryTextListener(
+//            object :
+//                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//                override fun onQueryTextSubmit(query: String?): Boolean {
+//                    query?.let {
+//                        searchViewModel.searchMovies(it)
+//                        hideKeyboard()
+//                    }
+//                    return true
+//                }
+//
+//                override fun onQueryTextChange(newText: String?): Boolean = false
+//            },
+//        )
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean =

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".MovieApplication"
@@ -15,11 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieBox"
-
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.MainActivity2"
+            android:exported="false"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.MovieBox" />
+        <activity
             android:name=".ui.activity.MainActivity"
-
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

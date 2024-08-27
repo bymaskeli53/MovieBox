@@ -22,6 +22,7 @@ import com.example.moviebox.model.Cast
 import com.example.moviebox.model.mapper.MovieToMovieEntityMapper
 import com.example.moviebox.ui.adapter.ActorsAdapter
 import com.example.moviebox.ui.fragment.base.BaseFragment
+import com.example.moviebox.ui.screen.DetailsScreen
 import com.example.moviebox.util.Resource
 import com.example.moviebox.util.constant.NetworkConstants
 import com.example.moviebox.util.constant.ViewConstants.MAX_LINES_MOVIE_OVERVIEW
@@ -50,8 +51,8 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
          * Screen opening animation
          * İnflater
          */
-        val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(R.transition.slide_in)
+//        val inflater = TransitionInflater.from(requireContext())
+//        enterTransition = inflater.inflateTransition(R.transition.slide_in)
         super.onCreate(savedInstanceState)
     }
 
@@ -61,117 +62,122 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        movieEntity = MovieToMovieEntityMapper.map(args.movie)
-
-        setupUI()
-        observeFavoriteMovie()
-        observeActors()
-        setupListeners()
-    }
-
-    private fun setupUI() {
-        val movie = args.movie
-        binding.ivBackground.load(NetworkConstants.IMAGE_BASE_URL + movie.poster_path) {
-            placeholder(R.drawable.ic_generic_movie_poster)
-            error(R.drawable.ic_generic_movie_poster)
+        binding.composeView.setContent {
+            DetailsScreen()
         }
-        binding.tvMovieTitle.text = movie.title
-        binding.tvMovieOverview.setResizableText(
-            fullText = movie.overview ?: getString(R.string.no_overview),
-            maxLines = MAX_LINES_MOVIE_OVERVIEW,
-            viewMore = true,
-        )
 
-        binding.ratingBar.rating = movie.vote_average?.toFloat() ?: 0.0f
-        binding.tvMovieReleaseDate.text = movie.release_date?.let { movieViewModel.formatDate(it) }
-    }
 
-    private fun setupListeners() {
-        binding.ivStar.setOnClickListener { toggleFavorite() }
-        binding.cardYoutube.setOnClickListener { openYoutubeTrailer(args.movie.id) }
-    }
 
-    private fun openYoutubeTrailer(movieId: Int) {
-        movieViewModel.fetchTrailerKey(movieId)
-        movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
-            if (trailerKey != null) {
-                val intent =
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://www.youtube.com/watch?v=$trailerKey"),
-                    )
-                startActivity(intent)
-            } else {
-                Toast
-                    .makeText(
-                        requireContext(),
-                        getString(R.string.could_not_find_trailer),
-                        Toast.LENGTH_SHORT,
-                    ).show()
-            }
-        }
-    }
-
-    private fun observeFavoriteMovie() {
-        favoriteViewModel.getMovieById(args.movie.id)
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                favoriteViewModel.currentMovie.collect { movie ->
-                    isFavorite = movie?.isFavorite == true
-                    binding.ivStar.setImageResource(
-                        if (isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_empty,
-                    )
-                }
-            }
-        }
-    }
-
-    private fun observeActors() {
-        creditsViewModel.getActors(args.movie.id)
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                creditsViewModel.actors.collect { resource ->
-                    when (resource) {
-                        is Resource.Success -> {
-                            val actorList = resource.data?.cast
-                            updateActors(actorList)
-                            binding.progressBarActors.hide()
-                        }
-
-                        is Resource.Loading -> binding.progressBarActors.show()
-                        is Resource.Error -> Log.e("DetailsFragment", "Failed to load actors")
-                        is Resource.Idle -> Log.e("DetailFragment", "Idle")
-                    }
-                }
-            }
-        }
-    }
-
-    private fun updateActors(actorList: List<Cast>?) {
-        if (actorList != null) {
-            val actorsAdapter =
-                ActorsAdapter(onActorClick = { actor ->
-                    val action =
-                        DetailsFragmentDirections.actionDetailsFragmentToActorBottomSheetDialogFragment(
-                            actor,
-                        )
-                    findNavController().navigate(action)
-                })
-            actorsAdapter.submitList(actorList)
-            binding.rvActors.adapter = actorsAdapter
-        }
-    }
-
-    private fun toggleFavorite() {
-        binding.ivStar.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.bounce))
-        if (isFavorite) {
-            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
-        } else {
-            binding.ivStar.setImageResource(R.drawable.ic_star_filled)
-        }
-        isFavorite = !isFavorite
-        movieEntity.isFavorite = isFavorite
-        favoriteViewModel.onFavoriteButtonClick(movieEntity)
-    }
-}
+//        movieEntity = MovieToMovieEntityMapper.map(args.movie)
+//
+//        setupUI()
+//        observeFavoriteMovie()
+//        observeActors()
+//        setupListeners()
+//    }
+//
+//    private fun setupUI() {
+//        val movie = args.movie
+//        binding.ivBackground.load(NetworkConstants.IMAGE_BASE_URL + movie.poster_path) {
+//            placeholder(R.drawable.ic_generic_movie_poster)
+//            error(R.drawable.ic_generic_movie_poster)
+//        }
+//        binding.tvMovieTitle.text = movie.title
+//        binding.tvMovieOverview.setResizableText(
+//            fullText = movie.overview ?: getString(R.string.no_overview),
+//            maxLines = MAX_LINES_MOVIE_OVERVIEW,
+//            viewMore = true,
+//        )
+//
+//        binding.ratingBar.rating = movie.vote_average?.toFloat() ?: 0.0f
+//        binding.tvMovieReleaseDate.text = movie.release_date?.let { movieViewModel.formatDate(it) }
+//    }
+//
+//    private fun setupListeners() {
+//        binding.ivStar.setOnClickListener { toggleFavorite() }
+//        binding.cardYoutube.setOnClickListener { openYoutubeTrailer(args.movie.id) }
+//    }
+//
+//    private fun openYoutubeTrailer(movieId: Int) {
+//        movieViewModel.fetchTrailerKey(movieId)
+//        movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
+//            if (trailerKey != null) {
+//                val intent =
+//                    Intent(
+//                        Intent.ACTION_VIEW,
+//                        Uri.parse("https://www.youtube.com/watch?v=$trailerKey"),
+//                    )
+//                startActivity(intent)
+//            } else {
+//                Toast
+//                    .makeText(
+//                        requireContext(),
+//                        getString(R.string.could_not_find_trailer),
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
+//            }
+//        }
+//    }
+//
+//    private fun observeFavoriteMovie() {
+//        favoriteViewModel.getMovieById(args.movie.id)
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                favoriteViewModel.currentMovie.collect { movie ->
+//                    isFavorite = movie?.isFavorite == true
+//                    binding.ivStar.setImageResource(
+//                        if (isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_empty,
+//                    )
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun observeActors() {
+//        creditsViewModel.getActors(args.movie.id)
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                creditsViewModel.actors.collect { resource ->
+//                    when (resource) {
+//                        is Resource.Success -> {
+//                            val actorList = resource.data?.cast
+//                            updateActors(actorList)
+//                            binding.progressBarActors.hide()
+//                        }
+//
+//                        is Resource.Loading -> binding.progressBarActors.show()
+//                        is Resource.Error -> Log.e("DetailsFragment", "Failed to load actors")
+//                        is Resource.Idle -> Log.e("DetailFragment", "Idle")
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun updateActors(actorList: List<Cast>?) {
+//        if (actorList != null) {
+//            val actorsAdapter =
+//                ActorsAdapter(onActorClick = { actor ->
+//                    val action =
+//                        DetailsFragmentDirections.actionDetailsFragmentToActorBottomSheetDialogFragment(
+//                            actor,
+//                        )
+//                    findNavController().navigate(action)
+//                })
+//            actorsAdapter.submitList(actorList)
+//            binding.rvActors.adapter = actorsAdapter
+//        }
+//    }
+//
+//    private fun toggleFavorite() {
+//        binding.ivStar.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.bounce))
+//        if (isFavorite) {
+//            binding.ivStar.setImageResource(R.drawable.ic_star_empty)
+//        } else {
+//            binding.ivStar.setImageResource(R.drawable.ic_star_filled)
+//        }
+//        isFavorite = !isFavorite
+//        movieEntity.isFavorite = isFavorite
+//        favoriteViewModel.onFavoriteButtonClick(movieEntity)
+//    }
+}}

@@ -2,7 +2,7 @@ package com.example.moviebox.model
 
 data class SearchResult(
     val adult: Boolean,
-    val backdrop_path: String,
+    val backdrop_path: String?,
     val genre_ids: List<Int>,
     val id: Int,
     val original_language: String,

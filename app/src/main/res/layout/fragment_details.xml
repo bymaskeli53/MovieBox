@@ -1,179 +1,192 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<FrameLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="?android:colorBackground"
-    android:layoutDirection="locale"
-    app:layout_constraintStart_toStartOf="parent">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_background"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:alpha="0.2"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_movie_overview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="40dp"
-            android:background="@android:color/white"
-            android:elevation="2dp"
-            android:ellipsize="end"
-            android:lineSpacingExtra="4dp"
-            android:padding="8dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rating_bar" />
-
-        <TextView
-            android:id="@+id/tv_movie_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@android:color/white"
-            android:elevation="2dp"
-            android:fontFamily="sans-serif-medium"
-            android:padding="8dp"
-            android:text="Movie Title"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent" />
+</FrameLayout>
 
 
-        <TextView
-            android:id="@+id/tv_movie_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/movie_rating"
-            android:textColor="@color/black"
-            android:layout_marginBottom="8dp"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@id/rating_bar"
-            app:layout_constraintEnd_toEndOf="@id/rating_bar"
-            app:layout_constraintStart_toStartOf="@id/rating_bar"
-             />
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 
-        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-            android:id="@+id/rating_bar"
-            style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:minWidth="24dp"
-            android:minHeight="24dp"
-            android:numStars="10"
-            app:layout_constraintEnd_toStartOf="@id/iv_star"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_star"
-            tools:rating="4" />
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:fillViewport="true"-->
+<!--    android:background="?android:colorBackground"-->
+<!--    android:layoutDirection="locale"-->
+<!--    app:layout_constraintStart_toStartOf="parent">-->
 
-        <TextView
-            android:id="@+id/tv_movie_release_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="sans-serif"
-            android:padding="4dp"
-            android:text="Release Date: YYYY-MM-DD"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_overview" />
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_actors"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_release_date" />
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_background"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:alpha="0.2"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_youtube"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_actors">
+<!--        <TextView-->
+<!--            android:id="@+id/tv_movie_overview"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="40dp"-->
+<!--            android:background="@android:color/white"-->
+<!--            android:elevation="2dp"-->
+<!--            android:ellipsize="end"-->
+<!--            android:lineSpacingExtra="4dp"-->
+<!--            android:padding="8dp"-->
+<!--            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
+<!--            android:textColor="@android:color/black"-->
+<!--            android:textSize="16sp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/rating_bar" />-->
 
-                <ImageView
-                    android:id="@+id/iv_youtube_icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:contentDescription="@string/youtube_button"
-                    android:src="@drawable/ic_youtube2" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_movie_title"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="16dp"-->
+<!--            android:background="@android:color/white"-->
+<!--            android:elevation="2dp"-->
+<!--            android:fontFamily="sans-serif-medium"-->
+<!--            android:padding="8dp"-->
+<!--            android:text="Movie Title"-->
+<!--            android:textColor="@android:color/black"-->
+<!--            android:textSize="24sp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/tv_youtube"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/watch_trailer_on_youtube"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <ImageView
-            android:id="@+id/iv_star"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_star_empty"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_title" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_movie_rating"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/movie_rating"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:textSize="24sp"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/rating_bar"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/rating_bar"-->
+<!--            app:layout_constraintStart_toStartOf="@id/rating_bar"-->
+<!--             />-->
 
-        <ProgressBar
-            android:id="@+id/progress_bar_actors"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_actors" />
+<!--        <me.zhanghai.android.materialratingbar.MaterialRatingBar-->
+<!--            android:id="@+id/rating_bar"-->
+<!--            style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:minWidth="24dp"-->
+<!--            android:minHeight="24dp"-->
+<!--            android:numStars="10"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/iv_star"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/iv_star"-->
+<!--            tools:rating="4" />-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/tv_movie_release_date"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="80dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginBottom="24dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:fontFamily="sans-serif"-->
+<!--            android:padding="4dp"-->
+<!--            android:text="Release Date: YYYY-MM-DD"-->
+<!--            android:textColor="@android:color/darker_gray"-->
+<!--            android:textSize="14sp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tv_movie_overview" />-->
 
-</ScrollView>
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rv_actors"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tv_movie_release_date" />-->
+
+<!--        <com.google.android.material.card.MaterialCardView-->
+<!--            android:id="@+id/card_youtube"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="32dp"-->
+
+<!--            app:cardCornerRadius="8dp"-->
+<!--            app:cardElevation="4dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/rv_actors">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:padding="16dp">-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/iv_youtube_icon"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:contentDescription="@string/youtube_button"-->
+<!--                    android:src="@drawable/ic_youtube2" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_youtube"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:fontFamily="sans-serif-medium"-->
+<!--                    android:text="@string/watch_trailer_on_youtube"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="16sp" />-->
+<!--            </LinearLayout>-->
+<!--        </com.google.android.material.card.MaterialCardView>-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_star"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:layout_margin="16dp"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:padding="16dp"-->
+<!--            android:src="@drawable/ic_star_empty"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tv_movie_title" />-->
+
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progress_bar_actors"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/rv_actors" />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--</ScrollView>-->

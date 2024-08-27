@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moviebox.R
 import com.example.moviebox.databinding.ActivityMainBinding
+import com.example.moviebox.ui.components.BottomNavBar
 import com.example.moviebox.util.extension.gone
 import com.example.moviebox.util.extension.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        val navHostFragment =
+//            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//        navController = navHostFragment.findNavController()
+//
+//        binding.bottom.setContent {
+//            BottomNavBar(navController = navController)
+//        }
+
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
@@ -35,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         setBottomNavVisibilityForEachFragment(navController)
     }
+
 
     override fun onSupportNavigateUp(): Boolean = super.onSupportNavigateUp() || navController.navigateUp()
 
@@ -51,4 +62,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

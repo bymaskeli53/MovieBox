@@ -45,6 +45,9 @@ android {
         buildConfigField("String", "API_KEY", "\"${localProperties["API_KEY"]}\"")
 
         buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
     buildTypes {
         release {
@@ -62,10 +65,18 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
-     // Jetpack Compose
+     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.ui.graphics)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    // Jetpack Compose
     val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
@@ -93,6 +104,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     // Optional - Integration with LiveData
     implementation("androidx.compose.runtime:runtime-livedata")
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     @Suppress("ktlint:standard:property-naming")
     val room_version = "2.6.1"
@@ -136,8 +148,11 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
+
+    // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
 
     // coil
@@ -157,6 +172,7 @@ dependencies {
 
     // paging
     implementation("androidx.paging:paging-runtime:$paging_version")
+    implementation("androidx.paging:paging-compose:$paging_version")
 
     // material rating bar
     implementation("me.zhanghai.android.materialratingbar:library:1.4.0")
