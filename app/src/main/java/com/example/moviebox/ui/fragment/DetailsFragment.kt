@@ -63,7 +63,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         super.onViewCreated(view, savedInstanceState)
 
         binding.composeView.setContent {
-            DetailsScreen(movieItem = args.movie)
+            DetailsScreen(movie = args.movie)
         }
 
 
