@@ -64,7 +64,10 @@ class MoviesFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.composeView.setContent {
-            MoviesScreen()
+            MoviesScreen(onItemClick = {
+                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(it)
+                findNavController().navigate(action)
+            })
         }
 
 //        searchMovieAdapter =

@@ -2,6 +2,7 @@ package com.example.moviebox.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,7 @@ import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
 fun MovieListItem(
     modifier: Modifier = Modifier,
     movie: MovieItem,
+    onItemClick: (MovieItem) -> Unit
 ) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -38,7 +40,9 @@ fun MovieListItem(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .background(color = RedMixedOrange),
+                .background(color = RedMixedOrange)
+                .clickable{onItemClick(movie)}
+
     ) {
         Row(
             modifier =
