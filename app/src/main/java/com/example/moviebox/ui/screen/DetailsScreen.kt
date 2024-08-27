@@ -16,13 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.moviebox.model.MovieItem
 
 @Composable
-fun DetailsScreen(modifier: Modifier = Modifier) {
+fun DetailsScreen(modifier: Modifier = Modifier,movieItem: MovieItem) {
     Column(modifier = modifier.fillMaxSize()) {
 
             Text(
-                text = "Lord Of The Rings",
+                text = movieItem.title ?: "No title",
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium,
                 style = MaterialTheme.typography.headlineSmall,
@@ -44,8 +45,8 @@ fun DetailsScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DetailsScreenPreview() {
-    DetailsScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DetailsScreenPreview() {
+//    DetailsScreen()
+//}
