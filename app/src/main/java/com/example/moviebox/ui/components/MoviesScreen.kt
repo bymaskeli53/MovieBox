@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,14 +21,13 @@ fun MoviesScreen(
     viewModel: MovieViewModel = hiltViewModel(),
 ) {
     val items = viewModel.movies.collectAsLazyPagingItems()
-    //val state = remember { viewModel.movies }.collectAsLazyPagingItems()
-
+    // val state = remember { viewModel.movies }.collectAsLazyPagingItems()
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(
             count = items.itemCount,
-            key = items.itemKey { it.id },
-            contentType = items.itemContentType { "contentType" },
+            key = items.itemKey { "fl-${it.id}" },
+            contentType = items.itemContentType(),
         ) { index ->
             val item = items[index]
             if (item != null) {

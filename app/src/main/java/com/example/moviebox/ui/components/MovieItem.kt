@@ -70,9 +70,9 @@ fun MovieListItem(
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Image(
                     modifier =
-                    Modifier
-                        .width(80.dp)
-                        .height(40.dp),
+                        Modifier
+                            .width(80.dp)
+                            .height(40.dp),
                     painter = painterResource(id = R.drawable.arrow_right),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -84,11 +84,11 @@ fun MovieListItem(
                     painter = painterResource(id = R.drawable.ic_heart),
                     contentDescription = null,
                     modifier =
-                    Modifier
-                        .size(24.dp)
-                        .align(Alignment.End)
-                        .padding(top = 8.dp),
-                    alpha = if (movie.isFavorite) 1f else 0f
+                        Modifier
+                            .size(24.dp)
+                            .align(Alignment.End)
+                            .padding(top = 8.dp),
+                    alpha = if (movie.isFavorite) 1f else 0f,
                 )
             }
         }

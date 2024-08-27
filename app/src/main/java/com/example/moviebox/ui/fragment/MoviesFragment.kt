@@ -24,6 +24,7 @@ import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.ui.adapter.MovieAdapter
 import com.example.moviebox.ui.adapter.SearchMovieAdapter
+import com.example.moviebox.ui.components.MoviesScreen
 import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.util.NetworkConnectionLiveData
 import com.example.moviebox.util.Resource
@@ -62,6 +63,10 @@ class MoviesFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.composeView.setContent {
+            MoviesScreen()
+        }
+
 //        searchMovieAdapter =
 //            SearchMovieAdapter(onMovieClick = {
 //                val action =
@@ -73,7 +78,7 @@ class MoviesFragment :
 
         movieViewModel.getFavoriteMovieIDs()
         setupMenu()
-        observeViewModel()
+        //observeViewModel()
 
 //        viewLifecycleOwner.lifecycleScope.launch {
 //            searchViewModel.movies.collectLatest { movies ->
@@ -131,98 +136,98 @@ class MoviesFragment :
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                movieViewModel.movies.collectLatest { pagingData ->
-                    movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
-                        val updatedPagingData =
-                            pagingData.map { movie ->
-                                movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
-                            }
+//    private fun observeViewModel() {
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                movieViewModel.movies.collectLatest { pagingData ->
+//                    movieViewModel.favoriteMovieIds.collectLatest { favoriteMovieIds ->
+//                        val updatedPagingData =
+//                            pagingData.map { movie ->
+//                                movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
+//                            }
+//
+//                        movieAdapter.submitData(updatedPagingData)
+//                    }
+//                }
+//            }
+//        }
+//
+////        viewLifecycleOwner.lifecycleScope.launch {
+////            movieViewModel.isGridLayout.collectLatest { isGridLayout ->
+////                setupRecyclerView(isGridLayout)
+////            }
+////        }
+//    }
 
-                        movieAdapter.submitData(updatedPagingData)
-                    }
-                }
-            }
-        }
+//    private fun setupRecyclerView(isGridLayout: Boolean) {
+//        movieAdapter =
+//            MovieAdapter(isGridLayout) { movie ->
+//                saveScrollPosition()
+//                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
+//                findNavController().navigate(action)
+//            }
+//
+//        binding.rvMovies.layoutManager =
+//            if (isGridLayout) {
+//                GridLayoutManager(requireContext(), 3)
+//            } else {
+//                LinearLayoutManager(requireContext())
+//            }
+//
+//
+//        binding.rvMovies.adapter = movieAdapter
+//        binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
+//
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            movieViewModel.movies.collectLatest { pagingData ->
+//                val favoriteMovieIds = movieViewModel.favoriteMovieIds.value
+//                val updatedPagingData =
+//                    pagingData.map { movie ->
+//                        movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
+//                    }
+//                movieAdapter.submitData(updatedPagingData)
+//            }
+//        }
+//
+//        movieAdapter.addLoadStateListener { loadState ->
+//            when (val state = loadState.refresh) {
+//                is LoadState.Loading -> {
+//                    binding.shimmerView.show()
+//                    binding.shimmerView.startShimmer()
+//                }
+//
+//                is LoadState.NotLoading -> {
+//                    //  saveScrollPosition()
+//                    binding.shimmerView.hide()
+//                    binding.shimmerView.stopShimmer()
+//                    binding.rvMovies.isVisible = movieAdapter.itemCount > 0
+//                    //   binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
+//                }
+//
+//                is LoadState.Error -> {
+//                    binding.shimmerView.hide()
+//                    binding.shimmerView.stopShimmer()
+//                    Toast
+//                        .makeText(
+//                            requireContext(),
+//                            state.error.localizedMessage,
+//                            Toast.LENGTH_SHORT,
+//                        ).show()
+//                }
+//            }
+//        }
+//    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            movieViewModel.isGridLayout.collectLatest { isGridLayout ->
-                setupRecyclerView(isGridLayout)
-            }
-        }
-    }
-
-    private fun setupRecyclerView(isGridLayout: Boolean) {
-        movieAdapter =
-            MovieAdapter(isGridLayout) { movie ->
-                saveScrollPosition()
-                val action = MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(movie)
-                findNavController().navigate(action)
-            }
-
-        binding.rvMovies.layoutManager =
-            if (isGridLayout) {
-                GridLayoutManager(requireContext(), 3)
-            } else {
-                LinearLayoutManager(requireContext())
-            }
-
-
-        binding.rvMovies.adapter = movieAdapter
-        binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            movieViewModel.movies.collectLatest { pagingData ->
-                val favoriteMovieIds = movieViewModel.favoriteMovieIds.value
-                val updatedPagingData =
-                    pagingData.map { movie ->
-                        movie.copy(isFavorite = favoriteMovieIds.contains(movie.id))
-                    }
-                movieAdapter.submitData(updatedPagingData)
-            }
-        }
-
-        movieAdapter.addLoadStateListener { loadState ->
-            when (val state = loadState.refresh) {
-                is LoadState.Loading -> {
-                    binding.shimmerView.show()
-                    binding.shimmerView.startShimmer()
-                }
-
-                is LoadState.NotLoading -> {
-                    //  saveScrollPosition()
-                    binding.shimmerView.hide()
-                    binding.shimmerView.stopShimmer()
-                    binding.rvMovies.isVisible = movieAdapter.itemCount > 0
-                    //   binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
-                }
-
-                is LoadState.Error -> {
-                    binding.shimmerView.hide()
-                    binding.shimmerView.stopShimmer()
-                    Toast
-                        .makeText(
-                            requireContext(),
-                            state.error.localizedMessage,
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                }
-            }
-        }
-    }
-
-    private fun saveScrollPosition() {
-        val layoutManager = binding.rvMovies.layoutManager
-        val savedScrollPosition =
-            when (layoutManager) {
-                is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
-                is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
-                else -> 0
-            }
-        movieViewModel.setItemPosition(savedScrollPosition)
-    }
+//    private fun saveScrollPosition() {
+//        val layoutManager = binding.rvMovies.layoutManager
+//        val savedScrollPosition =
+//            when (layoutManager) {
+//                is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+//                is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+//                else -> 0
+//            }
+//        movieViewModel.setItemPosition(savedScrollPosition)
+//    }
 
     override fun onCreateMenu(
         menu: Menu,
@@ -270,27 +275,27 @@ class MoviesFragment :
 //        )
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
-        when (menuItem.itemId) {
-            R.id.grid_recycler_view -> {
-                movieViewModel.setGridLayout(true)
-
-                setupRecyclerView(true)
-                true
-            }
-
-            R.id.linear_recycler_view -> {
-                movieViewModel.setGridLayout(false)
-                setupRecyclerView(false)
-                true
-            }
-
-            R.id.action_search -> {
-                true
-            }
-
-            else -> false
-        }
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = true
+//        when (menuItem.itemId) {
+//            R.id.grid_recycler_view -> {
+//                movieViewModel.setGridLayout(true)
+//
+//                setupRecyclerView(true)
+//                true
+//            }
+//
+//            R.id.linear_recycler_view -> {
+//                movieViewModel.setGridLayout(false)
+//                setupRecyclerView(false)
+//                true
+//            }
+//
+//            R.id.action_search -> {
+//                true
+//            }
+//
+//            else -> false
+//        }
 
     override fun onDestroyView() {
         /**
