@@ -3,40 +3,27 @@ package com.example.moviebox.ui.fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
-import coil.load
 import com.example.moviebox.R
 import com.example.moviebox.database.MovieEntity
 import com.example.moviebox.databinding.FragmentDetailsBinding
-import com.example.moviebox.model.Cast
-import com.example.moviebox.model.mapper.MovieToMovieEntityMapper
-import com.example.moviebox.ui.adapter.ActorsAdapter
 import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.ui.screen.DetailsScreen
-import com.example.moviebox.util.Resource
-import com.example.moviebox.util.constant.NetworkConstants
-import com.example.moviebox.util.constant.ViewConstants.MAX_LINES_MOVIE_OVERVIEW
-import com.example.moviebox.util.extension.hide
-import com.example.moviebox.util.extension.setResizableText
 import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.CreditsViewModel
 import com.example.moviebox.viewmodel.FavoriteViewModel
 import com.example.moviebox.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::inflate, R.layout.fragment_details) {
+class DetailsFragment :
+    BaseFragment<FragmentDetailsBinding>(
+        FragmentDetailsBinding::inflate,
+        R.layout.fragment_details,
+    ) {
     private var isFavorite = false
 
     private val movieViewModel: MovieViewModel by viewModels()
@@ -63,10 +50,8 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         super.onViewCreated(view, savedInstanceState)
 
         binding.composeView.setContent {
-            DetailsScreen(movie = args.movie)
+            DetailsScreen(movie = args.movie, onYoutubeClick = ::openYoutubeTrailer)
         }
-
-
 
 //        movieEntity = MovieToMovieEntityMapper.map(args.movie)
 //
@@ -98,26 +83,28 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
 //        binding.cardYoutube.setOnClickListener { openYoutubeTrailer(args.movie.id) }
 //    }
 //
-//    private fun openYoutubeTrailer(movieId: Int) {
-//        movieViewModel.fetchTrailerKey(movieId)
-//        movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
-//            if (trailerKey != null) {
-//                val intent =
-//                    Intent(
-//                        Intent.ACTION_VIEW,
-//                        Uri.parse("https://www.youtube.com/watch?v=$trailerKey"),
-//                    )
-//                startActivity(intent)
-//            } else {
-//                Toast
-//                    .makeText(
-//                        requireContext(),
-//                        getString(R.string.could_not_find_trailer),
-//                        Toast.LENGTH_SHORT,
-//                    ).show()
-//            }
-//        }
-//    }
+    }
+
+     fun openYoutubeTrailer(movieId: Int) {
+        movieViewModel.fetchTrailerKey(movieId)
+        movieViewModel.trailerKey.observe(viewLifecycleOwner) { trailerKey ->
+            if (trailerKey != null) {
+                val intent =
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.youtube.com/watch?v=$trailerKey"),
+                    )
+                startActivity(intent)
+            } else {
+                Toast
+                    .makeText(
+                        requireContext(),
+                        getString(R.string.could_not_find_trailer),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+            }
+        }
+    }
 //
 //    private fun observeFavoriteMovie() {
 //        favoriteViewModel.getMovieById(args.movie.id)
@@ -180,4 +167,4 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
 //        movieEntity.isFavorite = isFavorite
 //        favoriteViewModel.onFavoriteButtonClick(movieEntity)
 //    }
-}}
+}

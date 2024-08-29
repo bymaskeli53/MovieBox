@@ -2,6 +2,7 @@ package com.example.moviebox.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -46,7 +47,7 @@ import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
 fun DetailsScreen(
     movie: MovieItem,
     onStarClick: () -> Unit = {},
-    onYoutubeClick: () -> Unit = {},
+    onYoutubeClick: (Int) -> Unit,
     onActorClick: (Actors) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
@@ -157,8 +158,12 @@ fun DetailsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .height(IntrinsicSize.Min),
-                verticalAlignment = Alignment.CenterVertically
+                    .height(IntrinsicSize.Min)
+                    .clickable(onClick = {
+                        onYoutubeClick.invoke(movie.id)
+                    }),
+                verticalAlignment = Alignment.CenterVertically,
+
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_youtube2),
