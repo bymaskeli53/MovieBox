@@ -4,50 +4,60 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults.textFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen() {
-    val searchQuery = remember { TextFieldValue("") }
+    var searchQuery by remember {mutableStateOf("")}
+
     val isSearching = remember { false }
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxSize()) {
         // SearchView equivalent
-        TextField(
-            value = searchQuery,
-            onValueChange = { newValue ->
-                // Handle the search query change
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            placeholder = { Text("Search...") },
-            colors = textFieldColors(
-                containerColor = Color.Transparent
-            )
-        )
+        SearchBar(
+            query = searchQuery,
+            onQueryChange = { newValue -> searchQuery = newValue },
+            onSearch = {},
+            active = true,
+            onActiveChange = {},
+            placeholder = {Text(text = "Search Movie ...")},
+        ) {
+        }
+//        TextField(
+//            value = searchQuery,
+//            onValueChange = { newValue ->
+//                // Handle the search query change
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(8.dp),
+//            placeholder = { Text("Search...") },
+//            colors = textFieldColors(
+//                containerColor = Color.Transparent
+//            )
+//        )
 
         // RecyclerView equivalent
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-                .padding(8.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+                    .padding(8.dp),
         ) {
             // Items can be added here
             item {
@@ -60,7 +70,7 @@ fun SearchScreen() {
         if (isSearching) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator()
             }
@@ -70,7 +80,7 @@ fun SearchScreen() {
         if (!isSearching && /* Replace with logic to check if movies are empty */ false) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(text = "Could not find movie")
             }
