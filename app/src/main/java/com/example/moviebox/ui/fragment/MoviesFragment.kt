@@ -48,8 +48,6 @@ class MoviesFragment :
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var searchMovieAdapter: SearchMovieAdapter
 
-    private lateinit var searchView: androidx.appcompat.widget.SearchView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
@@ -249,14 +247,4 @@ class MoviesFragment :
 
             else -> false
         }
-
-    override fun onDestroyView() {
-        /**
-         * Searchview listeners set to null to avoid memory leak
-         */
-        searchView.setOnQueryTextFocusChangeListener(null)
-        searchView.setOnQueryTextListener(null)
-        searchView.setOnCloseListener(null)
-        super.onDestroyView()
-    }
 }

@@ -1,7 +1,10 @@
 package com.example.moviebox.ui.adapter
 
+import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +43,7 @@ class MovieAdapter(
             } else {
                 binding.ivFavorite.hide()
             }
-            // binding.ivFavorite.visibility = if (movie.isFavorite) View.VISIBLE else View.GONE
+            setBackgroundColorByPopularity(movie.vote_average!!, binding.root.context, binding)
         }
     }
 
@@ -56,6 +59,8 @@ class MovieAdapter(
                 onMovieClick(movie)
             }
         }
+
+
     }
 
     override fun onCreateViewHolder(
@@ -85,6 +90,28 @@ class MovieAdapter(
             }
         }
     }
+
+    private fun setBackgroundColorByPopularity(voteAverage: Double, context: Context, binding: ItemMovieBinding) {
+        // Enum'dan PopularityRating nesnesini al
+        val popularityRating = PopularityRating.fromVoteAverage(voteAverage)
+
+        // Rengi al
+        val backgroundColor = ContextCompat.getColor(context, popularityRating.colorRes)
+
+        // View'ın background'ını değiştirmek için bir GradientDrawable oluştur
+        val drawable = binding.ivStar.background as? GradientDrawable
+        drawable?.setColor(backgroundColor)
+
+        // Eğer background henüz GradientDrawable değilse (ilk kez çağrılıyorsa)
+        if (drawable == null) {
+            val newDrawable = GradientDrawable()
+            newDrawable.shape = GradientDrawable.OVAL
+            newDrawable.setColor(backgroundColor)
+            binding.ivStar.background = newDrawable
+        }
+    }
+
+
 }
 
 class MovieDiffCallback : DiffUtil.ItemCallback<MovieItem>() {
@@ -97,4 +124,20 @@ class MovieDiffCallback : DiffUtil.ItemCallback<MovieItem>() {
         oldItem: MovieItem,
         newItem: MovieItem,
     ) = oldItem == newItem && oldItem.isFavorite == newItem.isFavorite
+}
+
+enum class PopularityRating(val colorRes: Int) {
+    HIGH(R.color.popularity_high),
+    MEDIUM(R.color.popularity_medium),
+    LOW(R.color.popularity_low);
+
+    companion object {
+        fun fromVoteAverage(voteAverage: Double): PopularityRating {
+            return when {
+                voteAverage > 8.0 -> HIGH
+                voteAverage >= 6.0 -> MEDIUM
+                else -> LOW
+            }
+        }
+    }
 }

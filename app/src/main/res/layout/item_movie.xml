@@ -74,12 +74,12 @@
             app:layout_constraintStart_toStartOf="@id/movieTitleTextView"
             app:layout_constraintTop_toBottomOf="@id/movieTitleTextView" />
 
-        <ImageView
+        <View
             android:id="@+id/iv_star"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/ic_star_filled"
+            android:background="@drawable/circular_background"
             app:layout_constraintStart_toStartOf="@id/tv_release_date"
             app:layout_constraintTop_toBottomOf="@id/tv_release_date" />
 

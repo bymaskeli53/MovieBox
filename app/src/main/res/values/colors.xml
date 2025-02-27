@@ -48,4 +48,8 @@
     <color name="sienna_4">#8b4726</color>
 
     <color name="aged_paper">#ecab53</color>
+
+    <color name="popularity_high">#4CAF50</color>
+    <color name="popularity_medium">#FFC107</color>
+    <color name="popularity_low">#F44336</color>
 </resources>
