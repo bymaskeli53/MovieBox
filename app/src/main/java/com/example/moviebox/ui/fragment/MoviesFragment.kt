@@ -230,44 +230,6 @@ class MoviesFragment :
     ) {
         menuInflater.inflate(R.menu.menu, menu)
 
-        val searchItem = menu.findItem(R.id.action_search)
-        searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
-
-        searchView.queryHint = getString(R.string.search_movies)
-
-        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (isAdded) {
-                if (hasFocus) {
-                    searchItem.expandActionView()
-                    binding.rvMovies.gone()
-                    binding.rvSearchMovies.show()
-                } else {
-                    binding.rvMovies.show()
-                    binding.rvSearchMovies.gone()
-                }
-            }
-        }
-
-        searchView.setOnCloseListener {
-            binding.rvMovies.show()
-            binding.rvSearchMovies.gone()
-            false
-        }
-
-        searchView.setOnQueryTextListener(
-            object :
-                androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        searchViewModel.searchMovies(it)
-                        hideKeyboard()
-                    }
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean = false
-            },
-        )
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
@@ -282,10 +244,6 @@ class MoviesFragment :
             R.id.linear_recycler_view -> {
                 movieViewModel.setGridLayout(false)
                 setupRecyclerView(false)
-                true
-            }
-
-            R.id.action_search -> {
                 true
             }
 
