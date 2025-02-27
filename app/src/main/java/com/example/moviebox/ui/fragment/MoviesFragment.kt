@@ -23,16 +23,11 @@ import androidx.transition.TransitionInflater
 import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentMoviesBinding
 import com.example.moviebox.ui.adapter.MovieAdapter
-import com.example.moviebox.ui.adapter.SearchMovieAdapter
 import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.util.NetworkConnectionLiveData
-import com.example.moviebox.util.Resource
-import com.example.moviebox.util.extension.gone
 import com.example.moviebox.util.extension.hide
-import com.example.moviebox.util.extension.hideKeyboard
 import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.MovieViewModel
-import com.example.moviebox.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,10 +39,7 @@ class MoviesFragment :
     private lateinit var networkConnectionLiveData: NetworkConnectionLiveData
 
     private val movieViewModel: MovieViewModel by viewModels()
-    private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var movieAdapter: MovieAdapter
-    private lateinit var searchMovieAdapter: SearchMovieAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
@@ -60,48 +52,9 @@ class MoviesFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchMovieAdapter =
-            SearchMovieAdapter(onMovieClick = {
-                val action =
-                    MoviesFragmentDirections.actionMoviesFragmentToDetailsFragment(
-                        it,
-                    )
-                findNavController().navigate(action)
-            }, formatDate = { date -> searchViewModel.formatDate(date) })
-
         movieViewModel.getFavoriteMovieIDs()
         setupMenu()
         observeViewModel()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.movies.collectLatest { movies ->
-                when (movies) {
-                    is Resource.Error -> {
-                        Toast
-                            .makeText(
-                                requireContext(),
-                                movies.exception.localizedMessage,
-                                Toast.LENGTH_LONG,
-                            ).show()
-                    }
-
-                    is Resource.Idle -> {
-                    }
-
-                    is Resource.Loading -> {
-                    }
-
-                    is Resource.Success -> {
-                        binding.rvSearchMovies.adapter = searchMovieAdapter
-                        val data = movies.data
-
-                        data.movieResponse.let {
-                        }
-                        searchMovieAdapter.submitList(data.movieResponse)
-                    }
-                }
-            }
-        }
 
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
@@ -166,8 +119,6 @@ class MoviesFragment :
             } else {
                 LinearLayoutManager(requireContext())
             }
-
-
         binding.rvMovies.adapter = movieAdapter
         binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
 
@@ -190,11 +141,9 @@ class MoviesFragment :
                 }
 
                 is LoadState.NotLoading -> {
-                    //  saveScrollPosition()
                     binding.shimmerView.hide()
                     binding.shimmerView.stopShimmer()
                     binding.rvMovies.isVisible = movieAdapter.itemCount > 0
-                    //   binding.rvMovies.layoutManager?.scrollToPosition(movieViewModel.position.value)
                 }
 
                 is LoadState.Error -> {
@@ -234,7 +183,6 @@ class MoviesFragment :
         when (menuItem.itemId) {
             R.id.grid_recycler_view -> {
                 movieViewModel.setGridLayout(true)
-
                 setupRecyclerView(true)
                 true
             }

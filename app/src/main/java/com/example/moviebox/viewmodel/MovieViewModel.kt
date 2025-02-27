@@ -32,26 +32,20 @@ class MovieViewModel
             refreshMovies()
         }
 
-        // StateFlow for favorite movie IDs
         private val _favoriteMovieIds = MutableStateFlow<List<Int>>(emptyList())
         val favoriteMovieIds: StateFlow<List<Int>> = _favoriteMovieIds
 
-        // LiveData for trailer key
         private val _trailerKey = MutableLiveData<String?>()
         val trailerKey: LiveData<String?> get() = _trailerKey
 
-        // StateFlow for tracking the position of the selected item
         private val _position = MutableStateFlow(0)
         val position: StateFlow<Int> get() = _position
 
-        // StateFlow for grid layout toggle
         private val _isGridLayout = MutableStateFlow(false)
         val isGridLayout: StateFlow<Boolean> get() = _isGridLayout
 
-        // Format the date using the injected use case
         fun formatDate(inputDate: String): String = formatDateUseCase(inputDate)
 
-        // Fetch trailer key based on the movie ID
         fun fetchTrailerKey(movieId: Int) {
             viewModelScope.launch {
                 _trailerKey.value = getMovieTrailerKeyUseCase(movieId)
@@ -66,12 +60,10 @@ class MovieViewModel
             }
         }
 
-        // Set the position of the selected item
         fun setItemPosition(position: Int) {
             _position.value = position
         }
 
-        // Toggle grid layout
         fun setGridLayout(isGridLayout: Boolean) {
             _isGridLayout.value = isGridLayout
         }

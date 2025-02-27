@@ -11,7 +11,6 @@ import coil.transform.CircleCropTransformation
 import com.example.moviebox.R
 import com.example.moviebox.databinding.ActorBottomSheetDialogBinding
 import com.example.moviebox.model.Cast
-import com.example.moviebox.util.Gender
 import com.example.moviebox.util.autoCleared
 import com.example.moviebox.util.constant.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
@@ -35,20 +34,16 @@ class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = ActorBottomSheetDialogBinding.bind(view)
-
+        // TODO: Burası bakılacak
         val actor = navArgs.actor
-
-        binding.tvActorName.text = actor.name
-        binding.tvPopularity.text = getString(R.string.popularity) + actor.popularity.toString()
+        binding.tvActorName.text =  actor.name
         binding.tvCharacter.text = actor.character
-        binding.tvGender.text = genderDecider(actor.gender)
         setActorImage(actor)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         super.onCreateDialog(savedInstanceState).apply {
             setCanceledOnTouchOutside(true)
-            // window?.attributes?.windowAnimations = com.google.android.material.R.style.Widget_AppCompat_Light_ListPopupWindow
         }
 
     override fun onStart() {
@@ -78,8 +73,4 @@ class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun genderDecider(gender: Int): String {
-        val genderEnum = Gender.fromInt(gender)
-        return getString(genderEnum.labelResourceId)
-    }
 }
