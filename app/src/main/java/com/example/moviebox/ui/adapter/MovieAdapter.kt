@@ -15,6 +15,7 @@ import com.example.moviebox.databinding.ItemMovieBinding
 import com.example.moviebox.model.MovieItem
 import com.example.moviebox.util.constant.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
+import com.example.moviebox.util.extension.formatRuntime
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.show
 import java.util.Locale
@@ -92,17 +93,15 @@ class MovieAdapter(
     }
 
     private fun setBackgroundColorByPopularity(voteAverage: Double, context: Context, binding: ItemMovieBinding) {
-        // Enum'dan PopularityRating nesnesini al
+
         val popularityRating = PopularityRating.fromVoteAverage(voteAverage)
 
-        // Rengi al
+
         val backgroundColor = ContextCompat.getColor(context, popularityRating.colorRes)
 
-        // View'ın background'ını değiştirmek için bir GradientDrawable oluştur
         val drawable = binding.ivStar.background as? GradientDrawable
         drawable?.setColor(backgroundColor)
 
-        // Eğer background henüz GradientDrawable değilse (ilk kez çağrılıyorsa)
         if (drawable == null) {
             val newDrawable = GradientDrawable()
             newDrawable.shape = GradientDrawable.OVAL

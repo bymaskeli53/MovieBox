@@ -105,6 +105,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
+    // Google admob
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+
 
     // coil
     implementation("io.coil-kt:coil:2.5.0")

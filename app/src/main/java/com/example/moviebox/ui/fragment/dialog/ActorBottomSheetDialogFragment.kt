@@ -1,10 +1,12 @@
 package com.example.moviebox.ui.fragment.dialog
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.navArgs
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -19,7 +21,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private var binding: ActorBottomSheetDialogBinding by autoCleared()
-
     private val navArgs: ActorBottomSheetDialogFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -28,13 +29,13 @@ class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ): View? = inflater.inflate(R.layout.actor_bottom_sheet_dialog, container, false)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = ActorBottomSheetDialogBinding.bind(view)
-        // TODO: Burası bakılacak
         val actor = navArgs.actor
         binding.tvActorName.text =  actor.name
         binding.tvCharacter.text = actor.character
@@ -56,7 +57,7 @@ class ActorBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 val behavior = BottomSheetBehavior.from(sheet)
                 val layoutParams = sheet.layoutParams as ViewGroup.MarginLayoutParams
 
-                layoutParams.setMargins(32, 0, 32, 100) // Set the desired margins here
+                layoutParams.setMargins(32, 0, 32, 100)
                 sheet.layoutParams = layoutParams
 
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED

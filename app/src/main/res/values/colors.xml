@@ -52,4 +52,6 @@
     <color name="popularity_high">#4CAF50</color>
     <color name="popularity_medium">#FFC107</color>
     <color name="popularity_low">#F44336</color>
+
+    <color name="charocal">#36454F</color>
 </resources>

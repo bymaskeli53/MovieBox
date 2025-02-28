@@ -17,6 +17,9 @@
         android:theme="@style/Theme.MovieBox"
 
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7263939318192911~9306966223"/>
         <activity
             android:name=".ui.activity.MainActivity"
 

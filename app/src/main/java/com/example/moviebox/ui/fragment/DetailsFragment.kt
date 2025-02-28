@@ -31,7 +31,11 @@ import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.CreditsViewModel
 import com.example.moviebox.viewmodel.FavoriteViewModel
 import com.example.moviebox.viewmodel.MovieViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -46,10 +50,6 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
     private lateinit var movieEntity: MovieEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        /**
-         * Screen opening animation
-         * İnflater
-         */
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_in)
         super.onCreate(savedInstanceState)
@@ -60,7 +60,13 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        val backgroundScope = CoroutineScope(Dispatchers.IO)
+        backgroundScope.launch {
+            MobileAds.initialize(requireContext()) {}
+        }
 
+        val adRequest = AdRequest.Builder().build()
+        binding.bannerAdView.loadAd(adRequest)
 
         movieEntity = MovieToMovieEntityMapper.map(args.movie)
 

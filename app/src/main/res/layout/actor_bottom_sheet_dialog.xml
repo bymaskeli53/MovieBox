@@ -29,15 +29,7 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_popularity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="4dp"
-        android:text="Popularity: 80%"
-        android:textColor="@color/gray"
-        android:textSize="16sp" />
+
 
     <TextView
         android:id="@+id/tv_character"
@@ -49,13 +41,4 @@
         android:textColor="@color/black"
         android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/tv_gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="4dp"
-        android:text="Gender: Male"
-        android:textColor="@color/gray"
-        android:textSize="16sp" />
 </LinearLayout>

@@ -12,6 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@color/charocal"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -29,12 +30,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/movieImageView"
             android:ellipsize="end"
             android:maxLines="2"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/movieImageView"
@@ -42,14 +44,6 @@
             tools:text="movie title" />
 
 
-        <ImageView
-            android:id="@+id/iv_arrow_right"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:src="@drawable/arrow_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_favorite"
@@ -73,6 +67,7 @@
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="@id/movieTitleTextView"
             app:layout_constraintTop_toBottomOf="@id/movieTitleTextView" />
+
 
         <View
             android:id="@+id/iv_star"

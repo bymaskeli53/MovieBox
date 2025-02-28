@@ -25,7 +25,11 @@ import com.example.moviebox.util.extension.hideKeyboard
 import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.MovieViewModel
 import com.example.moviebox.viewmodel.SearchViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -43,6 +47,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     ) {
         super.onViewCreated(view, savedInstanceState)
 
+        val backgroundScope = CoroutineScope(Dispatchers.IO)
+        backgroundScope.launch {
+            MobileAds.initialize(requireContext()) {}
+        }
+
+        val adRequest = AdRequest.Builder().build()
+        binding.bannerAdView.loadAd(adRequest)
 
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)

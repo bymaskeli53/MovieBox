@@ -26,4 +26,16 @@
     <string name="resizable_text_read_more">Read More</string>
     <string name="resizable_text_read_less">Read Less</string>
     <string name="you_can_search_movies_from_here">You can search movies here</string>
+
+    <plurals name="format_runtime_hours_only">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+
+    <plurals name="format_runtime_minutes_only">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+
+    <string name="format_runtime_hours_minutes">%1$d hours %2$d minutes</string>
 </resources>
