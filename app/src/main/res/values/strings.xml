@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MovieBox</string>
+    <string name="app_name">Movie Box</string>
     <string name="user_connected_to_internet">User connected to internet</string>
     <string name="youtube_button">Watch the trailer</string>
     <string name="watch_trailer_on_youtube">Watch Trailer on YouTube</string>

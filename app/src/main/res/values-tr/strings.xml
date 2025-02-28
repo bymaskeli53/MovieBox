@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MovieBox</string>
+    <string name="app_name">Film Kutum</string>
     <string name="user_connected_to_internet">Kullanıcı internete bağlı</string>
     <string name="youtube_button">Fragmanı İzle</string>
     <string name="watch_trailer_on_youtube">YouTube\'da Fragmanı İzle</string>

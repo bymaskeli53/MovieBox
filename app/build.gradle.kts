@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
 
-        applicationId = "com.example.moviebox"
+        applicationId = "com.gundogar.moviebox"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
