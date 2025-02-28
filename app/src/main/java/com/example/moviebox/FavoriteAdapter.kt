@@ -36,7 +36,7 @@ class FavoriteAdapter : ListAdapter<MovieEntity, FavoriteAdapter.FavoriteViewHol
             oldItem: MovieEntity,
             newItem: MovieEntity,
         ): Boolean {
-            return oldItem.id == newItem.id // Assuming `id` is a unique identifier for `MovieEntity`
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(

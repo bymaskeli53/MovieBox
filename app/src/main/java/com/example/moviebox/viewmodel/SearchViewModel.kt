@@ -57,7 +57,7 @@ class SearchViewModel
                 try {
                     val response = repository.searchMovies(query)
                     _movies.update { Resource.Success(response) }
-                    // _movies.value = response.results
+
                 } catch (e: Exception) {
                     _movies.update { Resource.Error(exception = e) }
 

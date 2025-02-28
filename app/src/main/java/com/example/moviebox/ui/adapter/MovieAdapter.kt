@@ -15,7 +15,6 @@ import com.example.moviebox.databinding.ItemMovieBinding
 import com.example.moviebox.model.MovieItem
 import com.example.moviebox.util.constant.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
-import com.example.moviebox.util.extension.formatRuntime
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.show
 import java.util.Locale

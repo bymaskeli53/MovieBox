@@ -27,7 +27,7 @@ open class NoUnderlineClickSpan(val context: Context) : ClickableSpan() {
 }
 
 @SuppressLint("SetTextI18n")
-@Suppress("DEPRECATION") // It has been replaced by a Builder, which is minAPI 28, so OK for now
+@Suppress("DEPRECATION")
 fun TextView.setResizableText(
     fullText: String,
     maxLines: Int,
@@ -42,10 +42,8 @@ fun TextView.setResizableText(
         return
     }
     movementMethod = LinkMovementMethod.getInstance()
-    // Since we take the string character by character, we don't want to break up the Windows-style
-    // line endings.
+
     val adjustedText = fullText.replace("\r\n", "\n")
-    // Check if even the text has to be resizable.
     val textLayout = StaticLayout(
         adjustedText,
         paint,
@@ -56,7 +54,7 @@ fun TextView.setResizableText(
         includeFontPadding
     )
     if (textLayout.lineCount <= maxLines || adjustedText.isEmpty()) {
-        // No need to add 'read more' / 'read less' since the text fits just as well (less than max lines #).
+
         val htmlText = adjustedText.replace("\n", "<br/>")
         text = addClickablePartTextResizable(
             fullText,
@@ -73,7 +71,6 @@ fun TextView.setResizableText(
         if (viewMore) resources.getString(R.string.resizable_text_read_more) else resources.getString(R.string.resizable_text_read_less)
     var charactersToTake = charactersAtLineEnd - suffixText.length / 2 // Good enough first guess
     if (charactersToTake <= 0) {
-        // Happens when text is empty
         val htmlText = adjustedText.replace("\n", "<br/>")
         text = addClickablePartTextResizable(
             fullText,
@@ -86,7 +83,6 @@ fun TextView.setResizableText(
         return
     }
     if (!viewMore) {
-        // We can set the text immediately because nothing needs to be measured
         val htmlText = adjustedText.replace("\n", "<br/>")
         text = addClickablePartTextResizable(
             fullText,
@@ -105,7 +101,7 @@ fun TextView.setResizableText(
         val charactersPerLine =
             textLayout.getLineEnd(0) / (textLayout.getLineWidth(0) / textLayout.ellipsizedWidth.toFloat())
         val lineOfSpaces =
-            "\u00A0".repeat(charactersPerLine.roundToInt()) // non breaking space, will not be thrown away by HTML parser
+            "\u00A0".repeat(charactersPerLine.roundToInt())
         charactersToTake += lineOfSpaces.length - 1
         adjustedText.take(textLayout.getLineStart(maxLines - 1)) +
                 adjustedText.substring(textLayout.getLineStart(maxLines - 1), textLayout.getLineEnd(maxLines - 1))
@@ -114,7 +110,6 @@ fun TextView.setResizableText(
     } else {
         adjustedText
     }
-    // Check if we perhaps need to even add characters? Happens very rarely, but can be possible if there was a long word just wrapped
     val shortenedString = linedText.take(charactersToTake)
     val shortenedStringWithSuffix = shortenedString + suffixText
     val shortenedStringWithSuffixLayout = StaticLayout(
@@ -129,7 +124,7 @@ fun TextView.setResizableText(
     val modifier: Int
     if (shortenedStringWithSuffixLayout.getLineEnd(maxLines - 1) >= shortenedStringWithSuffix.length) {
         modifier = 1
-        charactersToTake-- // We might just be at the right position already
+        charactersToTake--
     } else {
         modifier = -1
     }
@@ -150,9 +145,8 @@ fun TextView.setResizableText(
         (modifier > 0 && newLayout.getLineEnd(maxLines - 1) >= appended.length)
     )
     if (modifier > 0) {
-        charactersToTake-- // We went overboard with 1 char, fixing that
+        charactersToTake--
     }
-    // We need to convert newlines because we are going over to HTML now
     val htmlText = linedText.take(charactersToTake).replace("\n", "<br/>")
     text = addClickablePartTextResizable(
         fullText,
@@ -176,7 +170,7 @@ private fun TextView.addClickablePartTextResizable(
     if (clickableText != null) {
         builder.append(" ")
         builder.append(clickableText)
-        val startIndexOffset = if (viewMore) 0 else 0 // Do not highlight the 3 dots and the space
+        val startIndexOffset = if (viewMore) 0 else 0
         builder.setSpan(object : NoUnderlineClickSpan(context) {
             override fun onClick(widget: View) {
                 if (viewMore) {

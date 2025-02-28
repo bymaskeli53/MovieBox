@@ -36,20 +36,8 @@ class FavoriteViewModel
             }
         }
 
-        fun insertFavoriteMovie(movie: MovieEntity) {
-            viewModelScope.launch {
-                movieRepository.insertFavoriteMovie(movie)
-                // TODO: Learn is this best practice
-            }
-        }
 
-        fun deleteFavoriteMovie(movie: MovieEntity) {
-            viewModelScope.launch {
-                movieRepository.deleteFavoriteMovie(movie)
-            }
-        }
-
-        fun onFavoriteButtonClick(movie: MovieEntity) {
+    fun onFavoriteButtonClick(movie: MovieEntity) {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     movieRepository.updateFavoriteStatus(movie)
