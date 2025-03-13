@@ -59,12 +59,6 @@ class MoviesFragment :
         networkConnectionLiveData = NetworkConnectionLiveData(requireContext())
         networkConnectionLiveData.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                Toast
-                    .makeText(
-                        requireContext(),
-                        getString(R.string.user_connected_to_internet),
-                        Toast.LENGTH_SHORT,
-                    ).show()
                 movieViewModel.refreshMovies()
             } else {
                 Toast

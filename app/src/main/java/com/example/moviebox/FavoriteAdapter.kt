@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviebox.database.MovieEntity
 import com.example.moviebox.databinding.ItemFavoriteBinding
 
-class FavoriteAdapter : ListAdapter<MovieEntity, FavoriteAdapter.FavoriteViewHolder>(MovieDiffCallback()) {
+class FavoriteAdapter(val onItemClickListener: (MovieEntity) -> Unit) : ListAdapter<MovieEntity, FavoriteAdapter.FavoriteViewHolder>(MovieDiffCallback()) {
     inner class FavoriteViewHolder(
         val binding: ItemFavoriteBinding,
     ) : RecyclerView.ViewHolder(binding.root)
@@ -29,6 +29,9 @@ class FavoriteAdapter : ListAdapter<MovieEntity, FavoriteAdapter.FavoriteViewHol
         val movieEntity = getItem(position)
         holder.binding.tvTitle.text = movieEntity.title
         holder.binding.tvOverview.text = movieEntity.overview
+        holder.binding.root.setOnClickListener {
+            onItemClickListener(movieEntity)
+        }
     }
 
     class MovieDiffCallback : DiffUtil.ItemCallback<MovieEntity>() {

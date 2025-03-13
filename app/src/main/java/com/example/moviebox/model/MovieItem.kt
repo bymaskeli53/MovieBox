@@ -2,6 +2,7 @@ package com.example.moviebox.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.util.Locale
 
 @Parcelize
 data class MovieItem(
@@ -20,10 +21,14 @@ data class MovieItem(
     val vote_average: Double?,
     val vote_count: Int?,
     var isFavorite: Boolean,
-    ) : Parcelable {
+) : Parcelable {
     /**
      * To string method is overriden to show movie title on detail screen
      **/
 
     override fun toString(): String = this.title ?: "movie name not found"
+
+    val formattedPopularity = String.format(locale = Locale.getDefault(), "%.1f", this.vote_average)
+
+    val formattedReleaseDate = this.release_date?.substringBefore("-")
 }

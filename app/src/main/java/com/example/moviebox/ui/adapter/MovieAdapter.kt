@@ -17,7 +17,6 @@ import com.example.moviebox.util.constant.DurationConstants.CROSSFADE_DURATION
 import com.example.moviebox.util.constant.NetworkConstants.IMAGE_BASE_URL
 import com.example.moviebox.util.extension.hide
 import com.example.moviebox.util.extension.show
-import java.util.Locale
 
 class MovieAdapter(
     private val isGridLayout: Boolean,
@@ -32,9 +31,9 @@ class MovieAdapter(
                 crossfade(CROSSFADE_DURATION)
                 placeholder(R.drawable.ic_generic_movie_poster)
             }
-            binding.tvReleaseDate.text = movie.release_date?.substringBefore("-")
+            binding.tvReleaseDate.text = movie.formattedReleaseDate
             binding.tvPopularity.text =
-                String.format(locale = Locale.getDefault(), format = "%.1f", movie.vote_average)
+                movie.formattedPopularity
             binding.root.setOnClickListener {
                 onMovieClick(movie)
             }
@@ -91,7 +90,11 @@ class MovieAdapter(
         }
     }
 
-    private fun setBackgroundColorByPopularity(voteAverage: Double, context: Context, binding: ItemMovieBinding) {
+    private fun setBackgroundColorByPopularity(
+        voteAverage: Double,
+        context: Context,
+        binding: ItemMovieBinding
+    ) {
 
         val popularityRating = PopularityRating.fromVoteAverage(voteAverage)
 

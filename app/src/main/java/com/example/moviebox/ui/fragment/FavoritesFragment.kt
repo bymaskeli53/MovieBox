@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.moviebox.FavoriteAdapter
 import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentFavoritesBinding
+import com.example.moviebox.model.mapper.MovieEntityToMovieItemMapper
 import com.example.moviebox.ui.fragment.base.BaseFragment
 import com.example.moviebox.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +34,14 @@ class FavoritesFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             favoriteViewModel.favoriteMovies.collect {
                 binding.rvFavorites.adapter =
-                    FavoriteAdapter().apply {
+                    FavoriteAdapter(onItemClickListener = {
+
+                        val action =
+                            FavoritesFragmentDirections.actionFavoritesFragmentToDetailsFragment(
+                                MovieEntityToMovieItemMapper.map(it)
+                            )
+                        findNavController().navigate(action)
+                    }).apply {
                         submitList(it)
                     }
                 binding.rvFavorites.addItemDecoration(
