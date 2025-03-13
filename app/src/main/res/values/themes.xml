@@ -4,6 +4,8 @@
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">true</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">#f2ebf5</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.MovieBox" parent="Base.Theme.MovieBox" />

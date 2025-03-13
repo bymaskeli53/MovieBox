@@ -4,5 +4,7 @@
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">true</item>
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:statusBarColor">#28252b</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>
