@@ -38,4 +38,5 @@
     </plurals>
 
     <string name="format_runtime_hours_minutes">%1$d hours %2$d minutes</string>
+    <string name="no_favorite_movies_yet">No favorite movies yet.</string>
 </resources>

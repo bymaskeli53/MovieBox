@@ -42,6 +42,7 @@ class SearchMovieAdapter(
             binding.imageViewMoviePoster.load(IMAGE_BASE_URL + movie.poster_path) {
                 crossfade(true)
                 placeholder(R.drawable.ic_generic_movie_poster)
+                error(R.drawable.ic_generic_movie_poster)
             }
             binding.textViewMovieDate.text =
                 formatDate(movie.release_date ?: context.getString(R.string.no_release_date))

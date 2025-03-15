@@ -30,6 +30,7 @@ class MovieAdapter(
             binding.movieImageView.load(IMAGE_BASE_URL + movie.poster_path) {
                 crossfade(CROSSFADE_DURATION)
                 placeholder(R.drawable.ic_generic_movie_poster)
+                error(R.drawable.ic_generic_movie_poster)
             }
             binding.tvReleaseDate.text = movie.formattedReleaseDate
             binding.tvPopularity.text =
@@ -53,6 +54,7 @@ class MovieAdapter(
             binding.ivMovie.load(IMAGE_BASE_URL + movie.poster_path) {
                 crossfade(CROSSFADE_DURATION)
                 placeholder(R.drawable.ic_generic_movie_poster)
+                error(R.drawable.ic_generic_movie_poster)
             }
             binding.root.setOnClickListener {
                 onMovieClick(movie)

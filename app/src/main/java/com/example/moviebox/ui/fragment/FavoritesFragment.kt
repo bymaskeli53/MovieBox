@@ -32,17 +32,24 @@ class FavoritesFragment :
         favoriteViewModel.getFavoriteMovies()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            favoriteViewModel.favoriteMovies.collect {
+            favoriteViewModel.favoriteMovies.collect { movieList ->
+                if (movieList.isEmpty()) {
+                    binding.tvEmptyMessage.visibility = View.VISIBLE
+                    binding.rvFavorites.visibility = View.GONE
+                } else {
+                    binding.tvEmptyMessage.visibility = View.GONE
+                    binding.rvFavorites.visibility = View.VISIBLE
+                }
+
                 binding.rvFavorites.adapter =
                     FavoriteAdapter(onItemClickListener = {
-
                         val action =
                             FavoritesFragmentDirections.actionFavoritesFragmentToDetailsFragment(
                                 MovieEntityToMovieItemMapper.map(it)
                             )
                         findNavController().navigate(action)
                     }).apply {
-                        submitList(it)
+                        submitList(movieList)
                     }
                 binding.rvFavorites.addItemDecoration(
                     DividerItemDecoration(

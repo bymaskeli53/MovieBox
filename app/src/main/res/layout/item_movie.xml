@@ -19,6 +19,7 @@
             android:id="@+id/movieImageView"
             android:layout_width="80dp"
             android:layout_height="120dp"
+            android:src="@drawable/ic_generic_movie_poster"
             android:layout_marginEnd="16dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"

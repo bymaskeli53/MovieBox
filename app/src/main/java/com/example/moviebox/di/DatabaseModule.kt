@@ -2,6 +2,7 @@ package com.example.moviebox.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.moviebox.database.Migrations.MIGRATION_1_2
 import com.example.moviebox.database.MovieDatabase
 import com.example.moviebox.util.constant.DatabaseConstants.MOVIE_DATABASE
 import dagger.Module
@@ -18,7 +19,8 @@ object DatabaseModule {
     @Provides
     fun provideMovieDatabase(
         @ApplicationContext context: Context,
-    ): MovieDatabase = Room.databaseBuilder(context, MovieDatabase::class.java, MOVIE_DATABASE).build()
+    ): MovieDatabase = Room.databaseBuilder(context, MovieDatabase::class.java, MOVIE_DATABASE)
+        .addMigrations(MIGRATION_1_2).build()
 
     @Singleton
     @Provides

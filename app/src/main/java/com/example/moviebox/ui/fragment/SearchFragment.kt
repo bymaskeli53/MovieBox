@@ -33,8 +33,6 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -52,9 +50,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val backgroundScope = CoroutineScope(Dispatchers.IO)
-
-            MobileAds.initialize(requireContext()) {}
+        MobileAds.initialize(requireContext()) {}
         val adview = AdView(requireContext()).apply {
             setAdSize(AdSize.BANNER)
             adUnitId = BuildConfig.AD_UNIT_ID_2
@@ -66,11 +62,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
         )
         val containerView = binding.topContainer
         containerView.addView(adview, params)
-//        binding.b.setAdSize(AdSize.BANNER)
-//        binding.bannerAdView.adUnitId = BuildConfig.AD_UNIT_ID_2
-//        val adRequest = AdRequest.Builder().build()
 
-      //  binding.bannerAdView.loadAd(adRequest)
 
 
 
