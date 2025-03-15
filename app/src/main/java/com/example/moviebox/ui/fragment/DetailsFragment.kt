@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import coil.load
+import com.example.moviebox.BuildConfig
 import com.example.moviebox.R
 import com.example.moviebox.database.MovieEntity
 import com.example.moviebox.databinding.FragmentDetailsBinding
@@ -32,6 +34,8 @@ import com.example.moviebox.viewmodel.CreditsViewModel
 import com.example.moviebox.viewmodel.FavoriteViewModel
 import com.example.moviebox.viewmodel.MovieViewModel
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -60,13 +64,25 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        val backgroundScope = CoroutineScope(Dispatchers.IO)
-        backgroundScope.launch {
-            MobileAds.initialize(requireContext()) {}
+
+        MobileAds.initialize(requireContext()) {}
+
+        val adview = AdView(requireContext()).apply {
+            setAdSize(AdSize.BANNER)
+            adUnitId = BuildConfig.AD_UNIT_ID_1
+            loadAd(AdRequest.Builder().build())
         }
 
-        val adRequest = AdRequest.Builder().build()
-        binding.bannerAdView.loadAd(adRequest)
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        val containerView = binding.topContainer
+        containerView.addView(adview, params)
+
+
+
 
         movieEntity = MovieToMovieEntityMapper.map(args.movie)
 

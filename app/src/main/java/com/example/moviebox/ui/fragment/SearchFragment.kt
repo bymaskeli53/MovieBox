@@ -8,13 +8,16 @@ import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.View
 import android.widget.CursorAdapter
+import android.widget.FrameLayout
 import android.widget.SearchView.OnQueryTextListener
 import android.widget.SimpleCursorAdapter
 import android.widget.Toast
+import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.moviebox.BuildConfig
 import com.example.moviebox.R
 import com.example.moviebox.databinding.FragmentSearchBinding
 import com.example.moviebox.ui.adapter.SearchMovieAdapter
@@ -26,6 +29,8 @@ import com.example.moviebox.util.extension.show
 import com.example.moviebox.viewmodel.MovieViewModel
 import com.example.moviebox.viewmodel.SearchViewModel
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -47,13 +52,29 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        val backgroundScope = CoroutineScope(Dispatchers.IO)
-        backgroundScope.launch {
-            MobileAds.initialize(requireContext()) {}
-        }
+        //val backgroundScope = CoroutineScope(Dispatchers.IO)
 
-        val adRequest = AdRequest.Builder().build()
-        binding.bannerAdView.loadAd(adRequest)
+            MobileAds.initialize(requireContext()) {}
+        val adview = AdView(requireContext()).apply {
+            setAdSize(AdSize.BANNER)
+            adUnitId = BuildConfig.AD_UNIT_ID_2
+            loadAd(AdRequest.Builder().build())
+        }
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        val containerView = binding.topContainer
+        containerView.addView(adview, params)
+//        binding.b.setAdSize(AdSize.BANNER)
+//        binding.bannerAdView.adUnitId = BuildConfig.AD_UNIT_ID_2
+//        val adRequest = AdRequest.Builder().build()
+
+      //  binding.bannerAdView.loadAd(adRequest)
+
+
+
+
 
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)

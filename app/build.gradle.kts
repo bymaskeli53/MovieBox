@@ -42,7 +42,17 @@ android {
         buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
     }
     buildTypes {
+
+        debug {
+            buildConfigField("String","AD_UNIT_ID_1","\"ca-app-pub-3940256099942544/6300978111\"")
+            buildConfigField("String","AD_UNIT_ID_2","\"ca-app-pub-3940256099942544/6300978111\"")
+        }
+
         release {
+
+            buildConfigField("String","AD_UNIT_ID_1","\"ca-app-pub-7263939318192911/6169635177\"")
+            buildConfigField("String","AD_UNIT_ID_2","\"ca-app-pub-7263939318192911/1476282516\"")
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

@@ -22,15 +22,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
-
         setupActionBarWithNavController(navController)
 
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
@@ -38,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         setBottomNavVisibilityForEachFragment(navController)
     }
 
-    override fun onSupportNavigateUp(): Boolean = super.onSupportNavigateUp() || navController.navigateUp()
+    override fun onSupportNavigateUp(): Boolean =
+        super.onSupportNavigateUp() || navController.navigateUp()
 
     private fun setBottomNavVisibilityForEachFragment(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
