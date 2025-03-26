@@ -18,16 +18,19 @@ MovieBox is an Android application that allows users to browse and search for mo
 ![Movies in Linear Layout](screenshots/linear_layout.webp)
 
 ### Grid Layout
-![Movies in Grid Layout](screenshots/grid_layout.jpeg)
+![Movies in Grid Layout](screenshots/grid_layout.webp)
 
 ### Favorites Screen
-![Favorites Screen](screenshots/favorites_screen.jpeg)
+![Favorites Screen](screenshots/favorite_screen.webp)
 
 ### Search Screen
-![Search Screen](screenshots/search_screen.jpeg)
+![Search Screen](screenshots/search_screen.webp)
 
 ### Movie Detail Screen
-![Movie Detail Screen](screenshots/movie_detail.jpeg)
+![Movie Detail Screen](screenshots/movie_detail.webp)
+
+### Actor Detail Screen
+![Actor Detail Screen](screenshots/actor_detail.webp)
 
 ## Demo Video
 
