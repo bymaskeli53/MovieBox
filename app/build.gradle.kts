@@ -13,7 +13,7 @@ plugins {
 
 android {
     namespace = "com.example.moviebox"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         viewBinding = true
@@ -24,9 +24,9 @@ android {
 
         applicationId = "com.gundogar.moviebox"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        targetSdk = 35
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
