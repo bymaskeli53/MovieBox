@@ -47,6 +47,12 @@ class MainActivity : AppCompatActivity() {
             )
             insets
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavView) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, 0, 0, -60)
+            insets
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean =
