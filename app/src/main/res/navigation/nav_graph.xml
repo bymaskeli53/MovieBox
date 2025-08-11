@@ -50,4 +50,8 @@
             android:name="actor"
             app:argType="com.example.moviebox.model.Cast" />
     </dialog>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.moviebox.ui.fragment.ChatFragment"
+        android:label="ChatFragment" />
 </navigation>
