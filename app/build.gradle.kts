@@ -37,19 +37,23 @@ android {
                 localProperties.load(it)
             }
         }
-        buildConfigField("String", "API_KEY", "\"${localProperties["API_KEY"]}\"")
 
         buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+        buildConfigField("String", "API_KEY", "\"${localProperties["API_KEY"]}\"")
+
+        buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties["GEMINI_API_KEY"]}\"")
+
+
     }
     buildTypes {
 
         debug {
             buildConfigField("String","AD_UNIT_ID_1","\"ca-app-pub-3940256099942544/6300978111\"")
             buildConfigField("String","AD_UNIT_ID_2","\"ca-app-pub-3940256099942544/6300978111\"")
+
         }
 
         release {
-
             buildConfigField("String","AD_UNIT_ID_1","\"ca-app-pub-7263939318192911/6169635177\"")
             buildConfigField("String","AD_UNIT_ID_2","\"ca-app-pub-7263939318192911/1476282516\"")
 
@@ -140,6 +144,9 @@ dependencies {
     implementation("me.zhanghai.android.materialratingbar:library:1.4.0")
 
     implementation("com.fragula2:fragula-core:2.10.1")
+
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
 
 
 
