@@ -51,7 +51,9 @@ class ChatFragment :
                     binding.progressBar.visibility = View.GONE
                     adapter = ChatAdapter(state.messages)
                     binding.recyclerViewMessages.adapter = adapter
-                    binding.recyclerViewMessages.scrollToPosition(state.messages.size - 1)
+                    if (state.messages.size >= 4) {
+                        binding.recyclerViewMessages.smoothScrollToPosition(state.messages.size - 2)
+                    }
                 }
                 is ChatUiState.Error -> {
                     binding.progressBar.visibility = View.GONE
