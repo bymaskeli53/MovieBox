@@ -39,7 +39,7 @@ class ChatFragment :
             }
         }
 
-        chatViewModel.uiState.observe(this) { state ->
+        chatViewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is ChatUiState.Idle -> {
                  binding.progressBar.visibility = View.GONE

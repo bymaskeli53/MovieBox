@@ -39,4 +39,6 @@
 
     <string name="format_runtime_hours_minutes">%1$d saat %2$d dakika</string>
     <string name="no_favorite_movies_yet">Henüz favori filminiz yok.</string>
+    <string name="suggestions">Öneriler</string>
+    <string name="ask_for_a_movie">Film sor</string>
 </resources>

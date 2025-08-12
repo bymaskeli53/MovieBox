@@ -53,5 +53,5 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.example.moviebox.ui.fragment.ChatFragment"
-        android:label="ChatFragment" />
+        android:label="@string/suggestions" />
 </navigation>

@@ -11,7 +11,7 @@
         android:layout_alignParentEnd="true"
         android:text="Merhaba Gemini, film önerir misin?"
         android:padding="12dp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/black"
         android:background="@drawable/sent_message_background"
         android:maxWidth="250dp"/>
 
