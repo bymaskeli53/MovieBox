@@ -42,13 +42,13 @@ class ChatFragment :
         chatViewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is ChatUiState.Idle -> {
-                 binding.progressBar.visibility = View.GONE
+                 binding.lottieLoading.visibility = View.GONE
                 }
                 is ChatUiState.Loading -> {
-                  binding.progressBar.visibility = View.VISIBLE
+                    binding.lottieLoading.visibility = View.VISIBLE
                 }
                 is ChatUiState.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.lottieLoading.visibility = View.GONE
                     adapter = ChatAdapter(state.messages)
                     binding.recyclerViewMessages.adapter = adapter
                     if (state.messages.size >= 4) {
@@ -56,7 +56,7 @@ class ChatFragment :
                     }
                 }
                 is ChatUiState.Error -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.lottieLoading.visibility = View.GONE
                     Toast.makeText(requireContext(), state.errorMessage, Toast.LENGTH_LONG).show()
                 }
             }
