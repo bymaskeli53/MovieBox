@@ -84,6 +84,9 @@ dependencies {
     @Suppress("ktlint:standard:property-naming")
     val paging_version = "3.3.1"
 
+    val lottieVersion = "6.5.2"
+
+
     ksp("androidx.room:room-compiler:$room_version")
 
     implementation(libs.androidx.core.ktx)
@@ -146,6 +149,10 @@ dependencies {
     implementation("com.fragula2:fragula-core:2.10.1")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
+    // Lottie
+    implementation("com.airbnb.android:lottie:$lottieVersion")
+
 
 
 

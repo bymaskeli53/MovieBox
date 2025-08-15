@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Mesajınızı yazın..."
+            android:hint="@string/ask_your_question"
             android:inputType="textMultiLine|textCapSentences"
             android:maxLines="4"
             android:padding="12dp" />
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:paddingHorizontal="16dp"
-            android:text="Gönder"
+            android:text="@string/send"
             android:textColor="@android:color/white" />
 
     </LinearLayout>

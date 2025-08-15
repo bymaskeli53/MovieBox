@@ -43,4 +43,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="suggestions">Suggestions</string>
     <string name="ask_for_a_movie">Ask for a movie</string>
+    <string name="send">Send</string>
+    <string name="ask_your_question">Ask your question</string>
 </resources>
